@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Worker } from '../models/Worker';
 import { Link, useNavigate } from 'react-router-dom';
+import { getWorkers } from '../utils/api/workers';
 
 const WorkerPage = () => {
   const [workers, setWorkers] = useState<Worker[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/workers')
-      .then((response) => response.json())
+    getWorkers()
       .then((data) => setWorkers(data))
       .catch((error) => console.error(error));
   }, []);
@@ -27,7 +27,7 @@ const WorkerPage = () => {
                 <p>Working at {worker.restaurantId}</p>
             </li>
             ))}
-        </ul>
+      </ul>
         <p>
             <button onClick={handleBackToHome}>Back to Home</button>
         </p> 
