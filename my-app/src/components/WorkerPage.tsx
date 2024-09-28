@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Worker } from '../models/Worker';
-import { Link, useNavigate } from 'react-router-dom';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { getWorkers } from '../utils/api/workers';
 
 const WorkerPage = () => {
-  const [workers, setWorkers] = useState<Worker[]>([]);
-  const navigate = useNavigate();
+  const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
     getWorkers()
@@ -13,25 +12,37 @@ const WorkerPage = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  const handleBackToHome = () => {
-      navigate('/');
-  };
-
   return (
-    <div>
-        <h1>Workers</h1>
-        <ul>
+    <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
+      <Typography variant="h2" component="h1">
+        Workers
+      </Typography>
+      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>ID</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Restaurant ID</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
             {workers.map((worker) => (
-            <li key={worker.id}>
-                <h2>{worker.name}</h2>
-                <p>Working at {worker.restaurantId}</p>
-            </li>
+              <TableRow key={worker.id}>
+                <TableCell>{worker.id}</TableCell>
+                <TableCell>{worker.name}</TableCell>
+                <TableCell>{worker.restaurantId}</TableCell>
+              </TableRow>
             ))}
-      </ul>
-        <p>
-            <button onClick={handleBackToHome}>Back to Home</button>
-        </p> 
-    </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Box sx={{ marginTop: 4 }}>
+        <Button variant="contained" component={Link} to="/">
+          Back to Home Page
+        </Button>
+      </Box>
+    </Box>
   );
 };
 
