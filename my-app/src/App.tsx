@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter, Route, Routes, Link } from 'react-router-dom';
 
 interface Restaurant {
   id: number;
@@ -13,71 +14,45 @@ interface Worker {
 }
 
 function App() {
-  
+  // ... (rest of your code remains the same)
+
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/restaurants" element={<RestaurantPage />} />
+        <Route path="/workers" element={<WorkerPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+function MainPage() {
+  return (
+    <div>
+      <h1>Main Page</h1>
+      <p>Welcome to our application!</p>
+      <ul>
+        <li>
+          <Link to="/restaurants">Restaurants</Link>
+        </li>
+        <li>
+          <Link to="/workers">Workers</Link>
+        </li>
+      </ul>
+    </div>
+  );
+}
+
+function RestaurantPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
-  const [workers, setWorkers] = useState<Worker[]>([]);
-  const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
-  const [selectedWorker, setSelectedWorker] = useState<Worker | null>(null);
 
   useEffect(() => {
-    console.log('useEffect hook is being called');
     fetch('http://localhost:3001/api/restaurants')
-      .then(response => response.json())
-      .then(data => setRestaurants(data))
-      .catch(error => console.error('Error:', error));
+      .then((response) => response.json())
+      .then((data) => setRestaurants(data))
+      .catch((error) => console.error(error));
   }, []);
-  useEffect(() => {
-    fetch('http://localhost:3001/api/workers')
-      .then(response => response.json())
-      .then(data => setWorkers(data))
-      .catch(error => console.error(error));
-  }, []);
-
-  const handleSelectRestaurant = (restaurant:any) => {
-    setSelectedRestaurant(restaurant);
-  };
-
-  const handleSelectWorker = (worker:any) => {
-    setSelectedWorker(worker);
-  };
-
-  const handleCreateRestaurant = () => {
-    const newRestaurant = {
-      name: 'New Restaurant',
-      address: '123 Main St',
-    };
-    fetch('http://localhost:3001/api/restaurants', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newRestaurant),
-    })
-      .then(response => response.json())
-      .then(data => {
-        setRestaurants([...restaurants, data]);
-      })
-      .catch(error => console.error(error));
-  };
-
-  const handleCreateWorker = () => {
-    const newWorker = {
-      name: 'New Worker',
-      restaurantId: selectedRestaurant.id,
-    };
-    fetch('http://localhost:3001/api/workers', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newWorker),
-    })
-      .then(response => response.json())
-      .then(data => {
-        setWorkers([...workers, data]);
-      })
-      .catch(error => console.error(error));
-  };
 
   return (
     <div>
@@ -85,36 +60,36 @@ function App() {
       <ul>
         {restaurants.map((restaurant) => (
           <li key={restaurant.id}>
-            <span>{restaurant.name}</span>
-            <button onClick={() => handleSelectRestaurant(restaurant)}>Select</button>
+            <h2>{restaurant.name}</h2>
+            <p>{restaurant.address}</p>
           </li>
         ))}
       </ul>
-      <button onClick={handleCreateRestaurant}>Create Restaurant</button>
+    </div>
+  );
+}
 
+function WorkerPage() {
+  const [workers, setWorkers] = useState<Worker[]>([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/workers')
+      .then((response) => response.json())
+      .then((data) => setWorkers(data))
+      .catch((error) => console.error(error));
+  }, []);
+
+  return (
+    <div>
       <h1>Workers</h1>
       <ul>
         {workers.map((worker) => (
           <li key={worker.id}>
-            <span>{worker.name}</span>
-            <button onClick={() => handleSelectWorker(worker)}>Select</button>
+            <h2>{worker.name}</h2>
+            <p>Working at {worker.restaurantId}</p>
           </li>
         ))}
       </ul>
-      <button onClick={handleCreateWorker}>Create Worker</button>
-
-      {selectedRestaurant && (
-        <div>
-          <h2>Selected Restaurant: {selectedRestaurant.name}</h2>
-          <ul>
-            {workers.filter((worker) => worker.restaurantId === selectedRestaurant.id).map((worker) => (
-              <li key={worker.id}>
-                <span>{worker.name}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }
