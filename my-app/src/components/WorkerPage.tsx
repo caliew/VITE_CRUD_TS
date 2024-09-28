@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getWorkers } from '../utils/api/workers';
+import { Worker } from '../models/Worker';
 
 const WorkerPage = () => {
-  const [workers, setWorkers] = useState([]);
+  const [workers, setWorkers] = useState<Worker[]>([]);
 
   useEffect(() => {
     getWorkers()

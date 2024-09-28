@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { getRestaurants } from '../utils/api/restaurants';
+import { Restaurant } from '../models/Restaurant';
 
 const RestaurantPage = () => {
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
     getRestaurants()

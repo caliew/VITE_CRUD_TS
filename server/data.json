@@ -1,8 +1,8 @@
 {
   "restaurants":[
-    {"id":1,"name":"Restaurant 1","address":"123 Main St"},
-    {"id":2,"name":"Restaurant 2","address":"456 Elm St"},
-    {"id":3,"name":"Restaurant 3","address":"789 Oak St"}],
+    {"id":1,"name":"Jurong East Branch","address":"123 Main St"},
+    {"id":2,"name":"Raffles Place Branch","address":"456 Elm St"},
+    {"id":3,"name":"City Hall Branch","address":"789 Oak St"}],
   "workers":[
     {"id":1,"name":"John Doe","restaurantId":1},
     {"id":2,"name":"Jane Doe","restaurantId":2},
