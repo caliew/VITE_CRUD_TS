@@ -1,0 +1,77 @@
+Step 1 Create a new directory for the backend server
+    mkdir server
+    cd server
+Step 2 Initialize a new npm project for the backend server
+    npm init -y
+Step 3 Install dependencies for the backend server
+    npm install express @types/express typescript
+Step 4 Create a new TypeScript project for the backend server
+    tsc --init
+Step 5 Create a new file for the backend server
+    touch server.ts
+Step 6 Add the following code to the server.ts
+    import express, { Request, Response } from 'express';
+
+    const app = express();
+    const port = 3001;
+
+    app.use(express.json());
+
+    // Create a sample in-memory database
+    const db = [
+    { id: 1, name: 'John Doe', email: 'john@example.com' },
+    { id: 2, name: 'Jane Doe', email: 'jane@example.com' },
+    ];
+
+    // API endpoints
+    app.get('/api/users', (req: Request, res: Response) => {
+    res.json(db);
+    });
+
+    app.get('/api/users/:id', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const user = db.find((user) => user.id === id);
+    if (!user) {
+        res.status(404).json({ message: 'User not found' });
+    } else {
+        res.json(user);
+    }
+    });
+
+    app.post('/api/users', (req: Request, res: Response) => {
+    const { name, email } = req.body;
+    const newUser = { id: db.length + 1, name, email };
+    db.push(newUser);
+    res.json(newUser);
+    });
+
+    app.put('/api/users/:id', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const user = db.find((user) => user.id === id);
+    if (!user) {
+        res.status(404).json({ message: 'User not found' });
+    } else {
+        const { name, email } = req.body;
+        user.name = name;
+        user.email = email;
+        res.json(user);
+    }
+    });
+
+    app.delete('/api/users/:id', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id);
+    const index = db.findIndex((user) => user.id === id);
+    if (index === -1) {
+        res.status(404).json({ message: 'User not found' });
+    } else {
+        db.splice(index, 1);
+        res.json({ message: 'User deleted' });
+    }
+    });
+
+    app.listen(port, () => {
+    console.log(`Server started on port ${port}`);
+    });
+
+Step 7 Start the server
+    npx ts-node server.ts
