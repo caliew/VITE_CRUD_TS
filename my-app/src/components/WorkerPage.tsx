@@ -1,5 +1,5 @@
 // my-app/src/components/WorkerPage.tsx
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';

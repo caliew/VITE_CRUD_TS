@@ -6,7 +6,7 @@ const HomePage = () => {
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
       <Typography variant="h2" component="h1">
-        Welcome to our application!
+        MAIN PAGE
       </Typography>
       <Box sx={{ marginTop: 4 }}>
         <Button variant="contained" component={Link} to="/restaurants">
