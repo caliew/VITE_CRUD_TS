@@ -1,17 +1,23 @@
-import React, { useState, useEffect } from 'react';
+// my-app/src/components/RestaurantPage.tsx
+import { useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getRestaurants } from '../utils/api/restaurants';
-import { Restaurant } from '../models/Restaurant';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchRestaurants } from '../redux/features/restaurantsSlice';
 
 const RestaurantPage = () => {
-  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+
+  const dispatch = useDispatch();
+  const restaurants = useSelector((state: any) => state.restaurants.restaurants);
+  const loading = useSelector((state: any) => state.restaurants.loading);
+  const error = useSelector((state: any) => state.restaurants.error);
+
+  // const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
-    getRestaurants()
-      .then((data) => setRestaurants(data))
-      .catch((error) => console.error(error));
-  }, []);
+    console.log('Fetching Restaurants...')
+    dispatch(fetchRestaurants());
+  }, [dispatch]);
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>

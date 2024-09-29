@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
+// my-app/src/components/WorkerPage.tsx
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getWorkers } from '../utils/api/workers';
-import { Worker } from '../models/Worker';
+import { fetchWorkers } from '../redux/features/workersSlice';
 
 const WorkerPage = () => {
-  const [workers, setWorkers] = useState<Worker[]>([]);
+  const dispatch = useDispatch();
+  const workers = useSelector((state: any) => state.workers.workers);
+  const loading = useSelector((state: any) => state.workers.loading);
+  const error = useSelector((state: any) => state.workers.error);
 
   useEffect(() => {
-    getWorkers()
-      .then((data) => setWorkers(data))
-      .catch((error) => console.error(error));
-  }, []);
+    dispatch(fetchWorkers());
+  }, [dispatch]);
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
