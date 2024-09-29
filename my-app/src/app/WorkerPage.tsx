@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Worker } from '../models/Worker';
-import { fetchWorkers } from '../redux/features/workersSlice';
+import { fetchWorkers, deleteWorker } from '../redux/features/workersSlice';
 
 const TableHeaders = () => {
   return (
@@ -17,11 +17,20 @@ const TableHeaders = () => {
 };
 
 const TableRowComponent = ({ worker }) => {
+  const dispatch = useDispatch();
+  const handleDelete = async () => {
+    await dispatch(deleteWorker(worker.id));
+  };  
   return (
     <TableRow key={worker.id}>
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.id}</Typography></TableCell>
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
+      <TableCell>
+        <Button variant="contained" color="secondary" onClick={handleDelete}>
+          Delete
+        </Button>
+      </TableCell>
   </TableRow>
   );
 };

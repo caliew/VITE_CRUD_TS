@@ -24,8 +24,15 @@ const updateRestaurant = async (id: number, restaurant: any) => {
 };
 
 const deleteRestaurant = async (id: number) => {
-  const response = await api.delete(`/api/restaurants/${id}`);
-  return response.data;
+  console.log('API DELETE.../api/restaurants/:id', id);
+  try {
+    const response = await api.delete(`/api/restaurants/${id}`);
+    console.log(response);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting restaurant:', error);
+    throw error;
+  }
 };
 
 export { getRestaurants, getRestaurant, createRestaurant, updateRestaurant, deleteRestaurant };
