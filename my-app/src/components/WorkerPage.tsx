@@ -3,9 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getWorkers } from '../utils/api/workers';
-import { Worker } from '../models/Worker';
-import { getWorkersRequest, getWorkersSuccess, getWorkersFailure } from '../redux/workersSlice';
+import { fetchWorkers } from '../redux/features/workersSlice';
 
 const WorkerPage = () => {
   const dispatch = useDispatch();
@@ -14,10 +12,7 @@ const WorkerPage = () => {
   const error = useSelector((state: any) => state.workers.error);
 
   useEffect(() => {
-    dispatch(getWorkersRequest());
-    getWorkers()
-      .then((data) => dispatch(getWorkersSuccess(data)))
-      .catch((error) => dispatch(getWorkersFailure(error)));
+    dispatch(fetchWorkers());
   }, [dispatch]);
 
   return (

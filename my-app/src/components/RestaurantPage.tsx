@@ -2,10 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { getRestaurants } from '../utils/api/restaurants';
-import { Restaurant } from '../models/Restaurant';
 import { useSelector, useDispatch } from 'react-redux';
-import { getRestaurantsRequest, getRestaurantsSuccess, getRestaurantsFailure } from '../redux/restaurantsSlice';
+import { fetchRestaurants } from '../redux/features/restaurantsSlice';
 
 const RestaurantPage = () => {
 
@@ -17,10 +15,8 @@ const RestaurantPage = () => {
   // const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
 
   useEffect(() => {
-    dispatch(getRestaurantsRequest());
-    getRestaurants()
-      .then((data) => dispatch(getRestaurantsSuccess(data)))
-      .catch((error) => dispatch(getRestaurantsFailure(error)));
+    console.log('Fetching Restaurants...')
+    dispatch(fetchRestaurants());
   }, [dispatch]);
 
   return (
