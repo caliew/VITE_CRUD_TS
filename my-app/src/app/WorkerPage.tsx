@@ -3,7 +3,28 @@ import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { Worker } from '../models/Worker';
 import { fetchWorkers } from '../redux/features/workersSlice';
+
+const TableHeaders = () => {
+  return (
+    <TableRow>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANT ID</Typography></TableCell>
+  </TableRow>
+  );
+};
+
+const TableRowComponent = ({ worker }) => {
+  return (
+    <TableRow key={worker.id}>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.id}</Typography></TableCell>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
+  </TableRow>
+  );
+};
 
 const WorkerPage = () => {
   const dispatch = useDispatch();
@@ -23,26 +44,18 @@ const WorkerPage = () => {
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>
           <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Restaurant ID</TableCell>
-            </TableRow>
+            <TableHeaders />
           </TableHead>
           <TableBody>
-            {workers.map((worker) => (
-              <TableRow key={worker.id}>
-                <TableCell>{worker.id}</TableCell>
-                <TableCell>{worker.name}</TableCell>
-                <TableCell>{worker.restaurantId}</TableCell>
-              </TableRow>
+            {workers.map((worker:Worker) => (
+              <TableRowComponent key={worker.id} worker={worker} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
       <Box sx={{ marginTop: 4 }}>
         <Button variant="contained" component={Link} to="/">
-          Back to Home Page
+          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>
         </Button>
       </Box>
     </Box>
