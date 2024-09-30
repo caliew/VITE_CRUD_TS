@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getRestaurants, deleteRestaurant as apiDeleteRestaurant, updateRestaurant as apiUpdateRestaurant   } from '../../utils/api/restaurants';
+import { getRestaurants, 
+  deleteRestaurant as apiDeleteRestaurant, 
+  createRestaurant as apiAddRestaurant,
+  updateRestaurant as apiUpdateRestaurant   } from '../../utils/api/restaurants';
 import { Restaurant } from '../../models/Restaurant';
 
 interface RestaurantsState {
@@ -34,6 +37,15 @@ export const updateRestaurant = createAsyncThunk('restaurants/updateRestaurant',
     console.log('UPDATE RESTAURANT...');
     console.log(restaurant)
     const response = await apiUpdateRestaurant(restaurant.id, restaurant);
+    return response;
+  }
+);
+
+export const addRestaurant = createAsyncThunk('restaurants/addRestaurant',
+  async (restaurant: Restaurant) => {
+    console.log('ADD RESTAURANT...');
+    console.log(restaurant)
+    const response = await apiAddRestaurant(restaurant);
     return response;
   }
 );
@@ -80,6 +92,17 @@ const restaurantsSlice = createSlice({
         state.restaurants = updatedRestaurants;
       })
       .addCase(updateRestaurant.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(addRestaurant.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addRestaurant.fulfilled, (state, action) => {
+        state.loading = false;
+        state.restaurants = [...state.restaurants, action.payload];
+      })
+      .addCase(addRestaurant.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });

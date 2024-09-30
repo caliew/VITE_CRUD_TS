@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Worker } from '../models/Worker';
-import { fetchWorkers, deleteWorker, updateWorker } from '../redux/features/workersSlice';
+import { fetchWorkers, deleteWorker, updateWorker, addWorker } from '../redux/features/workersSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 interface TableRowComponentProps {
@@ -16,10 +16,10 @@ interface TableRowComponentProps {
 const TableHeaders = () => {
   return (
     <TableRow>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANT ID</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>FUNCTION</Typography></TableCell>
+      <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
+      <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
+      <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANT ID</Typography></TableCell>
+      <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>FUNCTIONS</Typography></TableCell>
   </TableRow>
   );
 };
@@ -41,6 +41,16 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
             name: worker.name,
             restaurantId: worker.restaurantId,
           }}
+          validate={(values) => {
+            const errors = {};
+            if (!values.name) {
+              errors.name = 'Worker name is required';
+            }
+            if (!values.restaurantId) {
+              errors.restaurantId = 'Restaurant Id is required';
+            }
+            return errors;
+          }}
           onSubmit={async (values) => {
             try {
               await dispatch(updateWorker(values));
@@ -50,7 +60,7 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
               console.error(error);
             }
           }} >
-          {({ isSubmitting, values, handleChange, handleSubmit }) => (
+          {({ isSubmitting, values, handleChange, handleSubmit, errors }) => (
             <>
               <TableCell>
                 <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{values.id}</Typography>
@@ -62,7 +72,8 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
                   placeholder="Wroker Name" 
                   value={values.name} 
                   onChange={handleChange}
-                  style={{ fontSize: 18, fontWeight: 50, color: 'red' }} />
+                  style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
+                  { errors.name && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.name}</Typography> }
               </TableCell>
               <TableCell>
                 <Field 
@@ -71,7 +82,8 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
                   placeholder="Restaurant Ids" 
                   value={values.restaurantId} 
                   onChange={handleChange}
-                  style={{ fontSize: 18, fontWeight: 50, color: 'red' }} />
+                  style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
+                  { errors.restaurantId && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.restaurantId}</Typography> }
               </TableCell>
               <TableCell>
                 <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>UPDATE</Button>
@@ -82,10 +94,10 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
         </Formik>
       ) : (
       <>
-        <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.id}</Typography></TableCell>
-        <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
-        <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
-        <TableCell>
+        <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.id}</Typography></TableCell>
+        <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
+        <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
+        <TableCell style={{ textAlign: 'center' }}>
           <Button variant="contained" color="primary" onClick={handleDelete}>
             Delete
           </Button>
@@ -115,6 +127,17 @@ const WorkerPage = () => {
     }
   };
 
+  const handleAddWorker = async (value: Worker, setValues: (values: Worker) => void) => {
+    try {
+      await dispatch(addWorker(value));
+      await dispatch(fetchWorkers());
+      // Reset the form values
+      setValues({ name: '', restaurantId: '' });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
       <Typography variant="h3" component="h1">
@@ -132,6 +155,46 @@ const WorkerPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+
+      <Typography sx={{ fontSize: 24, fontWeight: 200, margin:'25px', color: 'black' }}>Add New Worker</Typography>
+      <Formik
+        initialValues={{
+          name: '',
+          restaurantId: '',
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.name) {
+            errors.name = 'Worker name is required';
+          }
+          if (!values.restaurantId) {
+            errors.restaurantId = 'Restaurant Id is required';
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setValues }) => handleAddWorker(values, setValues)}
+        >
+        {({ isSubmitting, values, handleChange, handleSubmit, handleReset, errors }) => (
+          <Form>
+            <Field 
+              type="text" 
+              name="name" 
+              placeholder="Worker Name" 
+              style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
+            {errors.name && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.name}</Typography> }
+            <Field 
+              type="text" 
+              name="restaurantId" 
+              placeholder="Restaurant Id" 
+              style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
+            {errors.restaurantId && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.restaurantId}</Typography> }
+            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>Add Worker</Button>
+            <Button variant="contained" color="secondary" onClick={handleReset}>Reset</Button>            
+          </Form>
+        )}
+      </Formik>
+
       <Box sx={{ marginTop: 4 }}>
         <Button variant="contained" component={Link} to="/">
           <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>

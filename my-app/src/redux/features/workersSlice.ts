@@ -1,5 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getWorkers, deleteWorker as apiDeleteWorker, updateWorker as apiUpdateWorker } from '../../utils/api/workers';
+import { getWorkers, 
+  createWorker as apiAddWorker,
+  deleteWorker as apiDeleteWorker, 
+  updateWorker as apiUpdateWorker } from '../../utils/api/workers';
 
 interface WorkersState {
   workers: any[];
@@ -35,6 +38,15 @@ export const updateWorker = createAsyncThunk('workers/updateWorker',
     console.log('UPDATE WORKER...');
     console.log(worker)
     const response = await apiUpdateWorker(worker.id, worker);
+    return response;
+  }
+);
+
+export const addWorker = createAsyncThunk('workers/addWorker',
+  async (worker: Worker) => {
+    console.log('ADD WORKER...');
+    console.log(worker)
+    const response = await apiAddWorker(worker);
     return response;
   }
 );
