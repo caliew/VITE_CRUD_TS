@@ -19,25 +19,23 @@ const TableHeaders = () => {
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
       <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ADDRESS</Typography></TableCell>
+      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>FUNCTIONS</Typography></TableCell>
     </TableRow>
   );
 };
 
 
 const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEditingRow, setIsEditingRow }) => {
+
   const dispatch = useDispatch();
 
-  const handleDelete = async () => {
-    await dispatch(deleteRestaurant(restaurant.id));
-  };
-
-  const handleUpdate = async () => {
-    setIsEditingRow(restaurant.id);
-  };
+  const handleDelete = async () => await dispatch(deleteRestaurant(restaurant.id));
+  const handleUpdate = async () => setIsEditingRow(restaurant.id);
+  const handleCancel = async () => setIsEditingRow(null);
 
   return (
     <TableRow key={restaurant.id}>
-      {isEditingRow === restaurant.id ? (
+      { isEditingRow === restaurant.id ? (
         <Formik
           initialValues={{
             id: restaurant.id,
@@ -46,13 +44,13 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
           }}
           onSubmit={async (values) => {
             try {
-              await dispatch(updateRestaurant(values));
               await dispatch(fetchRestaurants());
+              await dispatch(updateRestaurant(values));
+              setIsEditingRow(null);
             } catch (error) {
               console.error(error);
             }
-          }}
-        >
+          }} >
           {({ isSubmitting, values, handleChange, handleSubmit }) => (
             <>
               <TableCell>
@@ -77,9 +75,8 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
                   style={{ fontSize: 18, fontWeight: 50, color: 'red' }} />
               </TableCell>
               <TableCell>
-              <Button type="submit" disabled={isSubmitting} onClick={handleSubmit}>
-                  UPDATE
-                </Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>UPDATE</Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>CANCEL</Button>
               </TableCell>
             </>
           )}
@@ -90,10 +87,10 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
           <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.name}</Typography></TableCell>
           <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.address}</Typography></TableCell>
           <TableCell>
-            <Button variant="contained" color="secondary" onClick={handleDelete}>
+            <Button variant="contained" color="primary" onClick={handleDelete}>
               DELETE
             </Button>
-            <Button variant="contained" color="secondary" onClick={handleUpdate}>
+            <Button variant="contained" color="primary" onClick={handleUpdate}>
               UPDATE
             </Button>
           </TableCell>
@@ -124,8 +121,8 @@ const RestaurantPage = () => {
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-      <Typography variant="h2" component="h1">
-        Restaurants
+      <Typography variant="h3" component="h1">
+        RESTAURANTS LISTS
       </Typography>
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>

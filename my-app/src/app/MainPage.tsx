@@ -7,14 +7,15 @@ const HomePage = () => {
   const dispatch = useDispatch();
 
   useEffect(()=>{
+    //
+    // CHECK CHECK OF FETCH FUNCTION INSTEAD OF USING REDUX DISPATCH
+    //
     async function fetchData() {
       const response = await fetch('http://localhost:3001/api/restaurants');
       const data = await response.json();
-      console.log('fetchData...http://localhost:3001/api/restaurants', data.length);
     }
     fetchData();
     return()=>{
-      console.log('....HomePage...useEffect...return');
     }
   },[dispatch]);
 

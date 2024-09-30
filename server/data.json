@@ -1,1 +1,12 @@
-{"restaurants":[{"id":1,"name":"Jurong East Branch","address":"123 Main St"},{"id":2,"name":"JURONG EAST","address":"456 Elm St"},{"id":3,"name":"City Hall Branch","address":"789 Oak St"}],"workers":[{"id":1,"name":"John Doe","restaurantId":1},{"id":2,"name":"Jane Doe","restaurantId":2},{"id":3,"name":"Bob Smith","restaurantId":1},{"id":4,"name":"Alice Johnson","restaurantId":3}]}
+{
+    "restaurants":[
+        {"id":1,"name":"Jurong East Branch","address":"123 Main St"},
+        {"id":2,"name":"JURONG EAST","address":"456 Elm St"},
+        {"id":3,"name":"City Hall Branch","address":"789 Oak St"}
+    ],
+    "workers":[
+        {"id":1,"name":"John Doe","restaurantId":"2"},
+        {"id":2,"name":"Jane Doe","restaurantId":2},
+        {"id":3,"name":"Bob Smith","restaurantId":1},
+        {"id":4,"name":"Alice Johnson","restaurantId":3}
+    ]}
