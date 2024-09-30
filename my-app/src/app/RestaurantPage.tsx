@@ -7,6 +7,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchRestaurants, deleteRestaurant, updateRestaurant  } from '../redux/features/restaurantsSlice';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
+interface TableRowComponentProps {
+  restaurant: Restaurant;
+  isEditingRow: null|boolean;
+  setIsEditingRow: (id: number) => void;
+}
+
 const TableHeaders = () => {
   return (
     <TableRow>
@@ -18,7 +24,7 @@ const TableHeaders = () => {
 };
 
 
-const TableRowComponent = ({ restaurant, isEditingRow, setIsEditingRow }) => {
+const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEditingRow, setIsEditingRow }) => {
   const dispatch = useDispatch();
 
   const handleDelete = async () => {
@@ -102,14 +108,13 @@ const RestaurantPage = () => {
 
   const dispatch = useDispatch();
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
-  const [isEditingRow, setIsEditingRow] = useState(null);
+  const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
 
   useEffect(() => {
-    console.log('Fetching Restaurants...')
     dispatch(fetchRestaurants());
   }, [dispatch]);
 
-  const handleUpdateClick = (id) => {
+  const handleUpdateClick = (id:any) => {
     if (isEditingRow !== id) {
       setIsEditingRow(id);
     } else {

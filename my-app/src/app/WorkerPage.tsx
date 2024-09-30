@@ -1,10 +1,16 @@
 // my-app/src/components/WorkerPage.tsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Worker } from '../models/Worker';
 import { fetchWorkers, deleteWorker } from '../redux/features/workersSlice';
+
+interface TableRowComponentProps {
+  worker: Worker;
+  isEditingRow: null|boolean;
+  setIsEditingRow: (id: number) => void;
+}
 
 const TableHeaders = () => {
   return (
@@ -16,7 +22,7 @@ const TableHeaders = () => {
   );
 };
 
-const TableRowComponent = ({ worker }) => {
+const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditingRow, setIsEditingRow }) => {
   const dispatch = useDispatch();
   const handleDelete = async () => {
     await dispatch(deleteWorker(worker.id));
@@ -38,12 +44,19 @@ const TableRowComponent = ({ worker }) => {
 const WorkerPage = () => {
   const dispatch = useDispatch();
   const workers = useSelector((state: any) => state.workers.workers);
-  const loading = useSelector((state: any) => state.workers.loading);
-  const error = useSelector((state: any) => state.workers.error);
+  const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
 
   useEffect(() => {
     dispatch(fetchWorkers());
   }, [dispatch]);
+
+  const handleUpdateClick = (id:any) => {
+    if (isEditingRow !== id) {
+      setIsEditingRow(id);
+    } else {
+      setIsEditingRow(null);
+    }
+  };
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
@@ -57,7 +70,7 @@ const WorkerPage = () => {
           </TableHead>
           <TableBody>
             {workers.map((worker:Worker) => (
-              <TableRowComponent key={worker.id} worker={worker} />
+              <TableRowComponent key={worker.id} worker={worker} isEditingRow={isEditingRow} setIsEditingRow={handleUpdateClick} />
             ))}
           </TableBody>
         </Table>
