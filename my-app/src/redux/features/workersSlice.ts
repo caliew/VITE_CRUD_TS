@@ -2,16 +2,19 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getWorkers, 
   createWorker as apiAddWorker,
   deleteWorker as apiDeleteWorker, 
-  updateWorker as apiUpdateWorker } from '../../utils/api/workers';
+  updateWorker as apiUpdateWorker,
+  getWorkersByRestaurantId  } from '../../utils/api/workers';
 
 interface WorkersState {
   workers: any[];
+  workersByRestaurantId: any[];
   loading: boolean;
   error: any;
 }
 
 const initialState: WorkersState = {
   workers: [],
+  workersByRestaurantId: [],
   loading: false,
   error: null,
 };
@@ -35,18 +38,22 @@ export const deleteWorker = createAsyncThunk('workers/deleteWorker',
 
 export const updateWorker = createAsyncThunk('workers/updateWorker',
   async (worker: Worker) => {
-    console.log('UPDATE WORKER...');
-    console.log(worker)
-    const response = await apiUpdateWorker(worker.id, worker);
+    const response = await apiUpdateWorker(worker.id, { ...worker, restaurantId: Number(worker.restaurantId) });
     return response;
   }
 );
 
 export const addWorker = createAsyncThunk('workers/addWorker',
   async (worker: Worker) => {
-    console.log('ADD WORKER...');
-    console.log(worker)
     const response = await apiAddWorker(worker);
+    return response;
+  }
+);
+
+export const fetchWorkersByRestaurantId = createAsyncThunk(
+  'workers/fetchWorkersByRestaurantId',
+  async (restaurantId: number) => {
+    const response = await getWorkersByRestaurantId(restaurantId);
     return response;
   }
 );
@@ -76,6 +83,17 @@ const workersSlice = createSlice({
         state.workers = action.payload;
       })
       .addCase(deleteWorker.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      .addCase(fetchWorkersByRestaurantId.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchWorkersByRestaurantId.fulfilled, (state, action) => {
+        state.loading = false;
+        state.workersByRestaurantId  = action.payload;
+      })
+      .addCase(fetchWorkersByRestaurantId.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });      

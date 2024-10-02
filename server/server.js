@@ -26,7 +26,9 @@ app.use((req, res, next) => {
   next();
 });
 
+// -----------------------------
 // API endpoints for restaurants
+// -----------------------------
 app.get('/api/restaurants', (req, res) => {
   res.json(data.restaurants);
 });
@@ -70,13 +72,26 @@ app.delete('/api/restaurants/:id', (req, res) => {
   if (index === -1) {
     res.status(404).json({ message: 'Restaurant not found' });
   } else {
+    // Delete the restaurant
     data.restaurants.splice(index, 1);
+
+    // Delete the associated workers
+    data.workers = data.workers.filter((worker) => worker.restaurantId !== id);
+
     saveDataToFile();
-    res.json({ message: 'Restaurant deleted' });
+    res.json({ message: 'Restaurant deleted successfully' });
   }
 });
 
+app.get('/api/restaurants/workers/:restaurantId', (req, res) => {
+  const restaurantId = parseInt(req.params.restaurantId);
+  const workers = data.workers.filter((worker) => worker.restaurantId === restaurantId);
+  res.json(workers);
+});
+
+// -------------------------
 // API endpoints for workers
+// -------------------------
 app.get('/api/workers', (req, res) => {
   res.json(data.workers);
 });

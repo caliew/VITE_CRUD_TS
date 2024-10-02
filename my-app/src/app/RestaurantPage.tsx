@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 import { Restaurant } from '../models/Restaurant';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRestaurants, deleteRestaurant, updateRestaurant, addRestaurant  } from '../redux/features/restaurantsSlice';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { fetchWorkersByRestaurantId } from '../redux/features/workersSlice';
+import { Formik, Form, Field } from 'formik';
+import WorkerList from './WorkerList';
 
 interface TableRowComponentProps {
   restaurant: Restaurant;
@@ -84,8 +86,12 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
                 {errors.address && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.address}</Typography> }
               </TableCell>
               <TableCell style={{textAlign: 'center'}}>
-                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>UPDATE</Button>
-                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>CANCEL</Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
+                </Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>CANCEL</Typography>
+                </Button>
               </TableCell>
             </>
           )}
@@ -97,11 +103,15 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
           <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.address}</Typography></TableCell>
           <TableCell style={{textAlign: 'center'}}>
             <Button variant="contained" color="primary" onClick={handleDelete}>
-              DELETE
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>DELETE</Typography>
             </Button>
             <Button variant="contained" color="primary" onClick={handleUpdate}>
-              UPDATE
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
             </Button>
+            <Button variant="contained" color="primary" onClick={() => dispatch(fetchWorkersByRestaurantId(restaurant.id)) }>
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>LIST</Typography>
+            </Button>
+            <WorkerList restaurant={restaurant} />
           </TableCell>
         </>
       )}
@@ -139,7 +149,7 @@ const RestaurantPage = () => {
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-      <Typography sx={{ fontSize: 24, fontWeight: 200, margin:'25px', color: 'black' }}>
+      <Typography sx={{ fontSize: 32, fontWeight: 200, margin:'25px', color: 'black' }}>
         RESTAURANTS LISTS
       </Typography>
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
@@ -187,8 +197,14 @@ const RestaurantPage = () => {
               placeholder="Restaurant Address" 
               style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
             {errors.address && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.address}</Typography> }
-            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>Add Restaurant</Button>
-            <Button variant="contained" color="primary" onClick={handleReset}>Reset</Button>            
+            <div style={{marginTop:10}}>
+            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Add Restaurant</Typography>
+            </Button>
+            <Button variant="contained" color="secondary" onClick={handleReset}>
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Reset</Typography>
+              </Button>
+            </div>
           </Form>
         )}
       </Formik>

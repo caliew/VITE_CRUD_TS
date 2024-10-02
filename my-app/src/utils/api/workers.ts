@@ -20,7 +20,7 @@ const createWorker = async (worker: any) => {
 };
 
 const updateWorker = async (id: number, worker: any) => {
-  const response = await api.put(`/api/workers/${id}`, worker);
+  const response = await api.put(`/api/workers/${id}`, { ...worker, restaurantId: Number(worker.restaurantId) });
   return response.data;
 };
 
@@ -29,4 +29,11 @@ const deleteWorker = async (id: number) => {
   return response.data;
 };
 
-export { getWorkers, getWorker, createWorker, updateWorker, deleteWorker };
+const getWorkersByRestaurantId = async (restaurantId: number) => {
+  console.log(restaurantId)
+  const response = await api.get(`/api/restaurants/workers/${restaurantId}`);
+  console.log(response);
+  return response.data;
+};
+
+export { getWorkers, getWorker, createWorker, updateWorker, deleteWorker, getWorkersByRestaurantId };

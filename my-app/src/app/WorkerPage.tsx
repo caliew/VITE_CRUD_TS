@@ -86,8 +86,12 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
                   { errors.restaurantId && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.restaurantId}</Typography> }
               </TableCell>
               <TableCell>
-                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>UPDATE</Button>
-                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>CANCEL</Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
+                </Button>
+                <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>CANCEL</Typography>                  
+                </Button>
               </TableCell>
             </>
           )}
@@ -99,10 +103,10 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
         <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
         <TableCell style={{ textAlign: 'center' }}>
           <Button variant="contained" color="primary" onClick={handleDelete}>
-            Delete
+            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Delete</Typography>
           </Button>
           <Button variant="contained" color="primary" onClick={handleUpdate}>
-            UPDATE
+            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
           </Button>
         </TableCell>
       </>)}
@@ -129,7 +133,8 @@ const WorkerPage = () => {
 
   const handleAddWorker = async (value: Worker, setValues: (values: Worker) => void) => {
     try {
-      await dispatch(addWorker(value));
+      const restaurantId = parseInt(value.restaurantId);
+      await dispatch(addWorker({ ...value, restaurantId }));
       await dispatch(fetchWorkers());
       // Reset the form values
       setValues({ name: '', restaurantId: '' });
@@ -140,7 +145,7 @@ const WorkerPage = () => {
 
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-      <Typography variant="h3" component="h1">
+      <Typography sx={{ fontSize: 32, fontWeight: 200, margin:'25px', color: 'black' }}>
         WORKERS LISTS
       </Typography>
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
@@ -189,8 +194,16 @@ const WorkerPage = () => {
               placeholder="Restaurant Id" 
               style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
             {errors.restaurantId && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.restaurantId}</Typography> }
-            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>Add Worker</Button>
-            <Button variant="contained" color="secondary" onClick={handleReset}>Reset</Button>            
+
+            <div style={{marginTop:10}}>
+              <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>
+                <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Add Worker</Typography>
+              </Button>
+              <Button variant="contained" color="secondary" onClick={handleReset}>
+                <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Reset</Typography>
+              </Button>
+            </div>
+
           </Form>
         )}
       </Formik>

@@ -22,7 +22,7 @@ const HomePage = () => {
   return (
     <div>
       <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-        <Typography variant="h3" component="h3">
+      <Typography sx={{ fontSize: 32, fontWeight: 200, margin:'25px', color: 'black' }}>
           HOME PAGE
         </Typography>
         <Box sx={{ marginTop: 4 }}>

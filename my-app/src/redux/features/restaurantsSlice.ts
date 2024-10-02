@@ -34,8 +34,6 @@ export const deleteRestaurant = createAsyncThunk('restaurants/deleteRestaurant',
 
 export const updateRestaurant = createAsyncThunk('restaurants/updateRestaurant',
   async (restaurant: Restaurant) => {
-    console.log('UPDATE RESTAURANT...');
-    console.log(restaurant)
     const response = await apiUpdateRestaurant(restaurant.id, restaurant);
     return response;
   }
@@ -43,8 +41,6 @@ export const updateRestaurant = createAsyncThunk('restaurants/updateRestaurant',
 
 export const addRestaurant = createAsyncThunk('restaurants/addRestaurant',
   async (restaurant: Restaurant) => {
-    console.log('ADD RESTAURANT...');
-    console.log(restaurant)
     const response = await apiAddRestaurant(restaurant);
     return response;
   }
