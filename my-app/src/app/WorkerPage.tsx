@@ -1,11 +1,11 @@
 // my-app/src/components/WorkerPage.tsx
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TextField, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Worker } from '../models/Worker';
 import { fetchWorkers, deleteWorker, updateWorker, addWorker } from '../redux/features/workersSlice';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, Field } from 'formik';
 
 interface TableRowComponentProps {
   worker: Worker;
@@ -118,10 +118,17 @@ const WorkerPage = () => {
   const dispatch = useDispatch();
   const workers = useSelector((state: any) => state.workers.workers);
   const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
+  const [searchRestaurantId, setSearchRestaurantId] = useState('');
+  const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>([]);
 
   useEffect(() => {
     dispatch(fetchWorkers());
   }, [dispatch]);
+
+  useEffect(()=>{
+    console.log('..USE EFFECT.. WORKERS...')
+    setFilteredWorkers(searchRestaurantId === '' ? workers : workers.filter((worker: Worker) => worker.restaurantId === parseInt(searchRestaurantId)));
+  },[workers])
 
   const handleUpdateClick = (id:any) => {
     if (isEditingRow !== id) {
@@ -133,7 +140,7 @@ const WorkerPage = () => {
 
   const handleAddWorker = async (value: Worker, setValues: (values: Worker) => void) => {
     try {
-      const restaurantId = parseInt(value.restaurantId);
+      const restaurantId:Number = parseInt(value.restaurantId);
       await dispatch(addWorker({ ...value, restaurantId }));
       await dispatch(fetchWorkers());
       // Reset the form values
@@ -141,26 +148,43 @@ const WorkerPage = () => {
     } catch (error) {
       console.error(error);
     }
-  };
+  }
 
+  const handleSearch = () => {
+    setFilteredWorkers(searchRestaurantId === '' ? workers : workers.filter((worker: Worker) => worker.restaurantId === parseInt(searchRestaurantId)));
+  };
+  
   return (
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
       <Typography sx={{ fontSize: 32, fontWeight: 200, margin:'25px', color: 'black' }}>
         WORKERS LISTS
       </Typography>
+
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <TextField
+          label="Search by Restaurant ID"
+          value={searchRestaurantId}
+          onChange={(e) => setSearchRestaurantId(e.target.value)}  
+          InputProps={{ inputProps: {type: 'number'}, style: {fontFamily: 'Roboto',textAlign: 'center',fontSize: 18,fontWeight: 50,color: 'red'} }}
+          InputLabelProps={{ style: { fontFamily: 'Roboto', fontSize: 18, fontWeight: 50, color: 'blue' } }}
+        />
+        <Button variant="contained" color="primary" onClick={handleSearch}>
+          Search
+        </Button>
+      </Box>
+
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>
           <TableHead>
             <TableHeaders />
           </TableHead>
           <TableBody>
-            {workers.map((worker:Worker) => (
+            {filteredWorkers.map((worker:Worker) => (
               <TableRowComponent key={worker.id} worker={worker} isEditingRow={isEditingRow} setIsEditingRow={handleUpdateClick} />
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-
 
       <Typography sx={{ fontSize: 24, fontWeight: 200, margin:'25px', color: 'black' }}>Add New Worker</Typography>
       <Formik
