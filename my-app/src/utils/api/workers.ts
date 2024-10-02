@@ -30,9 +30,7 @@ const deleteWorker = async (id: number) => {
 };
 
 const getWorkersByRestaurantId = async (restaurantId: number) => {
-  console.log(restaurantId)
   const response = await api.get(`/api/restaurants/workers/${restaurantId}`);
-  console.log(response);
   return response.data;
 };
 
