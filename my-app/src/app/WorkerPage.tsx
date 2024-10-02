@@ -87,7 +87,7 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
               </TableCell>
               <TableCell>
                 <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>
-                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>SAVE</Typography>
                 </Button>
                 <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>
                   <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>CANCEL</Typography>                  
@@ -102,11 +102,11 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
         <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
         <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
         <TableCell style={{ textAlign: 'center' }}>
-          <Button variant="contained" color="primary" onClick={handleDelete}>
+          <Button variant="contained" color="primary" onClick={handleDelete} style={{ marginRight: 5 }}>
             <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Delete</Typography>
           </Button>
           <Button variant="contained" color="primary" onClick={handleUpdate}>
-            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
+            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>EDIT</Typography>
           </Button>
         </TableCell>
       </>)}
@@ -196,7 +196,7 @@ const WorkerPage = () => {
             {errors.restaurantId && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.restaurantId}</Typography> }
 
             <div style={{marginTop:10}}>
-              <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>
+              <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit} style={{ marginRight: 5 }}>
                 <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Add Worker</Typography>
               </Button>
               <Button variant="contained" color="secondary" onClick={handleReset}>

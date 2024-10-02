@@ -13,6 +13,8 @@ interface TableRowComponentProps {
   restaurant: Restaurant;
   isEditingRow: null|boolean;
   setIsEditingRow: (id: number) => void;
+  isShowingWorkers: boolean;
+  // setIsShowingWorkers: (showWorkers: boolean) => void;
 }
 
 const TableHeaders = () => {
@@ -26,11 +28,14 @@ const TableHeaders = () => {
   );
 };
 
-const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEditingRow, setIsEditingRow }) => {
+const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEditingRow, setIsEditingRow  }) => {
   const dispatch = useDispatch();
   const handleDelete = async () => await dispatch(deleteRestaurant(restaurant.id));
   const handleUpdate = async () => setIsEditingRow(restaurant.id);
   const handleCancel = async () => setIsEditingRow(null);
+  const [isShowingWorkers, setIsShowingWorkers] = useState(true);
+  
+  const handleToggleWorkers = () => setIsShowingWorkers(!isShowingWorkers);
 
   return (
     <TableRow key={restaurant.id}>
@@ -87,7 +92,7 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
               </TableCell>
               <TableCell style={{textAlign: 'center'}}>
                 <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleSubmit}>
-                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
+                  <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>SAVE</Typography>
                 </Button>
                 <Button variant="contained" color="secondary" disabled={isSubmitting} onClick={handleCancel}>
                   <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>CANCEL</Typography>
@@ -102,16 +107,19 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
           <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.name}</Typography></TableCell>
           <TableCell><Typography sx={{ textAlign: 'center', fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.address}</Typography></TableCell>
           <TableCell style={{textAlign: 'center'}}>
-            <Button variant="contained" color="primary" onClick={handleDelete}>
+            <Button variant="contained" color="primary" onClick={handleUpdate} style={{ marginRight: 5 }}>
+              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>EDIT</Typography>
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleDelete} style={{ marginRight: 5 }}>
               <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>DELETE</Typography>
             </Button>
-            <Button variant="contained" color="primary" onClick={handleUpdate}>
-              <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>UPDATE</Typography>
-            </Button>
-            <Button variant="contained" color="primary" onClick={() => dispatch(fetchWorkersByRestaurantId(restaurant.id)) }>
+            <Button variant="contained" color="primary" onClick={() => {
+                handleToggleWorkers();
+                dispatch(fetchWorkersByRestaurantId(restaurant.id)) 
+              }}>
               <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>LIST</Typography>
             </Button>
-            <WorkerList restaurant={restaurant} />
+            { isShowingWorkers && <WorkerList restaurant={restaurant} /> }
           </TableCell>
         </>
       )}
@@ -128,14 +136,6 @@ const RestaurantPage = () => {
   useEffect(() => {
     dispatch(fetchRestaurants());
   }, [dispatch]);
-
-  const handleUpdateClick = (id:any) => {
-    if (isEditingRow !== id) {
-      setIsEditingRow(id);
-    } else {
-      setIsEditingRow(null);
-    }
-  };
 
   const handleAddRestaurant = async (value: Restaurant, setValues: (values: Restaurant) => void) => {
     try {
@@ -159,7 +159,12 @@ const RestaurantPage = () => {
           </TableHead>
           <TableBody>
             {restaurants.map((restaurant:Restaurant) => (
-            <TableRowComponent key={restaurant.id} restaurant={restaurant} isEditingRow={isEditingRow} setIsEditingRow={handleUpdateClick} />
+              <TableRowComponent 
+              key={restaurant.id} 
+              restaurant={restaurant} 
+              isEditingRow={isEditingRow} 
+              setIsEditingRow={setIsEditingRow}
+            />
             ))}
           </TableBody>
         </Table>
@@ -198,7 +203,7 @@ const RestaurantPage = () => {
               style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} />
             {errors.address && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.address}</Typography> }
             <div style={{marginTop:10}}>
-            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit}>
+            <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit} style={{ marginRight: 5 }}>
               <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>Add Restaurant</Typography>
             </Button>
             <Button variant="contained" color="secondary" onClick={handleReset}>
