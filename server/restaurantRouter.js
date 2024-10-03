@@ -1,9 +1,12 @@
 // server/restaurantRouter.js
 const express = require('express');
 const router = express.Router();
+const { verifyToken } = require('./auth');
 
-// API endpoints for restaurants
+router.use(verifyToken);
+// API endpoints for ./api/restaurants
 router.get('/', (req, res) => {
+  console.log('GET /api/restaurants')
   res.json(req.data.restaurants);
 });
 

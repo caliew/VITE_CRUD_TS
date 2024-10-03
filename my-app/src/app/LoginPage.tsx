@@ -1,0 +1,58 @@
+import React from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import { Formik, Form, Field } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../utils/api/loginApi';
+
+const LoginPage = () => {
+    const navigate = useNavigate();
+    const handleSubmit = async (values: any, { setSubmitting, setFieldError  }: any) => {
+        try {
+            // const response = await fetch('http://localhost:3001/api/auth/login', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify(values),
+            // });
+            const response = await login(values);
+            if (response.status === 200) {
+              navigate('/main'); // Use navigate instead of window.location.href
+            }
+          } catch (error) {
+            if (error.response) {
+              setFieldError('accessCode', 'Invalid access code');
+            } else {
+              setFieldError('accessCode', error.message);
+            }
+          } finally {
+            setSubmitting(false);
+          }
+        };
+
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '25vh' }}>
+        <Box sx={{ width: 300, padding: 2, border: '1px solid #ccc', borderRadius: 2 }}>
+            <Formik
+            initialValues={{ accessCode: '' }}
+            onSubmit={handleSubmit}
+            >
+            {({ isSubmitting, handleSubmit, errors }) => (
+                <Form>
+                <Field
+                    type="text"
+                    name="accessCode"
+                    placeholder="Access Code"
+                    style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 18, fontWeight: 50, color: 'red' }} 
+                    />
+                    {errors.accessCode && <Typography sx={{ fontSize: 18, fontWeight: 100, color: 'red' }}>{errors.accessCode}</Typography> }
+                    <Button variant="contained" color="primary" disabled={isSubmitting} onClick={handleSubmit} style={{ marginLeft: 5 }}>
+                    <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>LOGIN</Typography>
+                    </Button>
+                </Form>
+            )}
+            </Formik>
+        </Box>
+        </Box>
+    );
+};
+
+export default LoginPage;

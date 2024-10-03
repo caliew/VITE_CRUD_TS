@@ -1,9 +1,12 @@
 // server/workerRouter.js
 const express = require('express');
 const router = express.Router();
+const { verifyToken } = require('./auth');
 
-// API endpoints for workers
+router.use(verifyToken);
+// API endpoints for ./api/workers
 router.get('/', (req, res) => {
+  console.log('GET /api/workers')
   res.json(req.data.workers);
 });
 

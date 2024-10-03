@@ -164,7 +164,7 @@ const WorkerPage = () => {
         <TextField
           label="Search by Restaurant ID"
           value={searchRestaurantId}
-          onChange={(e) => setSearchRestaurantId(e.target.value)}  
+          onChange={(e) => setSearchRestaurantId(e.target.value)}
           InputProps={{ inputProps: {type: 'number'}, style: {fontFamily: 'Roboto',textAlign: 'center',fontSize: 18,fontWeight: 50,color: 'red'} }}
           InputLabelProps={{ style: { fontFamily: 'Roboto', fontSize: 18, fontWeight: 50, color: 'blue' } }}
         />

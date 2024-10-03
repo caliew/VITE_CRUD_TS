@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Grid } from '@mui/material';
+import LoginPage from './LoginPage';
 import MainPage from './MainPage';
 import RestaurantPage from './RestaurantPage';
 import WorkerPage from './WorkerPage';
@@ -22,7 +23,8 @@ const App = () => {
             </Grid>
             <Grid item xs={10} sx={{ padding: 2 }}>
               <Routes>
-                <Route path="/" element={<MainPage />} />
+                <Route path="/" element={<LoginPage />} />
+                <Route path="/main" element={<MainPage />} />
                 <Route path="/restaurants" element={<RestaurantPage />} />
                 <Route path="/workers" element={<WorkerPage />} />
               </Routes>

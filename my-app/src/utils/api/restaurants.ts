@@ -1,10 +1,24 @@
 import axios from 'axios';
+import { getToken } from '../api/auth';
+
 const api = axios.create({
-    baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:3001', 
+    headers: {
+        Authorization: `${getToken()}`,
+    },
+});
+
+api.interceptors.request.use(async (config) => {
+  const token = await getToken();
+  if (token) {
+    config.headers.Authorization = `${token}`;
+  }
+  return config;
 });
 
 const getRestaurants = async () => {
-  const response = await api.get('/api/restaurants');
+  console.log('API GET.../api/restaurants')
+  const response = await api.get('/api/restaurants');  
   return response.data;
 };
 

@@ -5,8 +5,15 @@ import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import WorkIcon from '@mui/icons-material/Work';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { removeToken } from '../utils/api/auth';
 
 const Sidebar = () => {
+
+  const handleLogout = () => {
+    removeToken();
+  };
+  
   return (
     <List>
       <ListItem button component={Link} to="/">
@@ -31,6 +38,14 @@ const Sidebar = () => {
         </ListItemIcon>
         <ListItemText>
         <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>WORKERS</Typography>
+        </ListItemText>
+      </ListItem>
+      <ListItem button onClick={handleLogout} component={Link} to="/">
+        <ListItemIcon>
+          <LogoutIcon />
+        </ListItemIcon>
+        <ListItemText>
+        <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>LOGOUT</Typography>
         </ListItemText>
       </ListItem>
     </List>

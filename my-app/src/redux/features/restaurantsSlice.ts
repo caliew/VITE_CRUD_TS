@@ -20,6 +20,7 @@ const initialState: RestaurantsState = {
 export const fetchRestaurants = createAsyncThunk('restaurants/fetchRestaurants',
   async () => {
     const response = await getRestaurants();
+    console.log(response);
     return response;
   }
 );
@@ -61,6 +62,7 @@ const restaurantsSlice = createSlice({
       })
       .addCase(fetchRestaurants.rejected, (state, action) => {
         state.loading = false;
+        state.restaurants = [];
         state.error = action.error.message;
       })
       .addCase(deleteRestaurant.pending, (state) => {

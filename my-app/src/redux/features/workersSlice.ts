@@ -73,6 +73,7 @@ const workersSlice = createSlice({
       })
       .addCase(fetchWorkers.rejected, (state, action) => {
         state.loading = false;
+        state.workers = [];
         state.error = action.error.message;
       })
       .addCase(deleteWorker.pending, (state) => {

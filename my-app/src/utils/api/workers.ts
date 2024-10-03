@@ -1,8 +1,20 @@
 // workers.ts
 import axios from 'axios';
+import { getToken } from '../api/auth';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001',
+    baseURL: 'http://localhost:3001', 
+    headers: {
+        Authorization: `${getToken()}`,
+      },
+});
+
+api.interceptors.request.use(async (config) => {
+  const token = await getToken();
+  if (token) {
+    config.headers.Authorization = `${token}`;
+  }
+  return config;
 });
 
 const getWorkers = async () => {
