@@ -3,7 +3,7 @@ import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AppConfig } from '../config';
-import HomeIcon from '../../public/verified.svg';
+import HomeIcon from '../assets/verified.svg';
 
 const Header = () => {
   return (

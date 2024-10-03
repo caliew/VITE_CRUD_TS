@@ -14,7 +14,8 @@ const HomePage = () => {
       const response = await fetch('http://localhost:3001/api/restaurants');
       const data = await response.json();
     }
-    fetchData();
+    // fetchData();
+    // ---------
     return()=>{
     }
   },[dispatch]);
