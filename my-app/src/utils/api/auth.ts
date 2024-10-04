@@ -8,9 +8,7 @@ const getToken = () => {
 };
 
 const removeToken = () => {
-    console.log('..remove token..');
     localStorage.removeItem('accessToken');
-    console.log('..verify..',localStorage.getItem('accessToken'));
 };
 
 export { setToken, getToken, removeToken };

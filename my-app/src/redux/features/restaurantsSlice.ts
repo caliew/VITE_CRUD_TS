@@ -2,25 +2,24 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getRestaurants, 
   deleteRestaurant as apiDeleteRestaurant, 
   createRestaurant as apiAddRestaurant,
-  updateRestaurant as apiUpdateRestaurant   } from '../../utils/api/restaurants';
+  updateRestaurant as apiUpdateRestaurant   } from '../../utils/api/restaurantApi';
 import { Restaurant } from '../../models/Restaurant';
 
 interface RestaurantsState {
   restaurants: any[];
-  loading: boolean;
+  isLoading: boolean;
   error: any;
 }
 
 const initialState: RestaurantsState = {
   restaurants: [],
-  loading: false,
+  isLoading: false,
   error: null,
 };
 
 export const fetchRestaurants = createAsyncThunk('restaurants/fetchRestaurants',
   async () => {
     const response = await getRestaurants();
-    console.log(response);
     return response;
   }
 );
@@ -54,33 +53,33 @@ const restaurantsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchRestaurants.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchRestaurants.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.restaurants = action.payload;
       })
       .addCase(fetchRestaurants.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.restaurants = [];
         state.error = action.error.message;
       })
       .addCase(deleteRestaurant.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(deleteRestaurant.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.restaurants = action.payload;
       })
       .addCase(deleteRestaurant.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       })      
       .addCase(updateRestaurant.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(updateRestaurant.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         const updatedRestaurants = state.restaurants.map((restaurant) => {
           if (restaurant.id === action.payload.id) {
             return action.payload;
@@ -90,18 +89,18 @@ const restaurantsSlice = createSlice({
         state.restaurants = updatedRestaurants;
       })
       .addCase(updateRestaurant.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       })
       .addCase(addRestaurant.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(addRestaurant.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.restaurants = [...state.restaurants, action.payload];
       })
       .addCase(addRestaurant.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       });
   },

@@ -70,7 +70,7 @@ Step 6 Add the following code to the server.ts
     });
 
     app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+        console.log(`Server started on port ${port}`);
     });
 
 Step 7 Start the server

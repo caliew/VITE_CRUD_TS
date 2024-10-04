@@ -1,13 +1,15 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect, useState } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate  } from 'react-router-dom';
 import { Restaurant } from '../models/Restaurant';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRestaurants, deleteRestaurant, updateRestaurant, addRestaurant  } from '../redux/features/restaurantsSlice';
 import { fetchWorkersByRestaurantId } from '../redux/features/workersSlice';
 import { Formik, Form, Field } from 'formik';
 import WorkerList from './WorkerList';
+import { getToken } from '../utils/api/auth';
+
 
 interface TableRowComponentProps {
   restaurant: Restaurant;
@@ -129,9 +131,25 @@ const TableRowComponent: React.FC<TableRowComponentProps> = ({ restaurant, isEdi
 
 const RestaurantPage = () => {
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const token1 = getToken();
+
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
+  const { token, error } = useSelector((state) => state.auth);
+
   const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    if (!token1) {
+      navigate('/');
+    }
+  }, []);
+
+  if (!token1) {
+    return null;
+  }
 
   useEffect(() => {
     dispatch(fetchRestaurants());
@@ -148,6 +166,7 @@ const RestaurantPage = () => {
   };
 
   return (
+
     <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
       <Typography sx={{ fontSize: 32, fontWeight: 200, margin:'25px', color: 'black' }}>
         RESTAURANTS LISTS

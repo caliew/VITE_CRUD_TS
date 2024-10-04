@@ -1,12 +1,13 @@
 // workers.ts
 import axios from 'axios';
-import { getToken } from '../api/auth';
+import { getToken } from './auth';
 
 const api = axios.create({
     baseURL: 'http://localhost:3001', 
     headers: {
         Authorization: `${getToken()}`,
-      },
+    },
+    validateStatus: (status) => status >= 200 && status < 600, // Don't throw an error for status codes 200-599
 });
 
 api.interceptors.request.use(async (config) => {

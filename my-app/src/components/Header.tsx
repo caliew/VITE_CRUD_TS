@@ -3,9 +3,12 @@ import React from 'react';
 import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { AppConfig } from '../config';
+import { getToken } from '../utils/api/auth';
 import HomeIcon from '../assets/verified.svg';
 
 const Header = () => {
+  const token = getToken();
+
   return (
     <AppBar position="static">
       <Toolbar style={{ display: 'block'}}>
@@ -16,7 +19,7 @@ const Header = () => {
           </IconButton>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px'}}>
-          <Link to="/"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>HOME</Typography></Link>
+          <Link to="/home"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>HOME</Typography></Link>
           <Link to="/restaurants"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>RESTAURANTS</Typography></Link>
           <Link to="/workers"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>WORKERS</Typography></Link>
         </div>

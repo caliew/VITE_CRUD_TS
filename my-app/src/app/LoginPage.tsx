@@ -2,31 +2,25 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../utils/api/loginApi';
+import { login } from '../redux/features/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
 
 const LoginPage = () => {
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { token, error } = useSelector((state) => state.auth);
+
+    if (token) {
+      // Navigate to /main when token is available
+      navigate('/home')
+    }
+
     const handleSubmit = async (values: any, { setSubmitting, setFieldError  }: any) => {
-        try {
-            // const response = await fetch('http://localhost:3001/api/auth/login', {
-            //     method: 'POST',
-            //     headers: { 'Content-Type': 'application/json' },
-            //     body: JSON.stringify(values),
-            // });
-            const response = await login(values);
-            if (response.status === 200) {
-              navigate('/main'); // Use navigate instead of window.location.href
-            }
-          } catch (error) {
-            if (error.response) {
-              setFieldError('accessCode', 'Invalid access code');
-            } else {
-              setFieldError('accessCode', error.message);
-            }
-          } finally {
-            setSubmitting(false);
-          }
-        };
+        dispatch(login(values));
+        setFieldError('accessCode', error.message);
+        setSubmitting(false);
+    };
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '25vh' }}>

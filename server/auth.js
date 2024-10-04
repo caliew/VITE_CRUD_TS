@@ -8,7 +8,6 @@ const generateToken = (user) => {
 
 const verifyToken = (req, res, next) => {
   const token = req.header('Authorization');
-  console.log('...VERIFTYING TOKEN...',token);
     if (!token) return res.status(401).send('Access denied. No token provided.');
     try {
       const decoded = jwt.verify(token, secretKey);

@@ -1,11 +1,12 @@
 import axios from 'axios';
-import { getToken } from '../api/auth';
+import { getToken } from './auth';
 
 const api = axios.create({
     baseURL: 'http://localhost:3001', 
     headers: {
         Authorization: `${getToken()}`,
     },
+    validateStatus: (status) => status >= 200 && status < 600, // Don't throw an error for status codes 200-599
 });
 
 api.interceptors.request.use(async (config) => {
@@ -17,7 +18,6 @@ api.interceptors.request.use(async (config) => {
 });
 
 const getRestaurants = async () => {
-  console.log('API GET.../api/restaurants')
   const response = await api.get('/api/restaurants');  
   return response.data;
 };
@@ -38,13 +38,10 @@ const updateRestaurant = async (id: number, restaurant: any) => {
 };
 
 const deleteRestaurant = async (id: number) => {
-  console.log('API DELETE.../api/restaurants/:id', id);
   try {
     const response = await api.delete(`/api/restaurants/${id}`);
-    console.log(response);
     return response.data;
   } catch (error) {
-    console.error('Error deleting restaurant:', error);
     throw error;
   }
 };

@@ -4,7 +4,6 @@ const { verifyToken, generateToken } = require('./auth');
 
 // API endpoints for /api/auth/...
 router.post('/login', (req, res) => {
-    console.log('POST /api/auth/login');
     const { accessCode } = req.body;
     if (accessCode === 'admin') {
         const user = { id: 1, username: 'admin' };

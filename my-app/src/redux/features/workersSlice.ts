@@ -3,19 +3,19 @@ import { getWorkers,
   createWorker as apiAddWorker,
   deleteWorker as apiDeleteWorker, 
   updateWorker as apiUpdateWorker,
-  getWorkersByRestaurantId  } from '../../utils/api/workers';
+  getWorkersByRestaurantId  } from '../../utils/api/workerApi';
 
 interface WorkersState {
   workers: any[];
   workersByRestaurantId: any[];
-  loading: boolean;
+  isLoading: boolean;
   error: any;
 }
 
 const initialState: WorkersState = {
   workers: [],
   workersByRestaurantId: [],
-  loading: false,
+  isLoading: false,
   error: null,
 };
 
@@ -28,10 +28,8 @@ export const fetchWorkers = createAsyncThunk('workers/fetchWorkers',
 
 export const deleteWorker = createAsyncThunk('workers/deleteWorker',
   async (id: number) => {
-    console.log(`..DELETE WORKERS....${id}`)
     await apiDeleteWorker(id);
     const response = await getWorkers();
-    console.log(response);
     return response;
   }
 );
@@ -65,37 +63,37 @@ const workersSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchWorkers.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchWorkers.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.workers = action.payload;
       })
       .addCase(fetchWorkers.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.workers = [];
         state.error = action.error.message;
       })
       .addCase(deleteWorker.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(deleteWorker.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.workers = action.payload;
       })
       .addCase(deleteWorker.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       })
       .addCase(fetchWorkersByRestaurantId.pending, (state) => {
-        state.loading = true;
+        state.isLoading = true;
       })
       .addCase(fetchWorkersByRestaurantId.fulfilled, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.workersByRestaurantId  = action.payload;
       })
       .addCase(fetchWorkersByRestaurantId.rejected, (state, action) => {
-        state.loading = false;
+        state.isLoading = false;
         state.error = action.error.message;
       });      
   },

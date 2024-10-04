@@ -1,24 +1,23 @@
 import React, { useEffect } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    //
-    // CHECK CHECK OF FETCH FUNCTION INSTEAD OF USING REDUX DISPATCH
-    //
-    async function fetchData() {
-      const response = await fetch('http://localhost:3001/api/restaurants');
-      const data = await response.json();
+  const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/');
     }
-    // fetchData();
-    // ---------
-    return()=>{
-    }
-  },[dispatch]);
+  }, []);
+
+  if (!token) {
+    return null;
+  }
 
   return (
     <div>

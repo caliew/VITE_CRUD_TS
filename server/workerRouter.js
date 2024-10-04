@@ -6,7 +6,6 @@ const { verifyToken } = require('./auth');
 router.use(verifyToken);
 // API endpoints for ./api/workers
 router.get('/', (req, res) => {
-  console.log('GET /api/workers')
   res.json(req.data.workers);
 });
 

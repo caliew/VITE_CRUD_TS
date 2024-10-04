@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TextField, TableHead, TableRow, Paper, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Worker } from '../models/Worker';
 import { fetchWorkers, deleteWorker, updateWorker, addWorker } from '../redux/features/workersSlice';
 import { Formik, Form, Field } from 'formik';
+import { getToken } from '../utils/api/auth';
 
 interface TableRowComponentProps {
   worker: Worker;
@@ -115,18 +116,31 @@ const TableRowComponent : React.FC<TableRowComponentProps> = ({ worker, isEditin
 };
 
 const WorkerPage = () => {
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const token = getToken();
   const workers = useSelector((state: any) => state.workers.workers);
   const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
   const [searchRestaurantId, setSearchRestaurantId] = useState('');
   const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>([]);
 
   useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
+  }, []);
+  
+  if (!token) {
+    return null;
+  }
+
+  useEffect(() => {
     dispatch(fetchWorkers());
   }, [dispatch]);
 
   useEffect(()=>{
-    console.log('..USE EFFECT.. WORKERS...')
     setFilteredWorkers(searchRestaurantId === '' ? workers : workers.filter((worker: Worker) => worker.restaurantId === parseInt(searchRestaurantId)));
   },[workers])
 
@@ -169,7 +183,7 @@ const WorkerPage = () => {
           InputLabelProps={{ style: { fontFamily: 'Roboto', fontSize: 18, fontWeight: 50, color: 'blue' } }}
         />
         <Button variant="contained" color="primary" onClick={handleSearch}>
-          Search
+          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>SEARCH</Typography>
         </Button>
       </Box>
 
