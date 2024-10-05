@@ -22,13 +22,13 @@ const Sidebar = () => {
   };
   
   return (
-    <List>
+    <List >
       <ListItem button component={Link} to="/home">
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText>
-        <Typography variant="h6" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>HOME</Typography>
+        <Typography variant="sidebarMenu" >HOME</Typography>
         </ListItemText>
       </ListItem>
       {token && (
@@ -38,7 +38,7 @@ const Sidebar = () => {
               <RestaurantIcon />
             </ListItemIcon>
             <ListItemText>
-            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANTS</Typography>
+            <Typography variant="sidebarMenu" >RESTAURANTS</Typography>
             </ListItemText>
           </ListItem>
           <ListItem button component={Link} to="/workers">
@@ -46,7 +46,7 @@ const Sidebar = () => {
               <WorkIcon />
             </ListItemIcon>
             <ListItemText>
-            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>WORKERS</Typography>
+            <Typography variant="sidebarMenu" >WORKERS</Typography>
             </ListItemText>
           </ListItem>
         </>)
@@ -56,7 +56,7 @@ const Sidebar = () => {
           <LogoutIcon />
         </ListItemIcon>
         <ListItemText>
-        <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>LOGOUT</Typography>
+        <Typography variant="sidebarMenu" >LOGOUT</Typography>
         </ListItemText>
       </ListItem>
     </List>

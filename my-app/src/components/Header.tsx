@@ -25,18 +25,20 @@ const Header = () => {
         <div style={{ margin:'5px' }}>
           <IconButton edge="start" color="inherit" >
             <img src={HomeIcon} style={{width: 64, height: 64}} alt="Home Icon" />
-            <Typography variant="h3" component="div" sx={{ flexGrow: 1.5, fontSize: 32, fontWeight: 100 }}>{AppConfig.applicationName}</Typography>
+            <Typography variant="headerTitle" >
+              {AppConfig.applicationName}
+            </Typography>
           </IconButton>
         </div>
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '10px'}}>
-          <Link to="/home"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>HOME</Typography></Link>
+          <Link to="/home"><Typography variant="headerMenu" >HOME</Typography></Link>
           { token && (
             <>
-              <Link to="/restaurants"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>RESTAURANTS</Typography></Link>
-              <Link to="/workers"><Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>WORKERS</Typography></Link>
+              <Link to="/restaurants"><Typography variant="headerMenu">RESTAURANTS</Typography></Link>
+              <Link to="/workers"><Typography variant="headerMenu" >WORKERS</Typography></Link>
             </>
            )}
-           <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2, cursor: 'pointer' }} onClick={handleLogout}>LOGOUT</Typography>
+           <Typography variant="headerMenu" sx={{ cursor: 'pointer' }} onClick={handleLogout}>LOGOUT</Typography>
         </div>
       </Toolbar>
     </AppBar>
