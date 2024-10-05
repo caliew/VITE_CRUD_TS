@@ -1,16 +1,18 @@
 // authSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginApi } from '../../utils/api/loginApi';
-import { getToken, removeToken  } from '../../utils/api/auth';
+import { getToken, removeToken, getAccessCode, removeAccessCode  } from '../../utils/api/auth';
 
 interface AuthState {
   token: string | null;
+  accessCode: string | null;
   error: string | null;
   isLoading: boolean;
 }
 
 const initialState: AuthState = {
   token: null,
+  accessCode: null,
   error: null,
   isLoading: false,
 };
@@ -41,6 +43,7 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.token = getToken();
+        state.accessCode = getAccessCode();
         state.error = action.payload;
       })
       .addCase(login.rejected, (state, action) => {

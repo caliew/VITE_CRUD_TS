@@ -134,21 +134,14 @@ const RestaurantPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token1 = getToken();
-
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
-  const { token, error } = useSelector((state) => state.auth);
+  const { token } = useSelector((state) => state.auth);
 
   const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    if (!token1) {
-      navigate('/');
-    }
-  }, []);
-
-  if (!token1) {
-    return null;
+  if (!token) {
+    // Navigate to /main when token is available
+    navigate('/home')
   }
 
   useEffect(() => {
@@ -234,7 +227,7 @@ const RestaurantPage = () => {
       </Formik>
 
       <Box sx={{ marginTop: 4 }}>
-        <Button variant="contained" component={Link} to="/">
+        <Button variant="contained" component={Link} to="/home">
           <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>
         </Button>
       </Box>

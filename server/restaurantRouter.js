@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { verifyToken } = require('./auth');
+const { saveDataToFile } = require('./utils');
 
 router.use(verifyToken);
 // API endpoints for ./api/restaurants
@@ -23,7 +24,6 @@ router.post('/', (req, res) => {
   const { name, address } = req.body;
   const newRestaurant = { id: req.data.restaurants.slice(-1)[0].id + 1, name, address };
   req.data.restaurants.push(newRestaurant);
-  const { saveDataToFile } = require('./utils');
   saveDataToFile(req.data);
   res.json(newRestaurant);
 });
@@ -37,7 +37,6 @@ router.put('/:id', (req, res) => {
     const { name, address } = req.body;
     restaurant.name = name;
     restaurant.address = address;
-    const { saveDataToFile } = require('./utils');
     saveDataToFile(req.data);
     res.json(restaurant);
   }
@@ -49,8 +48,10 @@ router.delete('/:id', (req, res) => {
   if (index === -1) {
     res.status(404).json({ message: 'Restaurant not found' });
   } else {
+    // REMOVE THE RESTAURANT
     req.data.restaurants.splice(index, 1);
-    const { saveDataToFile } = require('./utils');
+    // REMOVE ALL WORKERS WITH RESTAURANT ID MATCHED
+    req.data.workers = req.data.workers.filter((worker) => worker.restaurantId !== id);
     saveDataToFile(req.data);
     res.json({ message: 'Restaurant deleted' });
   }

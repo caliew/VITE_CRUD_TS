@@ -11,10 +11,8 @@ const LoginPage = () => {
     const dispatch = useDispatch();
     const { token, error } = useSelector((state) => state.auth);
 
-    if (token) {
-      // Navigate to /main when token is available
-      navigate('/home')
-    }
+    // Navigate to /home when token is available
+    if (token) navigate('/home')
 
     const handleSubmit = async (values: any, { setSubmitting, setFieldError  }: any) => {
         dispatch(login(values));

@@ -1,7 +1,7 @@
 // my-app/src/components/Sidebar.tsx
 import React, { useState, useEffect } from 'react';
 import { List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import HomeIcon from '@mui/icons-material/Home';
@@ -9,15 +9,16 @@ import RestaurantIcon from '@mui/icons-material/Restaurant';
 import WorkIcon from '@mui/icons-material/Work';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../redux/features/authSlice';
-import { removeToken, getToken } from '../utils/api/auth';
 
 const Sidebar = () => {
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
+    navigate('/')
   };
   
   return (

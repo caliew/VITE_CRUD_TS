@@ -8,7 +8,7 @@ router.post('/login', (req, res) => {
     if (accessCode === 'admin') {
         const user = { id: 1, username: 'admin' };
         const token = generateToken(user);
-        res.json({ token });
+        res.json({ token, accessCode });
     } else {
         res.status(401).json({ message: 'Invalid credentials' });
     }

@@ -10,14 +10,10 @@ const HomePage = () => {
   const { token } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (!token) {
-      navigate('/');
-    }
+    if (!token) navigate('/');
   }, []);
 
-  if (!token) {
-    return null;
-  }
+  if (!token) return null;
 
   return (
     <div>

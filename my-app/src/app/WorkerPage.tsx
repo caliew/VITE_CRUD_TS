@@ -120,20 +120,16 @@ const WorkerPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const token = getToken();
   const workers = useSelector((state: any) => state.workers.workers);
+  const { token, accessCode } = useSelector((state) => state.auth);
+
   const [isEditingRow, setIsEditingRow] = useState<boolean | null>(null);
   const [searchRestaurantId, setSearchRestaurantId] = useState('');
   const [filteredWorkers, setFilteredWorkers] = useState<Worker[]>([]);
 
-  useEffect(() => {
-    if (!token) {
-      navigate('/');
-    }
-  }, []);
-  
   if (!token) {
-    return null;
+    // Navigate to /main when token is available
+    navigate('/home')
   }
 
   useEffect(() => {
@@ -247,7 +243,7 @@ const WorkerPage = () => {
       </Formik>
 
       <Box sx={{ marginTop: 4 }}>
-        <Button variant="contained" component={Link} to="/">
+        <Button variant="contained" component={Link} to="/home">
           <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>
         </Button>
       </Box>
