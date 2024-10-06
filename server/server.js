@@ -9,6 +9,7 @@ const dataLoader = require('./dataLoader');
 const authRouter = require('./authRouter');
 const workersRouter = require('./workerRouter');
 const restaurantRouter = require('./restaurantRouter');
+const ragRouter = require('./ragRouter');
 
 dataLoader.loadDataFromFile().then((data) => {
   // Use the loaded data to set up the server
@@ -29,6 +30,8 @@ dataLoader.loadDataFromFile().then((data) => {
   app.use('/api/auth', authRouter);
   app.use('/api/workers', workersRouter);
   app.use('/api/restaurants', restaurantRouter);
+  app.use('/api/rag', ragRouter);
+
   // -----------------------------
   // API endpoints for restaurants
   // -----------------------------
