@@ -1,8 +1,8 @@
 // my-app/src/components/Footer.tsx
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { AppConfig } from '../config';
 
+import { AppConfig } from '../config';
 
 const Footer = () => {
   return (

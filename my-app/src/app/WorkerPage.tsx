@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TextField, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
+
 import { Worker } from '../models/Worker';
 import { fetchWorkers, deleteWorker, updateWorker, addWorker } from '../redux/features/workersSlice';
-import { Formik, Form, Field } from 'formik';
-import { getToken } from '../utils/api/auth';
 
 interface TableRowComponentProps {
   worker: Worker;

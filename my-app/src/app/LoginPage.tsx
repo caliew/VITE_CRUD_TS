@@ -2,8 +2,9 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../redux/features/authSlice';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { login } from '../redux/features/authSlice';
 
 const LoginPage = () => {
 

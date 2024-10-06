@@ -1,22 +1,20 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect, useState } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link, useNavigate  } from 'react-router-dom';
-import { Restaurant } from '../models/Restaurant';
 import { useSelector, useDispatch } from 'react-redux';
+import { Formik, Form, Field } from 'formik';
+
 import { fetchRestaurants, deleteRestaurant, updateRestaurant, addRestaurant  } from '../redux/features/restaurantsSlice';
 import { fetchWorkersByRestaurantId } from '../redux/features/workersSlice';
-import { Formik, Form, Field } from 'formik';
+import { Restaurant } from '../models/Restaurant';
 import WorkerList from './WorkerList';
-import { getToken } from '../utils/api/auth';
-
 
 interface TableRowComponentProps {
   restaurant: Restaurant;
   isEditingRow: null|boolean;
   setIsEditingRow: (id: number) => void;
   isShowingWorkers: boolean;
-  // setIsShowingWorkers: (showWorkers: boolean) => void;
 }
 
 const TableHeaders = () => {

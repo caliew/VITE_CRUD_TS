@@ -1,5 +1,4 @@
 // my-app/src/components/Content.tsx
-import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 const Content = () => {
