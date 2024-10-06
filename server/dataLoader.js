@@ -1,10 +1,9 @@
 // server/dataLoader.js
 const fs = require('fs');
-const config = require('./config');
 
 function loadDataFromFile() {
   return new Promise((resolve, reject) => {
-    fs.readFile(config.dataFile, (err, fileData) => {
+    fs.readFile(process.env.DATA_FILE, (err, fileData) => {
       if (err) {
         reject(err);
       } else {

@@ -1,8 +1,8 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
 const app = express();
-const port = 3001;
 const fs = require('fs');
 
 const dataLoader = require('./dataLoader');
@@ -37,8 +37,8 @@ dataLoader.loadDataFromFile().then((data) => {
   // API endpoints for workers
   // -------------------------
 
-  app.listen(port, () => {
-    console.log(`Server started on port ${port}`);
+  app.listen(process.env.PORT, () => {
+    console.log(`Server started on port ${process.env.PORT}`);
   });
 
 })

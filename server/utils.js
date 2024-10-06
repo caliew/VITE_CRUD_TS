@@ -3,7 +3,7 @@ const config = require('./config');
 
 function saveDataToFile(data) {
   const jsonData = JSON.stringify(data);
-  fs.writeFile(config.dataFile, jsonData, (err) => {
+  fs.writeFile(process.env.DATA_FILE, jsonData, (err) => {
     if (err) {
       console.error(err);
     }
