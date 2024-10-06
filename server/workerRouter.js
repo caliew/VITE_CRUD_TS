@@ -1,9 +1,11 @@
 // server/workerRouter.js
-const express = require('express');
+import express from 'express';
+import { verifyToken } from './auth.js';
+
 const router = express.Router();
-const { verifyToken } = require('./auth');
 
 router.use(verifyToken);
+
 // API endpoints for ./api/workers
 router.get('/', (req, res) => {
   res.json(req.data.workers);
@@ -56,4 +58,4 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

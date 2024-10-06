@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import { verifyToken, generateToken } from './auth.js';
+
 const router = express.Router();
-const { verifyToken, generateToken } = require('./auth');
 
 // API endpoints for /api/auth/...
 router.post('/login', (req, res) => {
@@ -23,4 +24,4 @@ router.get('/protected', verifyToken, (req, res) => {
     res.json({ message: 'Hello, authenticated user!' });
 });
 
-module.exports = router;
+export default router;

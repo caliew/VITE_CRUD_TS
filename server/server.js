@@ -1,15 +1,15 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
-const fs = require('fs');
+dotenv.config();
 
-const dataLoader = require('./dataLoader');
-const authRouter = require('./authRouter');
-const workersRouter = require('./workerRouter');
-const restaurantRouter = require('./restaurantRouter');
-const ragRouter = require('./ragRouter');
+import dataLoader from  './dataLoader.js';
+import authRouter from './authRouter.js';
+import workersRouter from './workerRouter.js';
+import restaurantRouter from './restaurantRouter.js';
+import ragRouter from './ragRouter.js';
 
 dataLoader.loadDataFromFile().then((data) => {
   // Use the loaded data to set up the server
@@ -31,14 +31,6 @@ dataLoader.loadDataFromFile().then((data) => {
   app.use('/api/workers', workersRouter);
   app.use('/api/restaurants', restaurantRouter);
   app.use('/api/rag', ragRouter);
-
-  // -----------------------------
-  // API endpoints for restaurants
-  // -----------------------------
-
-  // -------------------------
-  // API endpoints for workers
-  // -------------------------
 
   app.listen(process.env.PORT, () => {
     console.log(`Server started on port ${process.env.PORT}`);

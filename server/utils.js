@@ -1,6 +1,6 @@
-const fs = require('fs');
+import fs from 'fs';
 
-function saveDataToFile(data) {
+export function saveDataToFile(data) {
   const jsonData = JSON.stringify(data);
   fs.writeFile(process.env.DATA_FILE, jsonData, (err) => {
     if (err) {
@@ -9,4 +9,3 @@ function saveDataToFile(data) {
   });
 }
 
-module.exports = { saveDataToFile };

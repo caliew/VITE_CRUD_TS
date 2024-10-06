@@ -1,10 +1,12 @@
 // server/restaurantRouter.js
-const express = require('express');
+import express from 'express';
+import { verifyToken } from './auth.js';
+import { saveDataToFile } from './utils.js';
+
 const router = express.Router();
-const { verifyToken } = require('./auth');
-const { saveDataToFile } = require('./utils');
 
 router.use(verifyToken);
+
 // API endpoints for ./api/restaurants
 router.get('/', (req, res) => {
   res.json(req.data.restaurants);
@@ -58,9 +60,9 @@ router.delete('/:id', (req, res) => {
 });
 
 router.get('/workers/:restaurantId', (req, res) => {
-    const restaurantId = parseInt(req.params.restaurantId);
-    const workers = req.data.workers.filter((worker) => worker.restaurantId === restaurantId);
-    res.json(workers);
-  });
+  const restaurantId = parseInt(req.params.restaurantId);
+  const workers = req.data.workers.filter((worker) => worker.restaurantId === restaurantId);
+  res.json(workers);
+});
 
-module.exports = router;
+export default router;

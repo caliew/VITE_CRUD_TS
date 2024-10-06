@@ -1,8 +1,21 @@
 // ragRouter.js
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-// const ragModel = require('./ragModel');
+import ragModel from './ragModel.js';
+import { pipeline } from '@xenova/transformers';
 
+// Create a pipeline instance
+const pipelineSingleton = {
+  instance: null,
+  async getInstance() {
+    if (!this.instance) {
+      this.instance = await pipeline('text-classification', 'Xenova/distilbert-base-uncased-finetuned-sst-2-english');
+    }
+    return this.instance;
+  }
+};
+
+// API endpoints for ./api/rag/
 router.post('/generate', (req, res) => {
   const inputText = req.body.inputText;
   let generatedText = 'RAG MODEL IS UNDER TESTING. ..TO BE READY SOON..';
@@ -10,4 +23,11 @@ router.post('/generate', (req, res) => {
   res.json({ generatedText });
 });
 
-module.exports = router;
+router.post('/classify', async (req, res) => {
+  const text = req.body.text;
+  const pipelineInstance = await pipelineSingleton.getInstance();
+  const output = await pipelineInstance(text);
+  res.json({ classification: output });
+});
+
+export default router;

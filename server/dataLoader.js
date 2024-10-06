@@ -1,5 +1,5 @@
 // server/dataLoader.js
-const fs = require('fs');
+import fs from 'fs';
 
 function loadDataFromFile() {
   return new Promise((resolve, reject) => {
@@ -14,4 +14,4 @@ function loadDataFromFile() {
   });
 }
 
-module.exports = { loadDataFromFile };
+export default { loadDataFromFile }
