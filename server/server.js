@@ -5,13 +5,14 @@ import cors from 'cors';
 const app = express();
 dotenv.config();
 
-import dataLoader from  './dataLoader.js';
-import authRouter from './authRouter.js';
-import workersRouter from './workerRouter.js';
-import restaurantRouter from './restaurantRouter.js';
-import ragRouter from './ragRouter.js';
+// import dataLoader from  './utils/dataLoader.js';
+import utils from './utils/utils.js';
+import authRouter from './routers/authRouter.js';
+import workersRouter from './routers/workerRouter.js';
+import restaurantRouter from './routers/restaurantRouter.js';
+import ragRouter from './routers/ragRouter.js';
 
-dataLoader.loadDataFromFile().then((data) => {
+utils.loadDataFromFile().then((data) => {
   // Use the loaded data to set up the server
   app.use(cors({
     origin: '*', // allow requests from this origin

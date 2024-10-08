@@ -1,7 +1,7 @@
 // server/restaurantRouter.js
 import express from 'express';
 import { verifyToken } from './auth.js';
-import { saveDataToFile } from './utils.js';
+import { saveDataToFile } from '../utils/utils.js';
 
 const router = express.Router();
 
