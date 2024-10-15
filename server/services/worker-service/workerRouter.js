@@ -1,6 +1,6 @@
 // server/workerRouter.js
 import express from 'express';
-import { verifyToken } from './auth.js';
+import { verifyToken } from '../auth-service/auth.js';
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.post('/', (req, res) => {
   const { name, restaurantId } = req.body;
   const newWorker = { id: req.data.workers.slice(-1)[0].id + 1, name, restaurantId };
   req.data.workers.push(newWorker);
-  const { saveDataToFile } = require('../utils/utils.js');
+  const { saveDataToFile } = require('../../utils/utils.js');
   saveDataToFile(req.data);
   res.json(newWorker);
 });
@@ -39,7 +39,7 @@ router.put('/:id', (req, res) => {
     const { name, restaurantId } = req.body;
     worker.name = name;
     worker.restaurantId = restaurantId;
-    const { saveDataToFile } = require('../utils/utils.js');
+    const { saveDataToFile } = require('../../utils/utils.js');
     saveDataToFile(req.data);
     res.json(worker);
   }
@@ -52,7 +52,7 @@ router.delete('/:id', (req, res) => {
     res.status(404).json({ message: 'Worker not found' });
   } else {
     req.data.workers.splice(index, 1);
-    const { saveDataToFile } = require('../utils/utils.js');
+    const { saveDataToFile } = require('../../utils/utils.js');
     saveDataToFile(req.data);
     res.json({ message: 'Worker deleted' });
   }

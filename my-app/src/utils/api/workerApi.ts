@@ -1,9 +1,10 @@
 // workers.ts
 import axios from 'axios';
 import { getToken } from './auth';
+import { AppConfig } from '../../config';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3001', 
+    baseURL: AppConfig.apiBaseUrl, 
     headers: {
         Authorization: `${getToken()}`,
     },

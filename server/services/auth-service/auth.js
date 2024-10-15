@@ -1,8 +1,9 @@
 import jwt from 'jsonwebtoken';
-const secretKey = process.env.SECRET_KEY || 'your-secret-key';
+import { AppConfig } from '../../config.js';
+const secretKey = AppConfig.SECRET_KEY || 'your-secret-key';
 
 export const generateToken = (user) => {
-  const payload = { userId: user.id, username: user.username, phase: process.env.PHASE };
+  const payload = { userId: user.id, username: user.username, phase: AppConfig.PHASE };
   return jwt.sign(payload, secretKey, { expiresIn: '1h' });
 };
 

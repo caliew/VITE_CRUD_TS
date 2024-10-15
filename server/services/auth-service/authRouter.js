@@ -15,6 +15,10 @@ router.post('/login', (req, res) => {
     }
 });
 
+router.get('/',(req,res)=>{
+    res.json({ message: `..PORT 3001..<${req.url}}>` });
+})
+
 // Protected routes
 router.use('/protected', verifyToken, (req, res, next) => {
     next();
