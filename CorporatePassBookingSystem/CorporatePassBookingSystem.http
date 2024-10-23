@@ -1,0 +1,6 @@
+@CorporatePassBookingSystem_HostAddress = http://localhost:5120
+
+GET {{CorporatePassBookingSystem_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
