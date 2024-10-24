@@ -42,6 +42,15 @@ namespace CorporatePassBookingSystem.Controllers
         public IActionResult CreateBooking(Booking booking)
         {
             _logger.LogInformation($"Creating new booking with id {booking.Id}");
+            if (booking.BookingDate < DateTime.Now)
+            {
+                return BadRequest("Booking date is in the past");
+            }
+            var existingBooking = _bookingRepository.GetBookingByFacilityIdAndDate(booking.FacilityId, booking.BookingDate);
+            if (existingBooking != null)
+            {
+                return BadRequest("Double booking detected");
+            }
             _bookingRepository.CreateBooking(booking);
             return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
         }

@@ -45,5 +45,10 @@ namespace CorporatePassBookingSystem.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public Booking? GetBookingByFacilityIdAndDate(int facilityId, DateTime bookingDate)
+        {
+            return _context.Bookings.FirstOrDefault(b => b.FacilityId == facilityId && b.BookingDate == bookingDate);
+        }        
     }
 }
