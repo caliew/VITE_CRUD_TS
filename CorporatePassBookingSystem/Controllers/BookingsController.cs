@@ -2,6 +2,7 @@ using CorporatePassBookingSystem.Models;
 using CorporatePassBookingSystem.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel.DataAnnotations;
 
 namespace CorporatePassBookingSystem.Controllers
 {
@@ -21,58 +22,114 @@ namespace CorporatePassBookingSystem.Controllers
         [HttpGet]
         public IActionResult GetBookings()
         {
-            _logger.LogInformation("Getting all bookings");
-            var bookings = _bookingRepository.GetBookings();
-            return Ok(bookings);
+            try
+            {
+                _logger.LogInformation("Getting all bookings");
+                var bookings = _bookingRepository.GetBookings();
+                return Ok(bookings);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting bookings");
+                return StatusCode(500, "An error occurred while getting bookings.");
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult GetBooking(int id)
         {
-            _logger.LogInformation($"Getting booking with id {id}");
-            var booking = _bookingRepository.GetBooking(id);
-            if (booking == null)
+            try
             {
-                return NotFound();
+                _logger.LogInformation($"Getting booking with id {id}");
+                var booking = _bookingRepository.GetBooking(id);
+                if (booking == null)
+                {
+                    return NotFound();
+                }
+                return Ok(booking);
             }
-            return Ok(booking);
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting booking");
+                return StatusCode(500, "An error occurred while getting booking.");
+            }
         }
 
         [HttpPost]
         public IActionResult CreateBooking(Booking booking)
         {
-            _logger.LogInformation($"Creating new booking with id {booking.Id}");
-            if (booking.BookingDate < DateTime.Now)
+            try
             {
-                return BadRequest("Booking date is in the past");
+                _logger.LogInformation($"Creating new booking with id {booking.Id}");
+                if (booking.BookingDate < DateTime.Now)
+                {
+                    return BadRequest("Booking date is in the past");
+                }
+                var existingBooking = _bookingRepository.GetBookingByFacilityIdAndDate(booking.FacilityId, booking.BookingDate);
+                if (existingBooking != null)
+                {
+                    return BadRequest("Double booking detected");
+                }
+                _bookingRepository.CreateBooking(booking);
+                return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
             }
-            var existingBooking = _bookingRepository.GetBookingByFacilityIdAndDate(booking.FacilityId, booking.BookingDate);
-            if (existingBooking != null)
+            catch (ValidationException ex)
             {
-                return BadRequest("Double booking detected");
+                return BadRequest(ex.Message);
             }
-            _bookingRepository.CreateBooking(booking);
-            return CreatedAtAction(nameof(GetBooking), new { id = booking.Id }, booking);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error creating booking");
+                return StatusCode(500, "An error occurred while creating booking.");
+            }
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateBooking(int id, Booking booking)
         {
-            if (id != booking.Id)
+            try
             {
-                return BadRequest();
+                if (id != booking.Id)
+                {
+                    return BadRequest("Booking ID does not match");
+                }
+                _logger.LogInformation($"Updating booking with id {id}");
+                _bookingRepository.UpdateBooking(booking);
+                return Ok();
             }
-            _logger.LogInformation($"Updating booking with id {id}");
-            _bookingRepository.UpdateBooking(booking);
-            return Ok();
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating booking");
+                return StatusCode(500, "An error occurred while updating booking.");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteBooking(int id)
         {
-            _logger.LogInformation($"Deleting booking with id {id}");
-            _bookingRepository.DeleteBooking(id);
-            return NoContent();
+            try
+            {
+                _logger.LogInformation($"Deleting booking with id {id}");
+                _bookingRepository.DeleteBooking(id);
+                return NoContent();
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting booking");
+                return StatusCode(500, "An error occurred while deleting booking.");
+            }
         }
     }
 }
