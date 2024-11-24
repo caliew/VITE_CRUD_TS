@@ -2,4 +2,4 @@
 my-app/node_modules
 my-app/package-lock.json
 server/node_modules
-restjs-api/node_modules
+nestjs-api/node_modules
