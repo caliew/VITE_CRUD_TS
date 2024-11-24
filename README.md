@@ -16,3 +16,10 @@ amend in .env DATABASE_URL="postgresql://postgres:123@localhost:5432/nest?schema
         with reference to docker-compose.yml
 npx prisma migrate dev
 npx prisma studio
+
+// PIPE AND CLASS VALIDATOR
+npm i --save class-validator class-transformer
+- SET IN main.ts >  app.useGlobalPipes(new ValidationPipe())
+- SET in dto > import { IsEmail, IsNotEmpty, IsString } from "class-validator";
+
+
