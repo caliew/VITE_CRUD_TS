@@ -31,3 +31,7 @@ npm i argon2
 // ADD CONFIG MODULE
 npm install @nestjs/config
 
+// AUTHENTICATION
+// JWT 
+npm install --save @nestjs/passport passport @nestjs/jwt passport-jwt
+npm install --save-dev @types/passport-jwt
