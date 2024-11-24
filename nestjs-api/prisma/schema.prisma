@@ -13,14 +13,36 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
 model User {
   id        Int @id @default(autoincrement())
+=======
+
+model User {
+  id Int @id @default(autoincrement())
+>>>>>>> 10194637f5e9ea5d96cc1b983e1b483a2c82f037
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   email     String @unique
   hash      String
+<<<<<<< HEAD
   name      String?
 
 
 }
+=======
+  lastName  String?
+  firstName String?
+}
+model Bookmark {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+  link        String
+
+}
+>>>>>>> 10194637f5e9ea5d96cc1b983e1b483a2c82f037
