@@ -28,4 +28,6 @@ npm i --save class-validator class-transformer
 // ARGON2 - BETTER SOLUTION
 npm i argon2
 
+// ADD CONFIG MODULE
+npm install @nestjs/config
 
