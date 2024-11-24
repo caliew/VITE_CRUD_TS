@@ -16,6 +16,7 @@ amend in .env DATABASE_URL="postgresql://postgres:123@localhost:5432/nest?schema
         with reference to docker-compose.yml
 npx prisma migrate dev
 npx prisma studio
+npx prisma generate
 
 // PIPE AND CLASS VALIDATOR
 npm i --save class-validator class-transformer
