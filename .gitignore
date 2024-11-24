@@ -3,3 +3,4 @@ my-app/node_modules
 my-app/package-lock.json
 server/node_modules
 restjs-api/node_modules
+restjs-api/package-lock.json
