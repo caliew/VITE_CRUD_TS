@@ -22,4 +22,9 @@ npm i --save class-validator class-transformer
 - SET IN main.ts >  app.useGlobalPipes(new ValidationPipe())
 - SET in dto > import { IsEmail, IsNotEmpty, IsString } from "class-validator";
 
+// GENERATE HASH BASED ON PASSWORD
+// NODE.BCRYPT.JS - VERIFICATION ALGORITHM ONLY FIRST FOR FIRST 72 BYTES OF A STRING
+// ARGON2 - BETTER SOLUTION
+npm i argon2
+
 
