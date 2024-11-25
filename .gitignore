@@ -2,4 +2,6 @@
 my-app/node_modules
 my-app/package-lock.json
 server/node_modules
+sererv/package-lock.json
 nestjs-api/node_modules
+nestjs-api/package-lock.json

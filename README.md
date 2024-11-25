@@ -52,3 +52,10 @@ npm install --save-dev @types/passport-jwt
 npm install pactum
 - SETUP TEST DATABASE FOR END-TO-END TEST
 - SETUP PRISMA SERVICE TO CLEAN DATABASE EVERYTIME RUN TEST
+
+// SETUP WITH TEST DB
+- Modify Package.json
+- use dotenv to manage configuration for prisma ENV
+- npm install dotenv-cli
+  to enable variable of our choice to npm script
+

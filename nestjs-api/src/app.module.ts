@@ -10,7 +10,7 @@ import { UserModule } from './user/user.module';
       isGlobal:true
     }), 
     AuthModule, 
-    PrismaModule, 
+    PrismaModule,
     UserModule],
   controllers: [],
   providers: [],

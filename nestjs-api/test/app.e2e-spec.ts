@@ -19,5 +19,6 @@ describe('App e2e',()=>{
   afterAll(()=>{
     app.close();
   })
-  it.todo('..DEFAULT TEST SCRIPT.. SHOULD PASS');
+  it.todo('..DEFAULT TEST SCRIPT.. SHOULD PASS 1');
+  it.todo('..DEFAULT TEST SCRIPT.. SHOULD PASS 2');
 })
