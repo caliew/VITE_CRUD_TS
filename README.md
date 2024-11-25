@@ -37,6 +37,18 @@ npm install --save @nestjs/passport passport @nestjs/jwt passport-jwt
 npm install --save-dev @types/passport-jwt
 
 // GUARDS - AUTHORIZATION
-@useGuards
+@useGuards(AuthGuard('jwt'))
 
+// CUSTOM GUARD
+@useGuards(JwtGuard)    => JwtGuard extends AuthGuard('jwt')
 
+// CUSTOM DECORATOR
+@GetUser                => GetUser = createParamDecorator((data:string | undefined, ctx: ExecutionContext) => {...
+
+// DECORATOR
+@HttpCode(HttpStatus.ACCEPTED)
+
+// END-TO-END TEST WITH PACTUM
+npm install pactum
+- SETUP TEST DATABASE FOR END-TO-END TEST
+- SETUP PRISMA SERVICE TO CLEAN DATABASE EVERYTIME RUN TEST
