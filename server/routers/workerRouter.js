@@ -1,17 +1,18 @@
 // server/workerRouter.js
 import express from 'express';
 import { verifyToken } from './auth.js';
+import { saveDataToFile } from '../utils/utils.js';
 
-const router = express.Router();
+const workerRouter = express.Router();
 
-router.use(verifyToken);
+workerRouter.use(verifyToken);
 
 // API endpoints for ./api/workers
-router.get('/', (req, res) => {
+workerRouter.get('/', (req, res) => {
   res.json(req.data.workers);
 });
 
-router.get('/:id', (req, res) => {
+workerRouter.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const worker = req.data.workers.find((worker) => worker.id === id);
   if (!worker) {
@@ -21,41 +22,35 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
-  const { name, restaurantId } = req.body;
-  const newWorker = { id: req.data.workers.slice(-1)[0].id + 1, name, restaurantId };
+workerRouter.post('/', (req, res) => {
+  const newWorker = { id: (req.data.workers.slice(-1)[0]?.id ?? 0)+ 1, ...req.body };
   req.data.workers.push(newWorker);
-  const { saveDataToFile } = require('../utils/utils.js');
   saveDataToFile(req.data);
   res.json(newWorker);
 });
 
-router.put('/:id', (req, res) => {
+workerRouter.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const worker = req.data.workers.find((worker) => worker.id === id);
   if (!worker) {
     res.status(404).json({ message: 'Worker not found' });
   } else {
-    const { name, restaurantId } = req.body;
-    worker.name = name;
-    worker.restaurantId = restaurantId;
-    const { saveDataToFile } = require('../utils/utils.js');
+    Object.assign(worker, req.body);
     saveDataToFile(req.data);
     res.json(worker);
   }
 });
 
-router.delete('/:id', (req, res) => {
+workerRouter.delete('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = req.data.workers.findIndex((worker) => worker.id === id);
   if (index === -1) {
     res.status(404).json({ message: 'Worker not found' });
   } else {
     req.data.workers.splice(index, 1);
-    const { saveDataToFile } = require('../utils/utils.js');
     saveDataToFile(req.data);
     res.json({ message: 'Worker deleted' });
   }
 });
 
-export default router;
+export default workerRouter;

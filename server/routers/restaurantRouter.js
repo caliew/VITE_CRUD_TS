@@ -3,16 +3,16 @@ import express from 'express';
 import { verifyToken } from './auth.js';
 import { saveDataToFile } from '../utils/utils.js';
 
-const router = express.Router();
+const restaurantRouter = express.Router();
 
-router.use(verifyToken);
+restaurantRouter.use(verifyToken);
 
 // API endpoints for ./api/restaurants
-router.get('/', (req, res) => {
+restaurantRouter.get('/', (req, res) => {
   res.json(req.data.restaurants);
 });
 
-router.get('/:id', (req, res) => {
+restaurantRouter.get('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const restaurant = req.data.restaurants.find((restaurant) => restaurant.id === id);
   if (!restaurant) {
@@ -22,29 +22,26 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', (req, res) => {
-  const { name, address } = req.body;
-  const newRestaurant = { id: req.data.restaurants.slice(-1)[0].id + 1, name, address };
+restaurantRouter.post('/', (req, res) => {
+  const newRestaurant = { id: (req.data.restaurants.slice(-1)[0]?.id ?? 0) + 1, ...req.body };
   req.data.restaurants.push(newRestaurant);
   saveDataToFile(req.data);
   res.json(newRestaurant);
 });
 
-router.put('/:id', (req, res) => {
+restaurantRouter.put('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const restaurant = req.data.restaurants.find((restaurant) => restaurant.id === id);
   if (!restaurant) {
     res.status(404).json({ message: 'Restaurant not found' });
   } else {
-    const { name, address } = req.body;
-    restaurant.name = name;
-    restaurant.address = address;
+    Object.assign(restaurant,req.body);
     saveDataToFile(req.data);
     res.json(restaurant);
   }
 });
 
-router.delete('/:id', (req, res) => {
+restaurantRouter.delete('/:id', (req, res) => {
   const id = parseInt(req.params.id);
   const index = req.data.restaurants.findIndex((restaurant) => restaurant.id === id);
   if (index === -1) {
@@ -59,10 +56,10 @@ router.delete('/:id', (req, res) => {
   }
 });
 
-router.get('/workers/:restaurantId', (req, res) => {
+restaurantRouter.get('/workers/:restaurantId', (req, res) => {
   const restaurantId = parseInt(req.params.restaurantId);
   const workers = req.data.workers.filter((worker) => worker.restaurantId === restaurantId);
   res.json(workers);
 });
 
-export default router;
+export default restaurantRouter;

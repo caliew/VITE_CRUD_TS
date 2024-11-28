@@ -11,6 +11,7 @@ import authRouter from './routers/authRouter.js';
 import workersRouter from './routers/workerRouter.js';
 import restaurantRouter from './routers/restaurantRouter.js';
 import ragRouter from './routers/ragRouter.js';
+import taskRouter from './routers/taskRouter.js';
 
 utils.loadDataFromFile().then((data) => {
   // Use the loaded data to set up the server
@@ -31,6 +32,7 @@ utils.loadDataFromFile().then((data) => {
   app.use('/api/auth', authRouter);
   app.use('/api/workers', workersRouter);
   app.use('/api/restaurants', restaurantRouter);
+  app.use('/api/tasks',taskRouter);
   app.use('/api/rag', ragRouter);
 
   app.listen(process.env.PORT, () => {

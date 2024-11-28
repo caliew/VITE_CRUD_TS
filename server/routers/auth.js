@@ -8,8 +8,8 @@ export const generateToken = (user) => {
 
 export const verifyToken = (req, res, next) => {
     let token = req.header('Authorization');
-    token = token.replace(/^Bearer\s+/, '');
     if (!token) return res.status(401).send('Access denied. No token provided.');
+    token = token.replace(/^Bearer\s+/, '');
     try {
       const decoded = jwt.verify(token, secretKey);
       if (decoded.phase !== process.env.PHASE) {

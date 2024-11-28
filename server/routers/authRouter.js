@@ -1,10 +1,10 @@
 import express from 'express';
 import { verifyToken, generateToken } from './auth.js';
 
-const router = express.Router();
+const authRouter = express.Router();
 
 // API endpoints for /api/auth/...
-router.post('/login', (req, res) => {
+authRouter.post('/login', (req, res) => {
     const { accessCode } = req.body;
     if (accessCode === 'admin') {
         const user = { id: 1, username: 'admin' };
@@ -16,12 +16,12 @@ router.post('/login', (req, res) => {
 });
 
 // Protected routes
-router.use('/protected', verifyToken, (req, res, next) => {
+authRouter.use('/protected', verifyToken, (req, res, next) => {
     next();
 });
 
-router.get('/protected', verifyToken, (req, res) => {
+authRouter.get('/protected', verifyToken, (req, res) => {
     res.json({ message: 'Hello, authenticated user!' });
 });
 
-export default router;
+export default authRouter;

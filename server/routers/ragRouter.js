@@ -1,6 +1,6 @@
 // ragRouter.js
 import express from 'express';
-const router = express.Router();
+const ragRouter = express.Router();
 import ragModel from './ragModel.js';
 import { pipeline } from '@xenova/transformers';
 
@@ -16,18 +16,18 @@ const pipelineSingleton = {
 };
 
 // API endpoints for ./api/rag/
-router.post('/generate', (req, res) => {
+ragRouter.post('/generate', (req, res) => {
   const inputText = req.body.inputText;
   let generatedText = 'RAG MODEL IS UNDER TESTING. ..TO BE READY SOON..';
 //   const generatedText = ragModel.generate(inputText);
   res.json({ generatedText });
 });
 
-router.post('/classify', async (req, res) => {
+ragRouter.post('/classify', async (req, res) => {
   const text = req.body.text;
   const pipelineInstance = await pipelineSingleton.getInstance();
   const output = await pipelineInstance(text);
   res.json({ classification: output });
 });
 
-export default router;
+export default ragRouter;
