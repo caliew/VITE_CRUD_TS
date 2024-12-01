@@ -1,4 +1,4 @@
-const brackets = (position) =>
+const brackets = (position:any) =>
   position === "left" ? (
     <svg
       width="5"

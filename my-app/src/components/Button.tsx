@@ -1,4 +1,5 @@
 import ButtonSvg from "../assets/svg/ButtonSvg";
+import { Link } from 'react-router-dom';
 
 interface ButtonProp {
   className?: string,
@@ -23,10 +24,10 @@ const Button = ({ className, href, onClick, children, px, white }: ButtonProp) =
   );
 
   const renderLink = () => (
-    <a href={href} className={classes}>
+    <Link to={href} className={classes}>
       <span className={spanClasses}>{children}</span>
       {ButtonSvg(white)}
-    </a>
+    </Link>
   );
 
   return href ? renderLink() : renderButton();
