@@ -1,27 +1,24 @@
 // my-app/src/components/Header.tsx
-import React from 'react';
-import { AppBar, Toolbar, IconButton, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h3" component="div" sx={{ flexGrow: 1.5, fontSize: 32, fontWeight: 100 }}>
-          Application Name
-        </Typography>
-        <Link to="/">
-          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>HOME</Typography>
+    <div className="fixed z-30 w-full flex flex-row gap-5 p-5 justify-between text-xl font-Roboto font-extralight">
+      <div className="">Application Name</div>
+      <div className="flex">
+        <Link to="/" className="px-2">
+          <h1>HOME</h1>
         </Link>
-        <Link to="/restaurants">
-          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>RESTAURANTS</Typography>
+        <span />
+        <Link to="/restaurants" className="px-2">
+          <h1>RESTAURANTS</h1>          
         </Link>
-        <Link to="/workers">
-          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white', marginLeft: 2 }}>WORKERS</Typography>
+        <span />
+        <Link to="/workers" className="px-2">
+          <h1>WORKERS</h1>          
         </Link>
-      </Toolbar>
-    </AppBar>
+      </div>
+    </div>
   );
 };
 

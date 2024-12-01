@@ -4,11 +4,9 @@ import { Box, Typography } from '@mui/material';
 
 const Footer = () => {
   return (
-    <Box sx={{ textAlign: 'center', padding: 2, backgroundColor: '#f0f0f0' }}>
-      <Typography variant="body2" component="p">
+    <div className='flex justify-center font-Roboto font-extralight text-xl'>
         &copy; 2023 My App
-      </Typography>
-    </Box>
+    </div>
   );
 };
 

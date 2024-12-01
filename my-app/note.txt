@@ -1,0 +1,39 @@
+// Install Tailwind CSS with Vite
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+
+// Configure Template Paths tailwind.config.js
+export default {
+  content: [
+    "./index.html", 
+    "./src/**/*.{js,ts,jsx,tsx}"
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [
+    plugin(function ({ addBase, addComponents, addUtilities }) {
+        addBase(),
+        addComponents({}),
+        addUtilities({})
+    })
+  ],
+}
+
+The official Tailwind CSS Typography plugin provides a set of prose classes you can use to add beautiful typographic defaults to 
+any vanilla HTML you don’t control, like HTML rendered from Markdown, or pulled from a CMS.
+
+npm install -D @tailwindcss/typography
+
+Then add the plugin to your tailwind.config.js file:
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  theme: {
+    // ...
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    // ...
+  ],
+}
+

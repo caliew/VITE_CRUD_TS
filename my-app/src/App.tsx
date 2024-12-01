@@ -1,19 +1,14 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Grid } from '@mui/material';
-import MainPage from './MainPage';
-import RestaurantPage from './RestaurantPage';
-import WorkerPage from './WorkerPage';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Sidebar from '../components/Sidebar';
-import './app.css';
+import { MainPage, RestaurantPage, WorkerPage } from './page';
+import { Header, Footer, Sidebar } from './components';
 
 const App = () => {
   return (
-    <div>
-      <BrowserRouter >
+    <div className=''>
+      <Router >
         <Header />
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2}>
@@ -30,7 +25,7 @@ const App = () => {
           </Grid>
         </Box>
         <Footer />
-      </BrowserRouter>
+      </Router>
     </div>
   );
 };

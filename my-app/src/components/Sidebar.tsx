@@ -1,6 +1,4 @@
 // my-app/src/components/Sidebar.tsx
-import React from 'react';
-import { List, ListItem, ListItemText, ListItemIcon, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import RestaurantIcon from '@mui/icons-material/Restaurant';
@@ -8,32 +6,11 @@ import WorkIcon from '@mui/icons-material/Work';
 
 const Sidebar = () => {
   return (
-    <List>
-      <ListItem button component={Link} to="/">
-        <ListItemIcon>
-          <HomeIcon />
-        </ListItemIcon>
-        <ListItemText>
-        <Typography variant="h6" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>HOME</Typography>
-        </ListItemText>
-      </ListItem>
-      <ListItem button component={Link} to="/restaurants">
-        <ListItemIcon>
-          <RestaurantIcon />
-        </ListItemIcon>
-        <ListItemText>
-        <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANTS</Typography>
-        </ListItemText>
-      </ListItem>
-      <ListItem button component={Link} to="/workers">
-        <ListItemIcon>
-          <WorkIcon />
-        </ListItemIcon>
-        <ListItemText>
-        <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>WORKERS</Typography>
-        </ListItemText>
-      </ListItem>
-    </List>
+    <div className='fixed mt-20 flex flex-col font-Roboto font-extralight text-xl p-5 gap-5'>
+      <Link to="/" className='px-2'><span/><HomeIcon /><span />HOME</Link>
+      <Link to="/restaurants" className='px-2'><RestaurantIcon className='svg fill-red-500'/>RESTAURANTS</Link>
+      <Link to="/workers" className='px-2'><WorkIcon />WORKERS</Link>
+    </div>
   );
 };
 
