@@ -7,13 +7,13 @@ import { fetchWorkers } from '../redux/features/workersSlice';
 import { Button } from '../components';
 import { grid } from '../assets';
 
-const TableHeaders = () => {
+const TableHeaders = ({className}:any) => {
   return (
-    <thead>
+    <thead className={className}>
       <tr className=''>
-        <td>ID</td>
-        <td>NAME</td>
-        <td>RESTAURANT ID</td>
+        <th className={className}>ID</th>
+        <th className={className}>NAME</th>
+        <th className={className}>RESTAURANT ID</th>
       </tr>
     </thead>
   );
@@ -41,19 +41,17 @@ const WorkerPage = () => {
 
   return (
     <div className='mt-5 font-Roboto flex flex-col items-center justify-center'>
-      <div className='font-Roboto font-extralight text-5xl justify-center items-center mt-15 mb-15'>WORKERS</div>
+      <div className='font-Roboto font-extralight text-4xl justify-center items-center mt-15 mb-15'>WORKERS</div>
       <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
-        <div className="absolute top-0 left-0 max-w-full">
         <img
-          className="w-full  "
+          className="absolute top-0 left-0 w-full"
           src={grid}
           width={550}
           height={550}
           alt="Grid"
         />
-        </div>
-        <table className='border-separate border-spacing-x-15 table-auto font-Roboto font-extralight text-2xl '>
-          <TableHeaders />
+        <table className='table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl '>
+          <TableHeaders className='font-extralight border-b-2'/>
           <tbody className='items-center justify-center'>
             {workers.map((worker:Worker) => (
               <TableRowComponent key={worker.id} worker={worker} />

@@ -1,18 +1,18 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect } from 'react';
 import { Restaurant } from '../models/Restaurant';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, AnyIfEmpty } from 'react-redux';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
 import { Button } from '../components';
-import { grid } from '../assets/grid.png'
+import { grid } from '../assets'
 
-const TableHeaders = () => {
+const TableHeaders = ({className}:any) => {
   return (
-    <thead className=''>
+    <thead>
       <tr>
-        <td>ID</td>
-        <td>NAME</td>
-        <td>ADDRESS</td>
+        <th className={className}>ID</th>
+        <th className={className}>NAME</th>
+        <th className={className}>ADDRESS</th>
       </tr>
     </thead>
   );
@@ -40,19 +40,17 @@ const RestaurantPage = () => {
 
   return (
     <div className='mt-5 font-Roboto flex flex-col items-center justify-center'>
-      <div className='font-Roboto font-extralight text-5xl justify-center items-center mt-15 mb-15'>RESTAURANTS</div>
+      <div className='font-Roboto font-extralight text-4xl justify-center items-center mt-15 mb-15'>RESTAURANTS</div>
       <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
-        <div className="absolute top-0 left-0 max-w-full">
         <img
-          className="w-full"
+          className="absolute top-0 left-0 w-full"
           src={grid}
           width={550}
           height={550}
           alt="Grid"
         />
-        </div>
-        <table className='border-separate border-spacing-x-15 table-auto font-Roboto font-extralight text-2xl'>
-            <TableHeaders />
+        <table className='table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl'>
+            <TableHeaders className='font-extralight border-b-2'/>
             <tbody>
               {restaurants.map((restaurant:Restaurant) => (
                 <TableRowComponent restaurant={restaurant} />
