@@ -1,23 +1,14 @@
-import React from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Button } from "../components";
 
 const HomePage = () => {
+
   return (
-    <div>
-      <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-        <Typography variant="h3" component="h3">
-          HOME PAGE
-        </Typography>
-        <Box sx={{ marginTop: 4 }}>
-          <Button variant="contained" component={Link} to="/restaurants">
-            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>VIEW RESTAURANTS</Typography>
-          </Button>
-          <Button variant="contained" component={Link} to="/workers" sx={{ marginLeft: 2 }}>
-            <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>VIEW WORKERS</Typography>
-          </Button>
-        </Box>
-      </Box>
+    <div className="flex flex-col pt-5 items-center gap-5">
+      <div className="font-Roboto font-extralight text-5xl mt-15 mb-15">HOME PAGE</div>
+      <div className='mt-10 flex '>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href='/'>RESTAURANTS</Button>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/workers">WORKERS</Button>
+      </div>
     </div>
   );
 };

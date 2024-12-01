@@ -1,28 +1,30 @@
 // my-app/src/components/WorkerPage.tsx
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { Worker } from '../models/Worker';
 import { fetchWorkers } from '../redux/features/workersSlice';
+import { Button } from '../components';
 
 const TableHeaders = () => {
   return (
-    <TableRow>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>RESTAURANT ID</Typography></TableCell>
-  </TableRow>
+    <thead>
+      <tr className=''>
+        <td>ID</td>
+        <td>NAME</td>
+        <td>RESTAURANT ID</td>
+      </tr>
+    </thead>
   );
 };
 
-const TableRowComponent = ({ worker }) => {
+const TableRowComponent = ({ worker }:{ worker: Worker}) => {
   return (
-    <TableRow key={worker.id}>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.id}</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.name}</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{worker.restaurantId}</Typography></TableCell>
-  </TableRow>
+    <tr key={worker.id}>
+      <td>{worker.id}</td>
+      <td>{worker.name}</td>
+      <td className='text-center'>{worker.restaurantId}</td>
+    </tr>
   );
 };
 
@@ -37,28 +39,20 @@ const WorkerPage = () => {
   }, [dispatch]);
 
   return (
-    <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-      <Typography variant="h2" component="h1">
-        Workers
-      </Typography>
-      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-        <Table>
-          <TableHead>
-            <TableHeaders />
-          </TableHead>
-          <TableBody>
-            {workers.map((worker:Worker) => (
-              <TableRowComponent key={worker.id} worker={worker} />
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box sx={{ marginTop: 4 }}>
-        <Button variant="contained" component={Link} to="/">
-          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>
-        </Button>
-      </Box>
-    </Box>
+    <div className='mt-5 font-Roboto flex flex-col items-center justify-center'>
+      <div className='font-Roboto font-extralight text-5xl justify-center items-center mt-15 mb-15'>WORKERS</div>
+      <table className='border-separate border-spacing-x-15 table-auto font-Roboto font-extralight text-2xl '>
+        <TableHeaders />
+        <tbody className='items-center justify-center'>
+          {workers.map((worker:Worker) => (
+            <TableRowComponent key={worker.id} worker={worker} />
+          ))}
+        </tbody>
+      </table>
+      <div className='mt-10 font-Roboto font-extralight text-2xl'>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+      </div>
+    </div>
   );
 };
 

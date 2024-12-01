@@ -2,18 +2,12 @@
   "restaurants":[
     {"id":1,"name":"Jurong East Branch","address":"123 Main St"},
     {"id":2,"name":"Raffles Place Branch","address":"456 Elm St"},
-    {"id":3,"name":"City Hall Branch","address":"789 Oak St"}],
+    {"id":3,"name":"City Hall Branch","address":"789 Oak St"}
+  ],
   "workers":[
     {"id":1,"name":"John Doe","restaurantId":1},
     {"id":2,"name":"Jane Doe","restaurantId":2},
     {"id":3,"name":"Bob Smith","restaurantId":1},
-    {"id":4,"name":"John Doe","restaurantId":1},
-    {"id":5,"name":"Jane Doe","restaurantId":2},
-    {"id":6,"name":"Bob Smith","restaurantId":1},
-    {"id":7,"name":"John Doe","restaurantId":1},
-    {"id":8,"name":"Jane Doe","restaurantId":2},
-    {"id":9,"name":"Bob Smith","restaurantId":1},
-    {"id":10,"name":"John Doe","restaurantId":1},
-    {"id":11,"name":"Jane Doe","restaurantId":2},
-    {"id":12,"name":"Bob Smith","restaurantId":1},
-    {"id":13,"name":"Alice Johnson","restaurantId":3}]}
+    {"id":4,"name":"Alice Johnson","restaurantId":3}
+  ]
+}

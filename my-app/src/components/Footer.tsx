@@ -1,10 +1,7 @@
 // my-app/src/components/Footer.tsx
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-
 const Footer = () => {
   return (
-    <div className='flex justify-center font-Roboto font-extralight text-xl'>
+    <div className='flex justify-center font-Roboto font-extralight text-xl mt-10'>
         &copy; 2023 My App
     </div>
   );

@@ -2,21 +2,14 @@
 import { Link } from "react-router-dom";
 
 const Header = () => {
+  const spanClasses = "relative x-2 px-2";
   return (
     <div className="fixed z-30 w-full flex flex-row gap-5 p-5 justify-between text-xl font-Roboto font-extralight">
       <div className="">Application Name</div>
       <div className="flex">
-        <Link to="/" className="px-2">
-          <h1>HOME</h1>
-        </Link>
-        <span />
-        <Link to="/restaurants" className="px-2">
-          <h1>RESTAURANTS</h1>          
-        </Link>
-        <span />
-        <Link to="/workers" className="px-2">
-          <h1>WORKERS</h1>          
-        </Link>
+        <Link to="/" className={spanClasses}>HOME</Link>
+        <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link>
+        <Link to="/workers" className={spanClasses}>WORKERS</Link>
       </div>
     </div>
   );

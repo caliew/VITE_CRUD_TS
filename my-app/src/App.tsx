@@ -1,31 +1,24 @@
-import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { Box } from '@mui/material';
-import { Grid } from '@mui/material';
 import { MainPage, RestaurantPage, WorkerPage } from './page';
 import { Header, Footer, Sidebar } from './components';
+import ButtonGradient from './assets/svg/ButtonGradient';
 
 const App = () => {
   return (
     <div className=''>
       <Router >
         <Header />
-        <Box sx={{ padding: 2 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={2} sx={{ padding: 2 }}>
-              <Sidebar />
-            </Grid>
-            <Grid item xs={10} sx={{ padding: 2 }}>
-              <Routes>
-                <Route path="/" element={<MainPage />} />
-                <Route path="/restaurants" element={<RestaurantPage />} />
-                <Route path="/workers" element={<WorkerPage />} />
-              </Routes>
-            </Grid>
-          </Grid>
-        </Box>
+        <div className='columns-1'>
+          <Sidebar />
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/restaurants" element={<RestaurantPage />} />
+            <Route path="/workers" element={<WorkerPage />} />
+          </Routes>
+        </div>
         <Footer />
       </Router>
+      <ButtonGradient />
     </div>
   );
 };

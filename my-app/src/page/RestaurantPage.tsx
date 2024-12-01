@@ -1,28 +1,29 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { Restaurant } from '../models/Restaurant';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
+import { Button } from '../components';
 
 const TableHeaders = () => {
   return (
-    <TableRow>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ID</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>NAME</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>ADDRESS</Typography></TableCell>
-    </TableRow>
+    <thead className=''>
+      <tr>
+        <td>ID</td>
+        <td>NAME</td>
+        <td>ADDRESS</td>
+      </tr>
+    </thead>
   );
 };
 
-const TableRowComponent = ({ restaurant }) => {
+const TableRowComponent = ({restaurant}:{restaurant: Restaurant}) => {
   return (
-    <TableRow key={restaurant.id}>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.id}</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.name}</Typography></TableCell>
-      <TableCell><Typography sx={{ fontSize: 18, fontWeight: 100, color: 'black' }}>{restaurant.address}</Typography></TableCell>
-    </TableRow>
+    <tr key={restaurant.id}>
+      <td className='' >{restaurant.id}</td>
+      <td className=''>{restaurant.name}</td>
+      <td className=''>{restaurant.address}</td>
+    </tr>
   );
 };
 
@@ -37,28 +38,20 @@ const RestaurantPage = () => {
   }, [dispatch]);
 
   return (
-    <Box sx={{ textAlign: 'center', margin: '0 auto', padding: 4, maxWidth: 800 }}>
-      <Typography variant="h2" component="h1">
-        Restaurants
-      </Typography>
-      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-        <Table>
-          <TableHead>
-            <TableHeaders />
-          </TableHead>
-          <TableBody>
+    <div className='mt-5 font-Roboto flex flex-col items-center justify-center'>
+      <div className='font-Roboto font-extralight text-5xl justify-center items-center mt-15 mb-15'>RESTAURANTS</div>
+      <table className='border-separate border-spacing-x-15 table-auto font-Roboto font-extralight text-2xl'>
+          <TableHeaders />
+          <tbody>
             {restaurants.map((restaurant:Restaurant) => (
-              <TableRowComponent key={restaurant.id} restaurant={restaurant} />
+              <TableRowComponent restaurant={restaurant} />
             ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box sx={{ marginTop: 4 }}>
-        <Button variant="contained" component={Link} to="/">
-          <Typography variant="body1" sx={{ fontSize: 18, fontWeight: 100, color: 'white' }}>BACK TO HOME PAGE</Typography>
-        </Button>
-      </Box>
-    </Box>
+          </tbody>
+      </table>
+      <div className='mt-10 font-Roboto font-extralight text-2xl'>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+      </div>
+    </div>
   );
 };
 
