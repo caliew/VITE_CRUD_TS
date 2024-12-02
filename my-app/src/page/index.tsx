@@ -2,5 +2,6 @@ import MainPage from './MainPage';
 import ErrorPage from './ErrorPage';
 import RestaurantPage from './RestaurantPage';
 import WorkerPage from './WorkerPage';
+import LoginPage from './LoginPage';
 
-export { MainPage, RestaurantPage, WorkerPage, ErrorPage }
+export { LoginPage,MainPage, RestaurantPage, WorkerPage, ErrorPage }

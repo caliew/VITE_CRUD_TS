@@ -35,7 +35,6 @@ const RestaurantPage = () => {
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
 
   useEffect(() => {
-    console.log('Fetching Restaurants...')
     dispatch(fetchRestaurants());
   }, [dispatch]);
 
