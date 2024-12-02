@@ -6,6 +6,7 @@ import { Worker } from '../models/Worker';
 import { fetchWorkers } from '../redux/features/workersSlice';
 import { Button } from '../components';
 import { grid } from '../assets';
+import { Camera } from 'lucide-react';
 
 const TableHeaders = ({className}:any) => {
   return (
@@ -60,7 +61,9 @@ const WorkerPage = () => {
         </table>
       </div>
       <div className='mt-10 font-Roboto font-extralight text-2xl'>
-        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">
+        <div><Camera className="inline-flex"/><span className="px-5"/>BACK TO HOME</div>
+        </Button>
       </div>
     </div>
   );

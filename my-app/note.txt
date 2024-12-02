@@ -37,3 +37,17 @@ module.exports = {
   ],
 }
 
+1. Heroicons: Heroicons is a popular icon set that is specifically designed to work with Tailwind CSS. 
+It offers a wide range of icons, and the best part is that it's free and open-source. You can use 
+Heroicons in your Tailwind CSS project by installing the heroicons package and importing the icons in your CSS.
+npm install heroicons
+
+2. Unicons: Unicons is another popular icon set that offers a wide range of icons. 
+While it's not specifically designed for Tailwind CSS, you can still use it in your project by importing the icons in your CSS.
+npm install unicons
+
+3. Lucide: Lucide is another popular icon set that is specifically designed to work with Tailwind CSS. 
+It offers a wide range of icons, and the best part is that it's free and open-source. You can use 
+Lucide in your Tailwind CSS project by installing the lucide package and importing the icons in your CSS.
+npm install lucide
+npm install lucide-react

@@ -1,10 +1,11 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect } from 'react';
 import { Restaurant } from '../models/Restaurant';
-import { useSelector, useDispatch, AnyIfEmpty } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
 import { Button } from '../components';
 import { grid } from '../assets'
+import { Camera } from 'lucide-react';
 
 const TableHeaders = ({className}:any) => {
   return (
@@ -59,7 +60,9 @@ const RestaurantPage = () => {
         </table>
       </div>
       <div className='mt-10 font-Roboto font-extralight text-2xl'>
-        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">
+          <div><Camera className="inline-flex"/><span className="px-5"/>BACK TO HOME</div>
+        </Button>
       </div>
     </div>
   );

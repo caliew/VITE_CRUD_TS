@@ -1,5 +1,6 @@
 import { Button } from "../components";
 import { grid } from '../assets';
+import { Utensils, User } from 'lucide-react';
 
 const HomePage = () => {
 
@@ -14,8 +15,12 @@ const HomePage = () => {
           height={550}
           alt="Grid"
         />
-        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href='/restaurants'>RESTAURANTS LISTS</Button>
-        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/workers">WORKERS LISTS</Button>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-2" href='/restaurants'>
+          <div className="inline-flex p-15"><Utensils /><span className="px-5"/>RESTAURANTS LISTS</div>
+        </Button>
+        <Button className="hidden lg:flex font-Roboto font-extralight text-2xl m-2" href="/workers">
+          <div><User className="inline-flex"/><span className="px-5"/>WORKERS LISTS</div>
+        </Button>
       </div>
     </div>
   );
