@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { MainPage, RestaurantPage, WorkerPage } from './page';
+import { ErrorPage, MainPage, RestaurantPage, WorkerPage } from './page';
 import { Header, Footer, Sidebar } from './components';
 import ButtonGradient from './assets/svg/ButtonGradient';
 
@@ -14,6 +14,7 @@ const App = () => {
             <Route path="/" element={<MainPage />} />
             <Route path="/restaurants" element={<RestaurantPage />} />
             <Route path="/workers" element={<WorkerPage />} />
+            <Route path="*" element={<ErrorPage />} />
           </Routes>
         </div>
         <Footer />
