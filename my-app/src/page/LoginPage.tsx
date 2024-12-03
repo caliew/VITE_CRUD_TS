@@ -1,9 +1,10 @@
-import { Formik, Form, Field } from 'formik';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Formik, Form, Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button } from '../components';
 
-import { login } from '../redux/features/authSlice';
+import { login, logout } from '../redux/features/authSlice';
 
 const LoginPage = () => {
 
@@ -15,6 +16,9 @@ const LoginPage = () => {
     if (token) {
         navigate('/')
     }
+    useEffect(()=>{
+        if (token) dispatch(logout());
+    },[])
 
     const handleSubmit = async (values: any, { setSubmitting, setFieldError  }: any) => {
         dispatch(login(values));
