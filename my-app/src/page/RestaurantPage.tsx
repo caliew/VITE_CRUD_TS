@@ -1,11 +1,14 @@
 // my-app/src/components/RestaurantPage.tsx
 import { useEffect } from 'react';
-import { Restaurant } from '../models/Restaurant';
+import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchRestaurants } from '../redux/features/restaurantsSlice';
-import { Button } from '../components';
+
 import { grid } from '../assets'
-import { Camera } from 'lucide-react';
+import { Camera, Utensils } from 'lucide-react';
+import { Restaurant } from '../models/Restaurant';
+import { fetchRestaurants } from '../redux/features/restaurantsSlice';
+import { Button, HeaderTitle } from '../components';
+import { getToken } from '../utils/api/auth';
 
 const TableHeaders = ({className}:any) => {
   return (
@@ -31,16 +34,24 @@ const TableRowComponent = ({restaurant}:{restaurant: Restaurant}) => {
 
 const RestaurantPage = () => {
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
+
+  useEffect(()=>{
+    const token = getToken();
+    if (!token) {
+      navigate('/login', { replace: true, state: { error: 'Invalid or expired token' } });
+    }
+  },[])
 
   useEffect(() => {
     dispatch(fetchRestaurants());
   }, [dispatch]);
 
   return (
-    <div className='mt-5 font-Roboto flex flex-col items-center justify-center'>
-      <div className='font-Roboto font-extralight text-4xl justify-center items-center mt-15 mb-15'>RESTAURANTS</div>
+    <div className='mt-15 font-Roboto flex flex-col items-center justify-center'>
+      <HeaderTitle Icon={Utensils} className="inline-flex size-24" title='RESTAURANTS'/>
       <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
         <img
           className="absolute top-0 left-0 w-full"
@@ -52,7 +63,7 @@ const RestaurantPage = () => {
         <table className='table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl'>
             <TableHeaders className='font-extralight border-b-2'/>
             <tbody>
-              {restaurants.map((restaurant:Restaurant) => (
+              {restaurants && restaurants.map((restaurant:Restaurant) => (
                 <TableRowComponent restaurant={restaurant} />
               ))}
             </tbody>

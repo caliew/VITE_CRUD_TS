@@ -1,7 +1,7 @@
 // my-app/src/components/Sidebar.tsx
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Camera, FileKey2, Utensils, User } from 'lucide-react';
+import { Camera, FileKey2, CircuitBoard, Utensils, User } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
 
 
@@ -19,6 +19,7 @@ const Sidebar = () => {
     return (
       <>
       <Link to="/" className="px-2 flex"><Camera/><span className={spanClasses}/>HOME</Link>
+      <Link to="/iotportals" className="px-2 flex"><CircuitBoard /><span className={spanClasses}/>IOT PORTAL</Link>
       <Link to="/restaurants" className="px-2 flex"><Utensils /><span className={spanClasses}/>RESTAURANTS</Link>
       <Link to="/workers" className="px-2 flex"><User /><span className={spanClasses}/>WORKERS</Link>
       </>
@@ -26,11 +27,11 @@ const Sidebar = () => {
   }
 
   return (
-    <div className="fixed mt-20 flex flex-col font-Roboto font-extralight text-xl p-5 gap-5">
+    <div className="fixed mt-20 z-30 flex flex-col font-Roboto font-extralight text-xl p-5 gap-5">
+      { loaded() }
       <Link to="/login" className="px-2 flex"><FileKey2/><span className={spanClasses}/>
       {token ? 'LOGOUT':'LOGIN'}
       </Link>
-      { loaded() }
     </div>
   );
 };

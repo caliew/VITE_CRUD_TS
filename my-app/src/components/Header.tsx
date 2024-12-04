@@ -15,14 +15,16 @@ const Header = () => {
     return (
       <>
         <Link to="/" className={spanClasses}>HOME</Link>
+        <Link to="/iotportals" className={spanClasses}>IOT PORTAL</Link>
         <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link>
         <Link to="/workers" className={spanClasses}>WORKERS</Link>
+        <Link to="/login" className={spanClasses}>{token ? 'LOGOUT':'LOGIN'}</Link>
       </>
     )
 
   }
   return (
-    <div className="fixed z-30 w-full flex flex-row gap-5 p-5 justify-between text-xl font-Roboto font-extralight">
+    <div className="fixed top-0 left-0 z-30 w-full flex flex-row gap-5 p-5 justify-between text-xl font-Roboto font-extralight">
       <div className="flex items-center">
         <img src={logo} alt="Logo" className="h-15 w-15 mr-2 fill-white" />
         <span>{AppName}</span>

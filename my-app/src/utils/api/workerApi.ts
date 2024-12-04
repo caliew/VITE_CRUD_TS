@@ -20,8 +20,10 @@ api.interceptors.request.use(async (config) => {
 
 const getWorkers = async () => {
   const response = await api.get('/api/workers');
-  return response.data;
+  if (response.status !== 200) return null;
+  return response.data
 };
+
 const getWorker = async (id: number) => {
   const response = await api.get(`/api/workers/${id}`);
   return response.data;

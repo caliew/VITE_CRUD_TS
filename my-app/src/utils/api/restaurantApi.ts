@@ -18,7 +18,8 @@ api.interceptors.request.use(async (config) => {
 });
 
 const getRestaurants = async () => {
-  const response = await api.get('/api/restaurants');  
+  const response = await api.get('/api/restaurants');
+  if (response.status !== 200) return null;
   return response.data;
 };
 

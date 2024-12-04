@@ -8,7 +8,7 @@ import {
 import { Restaurant } from '../../models/Restaurant';
 
 interface RestaurantsState {
-  restaurants: any[];
+  restaurants: any[] | null;
   isLoading: boolean;
   error: any;
 }
@@ -64,7 +64,7 @@ const restaurantsSlice = createSlice({
       })
       .addCase(fetchRestaurants.rejected, (state, action) => {
         state.isLoading = false;
-        state.restaurants = [];
+        state.restaurants = null;
         state.error = action.error.message;
       })
       .addCase(deleteRestaurant.pending, (state) => {
