@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { Button, HeaderTitle } from '../components';
-import { KeyRound } from 'lucide-react';
+import { GetIcon } from "../utils";
 
 import { login, logout } from '../redux/features/authSlice';
 
@@ -29,7 +29,7 @@ const LoginPage = () => {
 
     return (
         <div className="mt-15 font-Roboto flex flex-col items-center justify-center">
-            <HeaderTitle Icon={KeyRound} className="inline-flex size-24" title='LOGIN'/>
+            <HeaderTitle Icon={GetIcon('key')} className="inline-flex size-24" title='LOGIN'/>
             <Formik
             initialValues={{ accessCode: '' }}
             onSubmit={handleSubmit}

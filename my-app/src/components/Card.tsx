@@ -6,13 +6,16 @@ interface ButtonProp {
   title?: string,
   subtitle?: string,
   sensorType?: string,
+  name?: string,
+  sensorId?: string,
+  group?: string,
   onClick?: any,
   children?: any,
   px?: string,
   white?: string
 }
 
-const Card = ({ className, title, subtitle, sensorType, onClick, children, px, white }: ButtonProp) => {
+const Card = ({ className, title, subtitle, sensorType, name, sensorId, group, onClick, children, px, white }: ButtonProp) => {
   const classes = `button relative inline-flex items-center justify-center 
     h-11 transition-colors hover:text-color-1 
     flex flex-col h-full py-5 mb-15
@@ -26,8 +29,9 @@ const Card = ({ className, title, subtitle, sensorType, onClick, children, px, w
   const renderCard = () => (
     <button className={classes} onClick={onClick}>
         <div>{sensorType}</div>
-        <div>{subtitle}</div>
-        <div className="mb-3">{title}</div>
+        <div>{group}</div>
+        <div>{name}</div>
+        <div className="py-2">{sensorId}</div>
         {children}
     </button>
   );

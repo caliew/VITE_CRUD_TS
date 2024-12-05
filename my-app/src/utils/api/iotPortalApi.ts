@@ -1,7 +1,7 @@
 // workers.ts
 import axios from 'axios';
 import { getToken } from './auth';
-import token from '../token.json';
+import token from './token.json';
 
 const IOT_URL_IKN = 'http://202.59.9.164:5000';
 
