@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 
 const ErrorBoundary = ({ children }: any) => {
+  
   const [hasError, setHasError] = useState(false);
   const [error, setError] = useState(null);
 

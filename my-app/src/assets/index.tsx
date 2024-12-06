@@ -9,6 +9,9 @@ import benefitIcon2 from './benefits/icon-2.svg';
 import benefitIcon3 from './benefits/icon-3.svg';
 import benefitIcon4 from './benefits/icon-4.svg';
 import grid from './grid.png';
+import bg1 from './bg1.jpg';
+import brainwave from './brainwave.svg';
 
 export { benefitCard1, benefitCard2, benefitCard3, benefitCard4, benefitCard5, benefitCard6,
-         benefitIcon1, benefitIcon2, benefitIcon3, benefitIcon4, grid }
+         benefitIcon1, benefitIcon2, benefitIcon3, benefitIcon4, 
+         grid, bg1, brainwave }

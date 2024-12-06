@@ -6,5 +6,10 @@ import Button from './Button';
 import Card from './Card';
 import Section from './Section';
 import HeaderTitle from './HeaderTitle'
+import ErrorBoundary from './ErrorBoundary';
+import LEDDisplay from './LEDDisplay';
 
-export { Footer, Header, HeaderTitle, Sidebar, Contents, Button, Card, Section }
+export { ErrorBoundary, Footer, Header, HeaderTitle, 
+         Sidebar, Contents, 
+         LEDDisplay, 
+         Button, Card, Section }

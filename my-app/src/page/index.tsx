@@ -4,6 +4,6 @@ import IOTPortalPage from './IOTPortalPage'
 import RestaurantPage from './RestaurantPage';
 import WorkerPage from './WorkerPage';
 import LoginPage from './LoginPage';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from '../components/ErrorBoundary';
 
 export { LoginPage, ErrorBoundary, MainPage, IOTPortalPage, RestaurantPage, WorkerPage, ErrorPage }
