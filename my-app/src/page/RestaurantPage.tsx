@@ -4,10 +4,11 @@ import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
+import { Button, HeaderTitle } from '../components';
+import { GetIcon, GetToken, HeaderClasses, ButtonClasses } from '../utils';
+
 import { Restaurant } from '../models/Restaurant';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
-import { Button, HeaderTitle } from '../components';
-import { GetIcon, GetToken } from '../utils';
 
 const TableHeaders = ({className}:any) => {
   return (
@@ -50,7 +51,7 @@ const RestaurantPage = () => {
 
   return (
     <div className='mt-15 font-Roboto flex flex-col items-center justify-center'>
-      <HeaderTitle Icon={GetIcon('restaurants')} className="inline-flex size-24" title='RESTAURANTS'/>
+      <HeaderTitle Icon={GetIcon('restaurants')} className={HeaderClasses} title='RESTAURANTS'/>
       <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
         <img
           className="absolute top-0 left-0 w-full"
@@ -68,8 +69,8 @@ const RestaurantPage = () => {
             </tbody>
         </table>
       </div>
-      <div className='mt-10 font-Roboto font-extralight text-2xl'>
-        <Button Icon={GetIcon('home')} className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+      <div className=''>
+        <Button Icon={GetIcon('home')} className={ButtonClasses} href="/">BACK TO HOME</Button>
       </div>
     </div>
   );

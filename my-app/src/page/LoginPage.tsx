@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { Formik, Form, Field } from 'formik';
+
 import { Button, HeaderTitle } from '../components';
-import { GetIcon } from "../utils";
+import { GetIcon, HeaderClasses, ButtonClasses } from '../utils';
 
 import { login, logout } from '../redux/features/authSlice';
 
@@ -29,29 +31,31 @@ const LoginPage = () => {
 
     return (
         <div className="mt-15 font-Roboto flex flex-col items-center justify-center">
-            <HeaderTitle Icon={GetIcon('key')} className="inline-flex size-24" title='LOGIN'/>
-            <Formik
-            initialValues={{ accessCode: '' }}
-            onSubmit={handleSubmit}
-            >
-            {({ isSubmitting, handleSubmit, errors }) => (
-                <Form className='flex flex-col'>
-                    <Field
-                        type="text"
-                        name="accessCode"
-                        placeholder="Access Code"
-                        style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 24, fontWeight: 50, color: 'red' }} 
-                        />
-                        <span />
-                        <Button  className='mt-5 font-Roboto font-extralight text-2xl px-5' onClick={handleSubmit}>
-                            LOGIN
-                        </Button>
-                        <div className='flex justify-center font-Roboto font-extralight text-2xl text-color-3'>
-                        {errors.accessCode && <div className='text-red'>{errors.accessCode}</div> }
-                        </div>
-                </Form>
-            )}
-            </Formik>
+            <HeaderTitle Icon={GetIcon('key')} className={HeaderClasses} title='LOGIN'/>
+            <div className='m-10'>
+                <Formik
+                initialValues={{ accessCode: '' }}
+                onSubmit={handleSubmit}
+                >
+                {({ isSubmitting, handleSubmit, errors }) => (
+                    <Form className='flex flex-col'>
+                        <Field
+                            type="text"
+                            name="accessCode"
+                            placeholder="Access Code"
+                            style={{ fontFamily: 'Roboto', textAlign: 'center', fontSize: 24, fontWeight: 50, color: 'red' }} 
+                            />
+                            <span />
+                            <Button  className={ButtonClasses} onClick={handleSubmit}>
+                                LOGIN
+                            </Button>
+                            <div className='flex justify-center font-Roboto font-extralight text-2xl text-color-3'>
+                            {errors.accessCode && <div className='text-red'>{errors.accessCode}</div> }
+                            </div>
+                    </Form>
+                )}
+                </Formik>
+            </div>
         </div>
     );
 };

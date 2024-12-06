@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { grid, bg1 } from '../assets'
-import { GetIcon } from '../utils';
+import { grid } from '../assets'
 import { Button, HeaderTitle, Card } from '../components';
+import { GetIcon, HeaderClasses, ButtonClasses } from '../utils';
 
 import { fetchIOTPortal } from '../redux/features/iotPortalSlice';
 
@@ -29,12 +29,14 @@ const IOTPortalPage = () => {
   const getREADING = (sensorId:any) => {
     let sensorData = iotSensorData.filter((data:any)=>data['DTU.ID']==sensorId);
     let _data = sensorData[sensorData.length-1];
-    return _data?.['RCV.BYTES'] || 0;
+    let _HEX = _data?.['RCV.BYTES'] || 0;
+    const decimalNumber = parseInt(_HEX, 16);
+    return String(decimalNumber/10.0);
   }
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
   return (
     <div className="mt-15 font-Roboto flex flex-col items-center justify-center ">
-      <HeaderTitle Icon={GetIcon('iotportal')} className="inline-flex size-24" title='IOT PORTAL'/>
+      <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL'/>
       <div className="relative p-8 bg-n-8 overflow-hidden xl:p-15">
         <img
           className="absolute top-0 left-0 z-0 w-full opacity-100"
@@ -58,8 +60,8 @@ const IOTPortalPage = () => {
             })
           }
         </div>
-        <div className='mt-10 font-Roboto font-extralight text-2xl'>
-          <Button Icon={GetIcon('home')} className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+        <div className=''>
+          <Button Icon={GetIcon('home')} className={ButtonClasses} href="/">BACK TO HOME</Button>
         </div>
       </div>
     </div>

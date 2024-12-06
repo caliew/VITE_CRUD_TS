@@ -27,8 +27,8 @@ const Sidebar = () => {
       <>
       <Link to="/" className="px-2 flex"><HomeIcon /><span className={spanClasses}/>HOME</Link>
       <Link to="/iotportals" className="px-2 flex"><IOTIcon /><span className={spanClasses}/>IOT PORTAL</Link>
-      <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link>
-      <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link>
+      {/* <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link> */}
+      {/* <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link> */}
       </>
     )
   }

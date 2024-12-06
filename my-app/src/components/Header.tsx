@@ -16,8 +16,8 @@ const Header = () => {
       <>
         <Link to="/" className={spanClasses}>HOME</Link>
         <Link to="/iotportals" className={spanClasses}>IOT PORTAL</Link>
-        <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link>
-        <Link to="/workers" className={spanClasses}>WORKERS</Link>
+        {/* <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link> */}
+        {/* <Link to="/workers" className={spanClasses}>WORKERS</Link> */}
         <Link to="/login" className={spanClasses}>{token ? 'LOGOUT':'LOGIN'}</Link>
       </>
     )

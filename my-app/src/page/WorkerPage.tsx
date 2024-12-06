@@ -4,11 +4,11 @@ import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets';
-import { GetIcon, GetToken } from '../utils';
+import { Button, HeaderTitle } from '../components';
+import { GetIcon, GetToken, HeaderClasses, ButtonClasses } from '../utils';
+
 import { Worker } from '../models/Worker';
 import { fetchWorkers } from '../redux/features/workersSlice';
-
-import { Button, HeaderTitle } from '../components';
 
 const TableHeaders = ({className}:any) => {
   return (
@@ -51,7 +51,7 @@ const WorkerPage = () => {
 
   return (
     <div className='mt-15 font-Roboto flex flex-col items-center justify-center'>
-      <HeaderTitle Icon={GetIcon('workers')} className="inline-flex size-24" title='WORKERS'/>
+      <HeaderTitle Icon={GetIcon('workers')} className={HeaderClasses} title='WORKERS'/>
       <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
         <img
           className="absolute top-0 left-0 w-full"
@@ -69,8 +69,8 @@ const WorkerPage = () => {
           </tbody>
         </table>
       </div>
-      <div className='mt-10 font-Roboto font-extralight text-2xl'>
-        <Button Icon={GetIcon('home')} className="hidden lg:flex font-Roboto font-extralight text-2xl m-5" href="/">BACK TO HOME</Button>
+      <div className=''>
+        <Button Icon={GetIcon('home')} className={ButtonClasses} href="/">BACK TO HOME</Button>
       </div>
     </div>
   );
