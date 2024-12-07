@@ -29,7 +29,8 @@ const HomePage = () => {
         <div className='flex flex-col mt-5'>
         <Button Icon={GetIcon('')} className={ButtonClasses} >FEATURES</Button>
         <Button Icon={GetIcon('iotportal')} className={ButtonLINKClasses} to='/iotportals'>IOT PORTAL</Button>
-        <Button Icon={GetIcon('MapPinHouse')} className={ButtonLINKClasses} to='/layout'>SITE MAP</Button>
+        <Button Icon={GetIcon('MapPinHouse')} className={ButtonLINKClasses} to='/sitemap'>SITE MAP</Button>
+        <Button Icon={GetIcon('ChartSpline')} className={ButtonLINKClasses} to='/charting'>CHARTING</Button>
         <Button Icon={GetIcon('workers')} className={ButtonLINKClasses} to="/workers">WORKERS LISTS</Button>
         <Button Icon={GetIcon('restaurants')} className={ButtonLINKClasses} to='/restaurants'>RESTAURANTS LISTS</Button>
         </div>

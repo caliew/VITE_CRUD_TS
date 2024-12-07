@@ -9,9 +9,11 @@ const ButtonLINKClasses = 'font-Roboto font-extralight text-2xl m-2 hover:focus:
 const ButtonClasses = 'font-Roboto font-extralight text-2xl m-2 lg:flex ';
 
 const MapClasses = 'w-[850px] h-[600px] p-1 bg-n-8 rounded-[2.4375rem] overflow-hidden';
+const ChartClasses = 'w-[850px] h-[600px] p-1 bg-n-8 overflow-hidden';
 const IOTSensorsClasses = 'flex flex-wrap justify-center items-center gap-1 overflow-hidden';
 
 export { PageClasses, HeaderClasses, SidebarClasses, 
          ButtonClasses, ButtonLINKClasses,
-         RoutesClasses, MapClasses, IOTSensorsClasses,
+         RoutesClasses, 
+         MapClasses, ChartClasses, IOTSensorsClasses,
          PageContainClasses, GridClasses }

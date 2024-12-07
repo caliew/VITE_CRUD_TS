@@ -63,3 +63,8 @@ npm install lucide-react
 npm install react-mapbox-gl mapbox-gl
 ACCESS TOKEN = pk.eyJ1IjoiY2FsaWV3IiwiYSI6ImNsYnQ1ZjcwazAzMzczcHQwa2N2OTU5bTUifQ.MXbnNqpc6B3T44G97EmI6Q
 
+// --------------
+ECharts-for-react
+// --------------
+npm install echarts-for-react
+

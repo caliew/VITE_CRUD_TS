@@ -6,7 +6,7 @@ import { getLEDDisplay as GetLEDDisplay } from "./getLEDDisplay";
 import { PageClasses, HeaderClasses, SidebarClasses, 
          ButtonClasses, ButtonLINKClasses,
          PageContainClasses, IOTSensorsClasses,
-         RoutesClasses, MapClasses,
+         RoutesClasses, ChartClasses, MapClasses,
          GridClasses } from "./getClassName";
 import { getSensorUnit as GetSensorUNIT } from "./getSensorUnit";
 
@@ -15,5 +15,5 @@ export { GetIcon, GetLEDDisplay, GetSensorUNIT,
          PageClasses, HeaderClasses, SidebarClasses,
          ButtonClasses, ButtonLINKClasses,
          PageContainClasses, IOTSensorsClasses,
-         RoutesClasses, MapClasses,
+         RoutesClasses, ChartClasses, MapClasses,
          GridClasses }

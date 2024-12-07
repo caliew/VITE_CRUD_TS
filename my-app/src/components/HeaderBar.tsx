@@ -16,7 +16,8 @@ const HeaderBar = () => {
       <>
         <Link to="/" className={spanClasses}>HOME</Link>
         <Link to="/iotportals" className={spanClasses}>IOT PORTAL</Link>
-        <Link to="/layout" className={spanClasses}>LAYOUT</Link>
+        <Link to="/sitemap" className={spanClasses}>SITE MAP</Link>
+        <Link to="/charting" className={spanClasses}>CHARTING</Link>
         <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link>
         <Link to="/workers" className={spanClasses}>WORKERS</Link>
         <Link to="/login" className={spanClasses}>{token ? 'LOGOUT':'LOGIN'}</Link>

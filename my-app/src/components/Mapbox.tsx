@@ -3,7 +3,6 @@ import mapboxgl from 'mapbox-gl';
 import { MapClasses } from '../utils';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-
 const Mapbox = ({GeoJSON}:any) => {  
   
   const mapContainerRef = useRef();

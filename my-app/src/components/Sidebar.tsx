@@ -13,7 +13,8 @@ const SideBar = () => {
 
   const HomeIcon = GetIcon('home');
   const IOTIcon = GetIcon('iotportal');
-  const LayoutIcon = GetIcon('MapPinHouse');
+  const MapPinHouseIcon = GetIcon('MapPinHouse');
+  const ChartingIcon = GetIcon('ChartSpline');
   const RestaurantIcon = GetIcon('restaurants');
   const WorkerIcon = GetIcon('workers');
   const LogoutIcon = GetIcon('logout');
@@ -28,7 +29,8 @@ const SideBar = () => {
       <>
       <Link to="/" className="px-2 flex"><HomeIcon /><span className={spanClasses}/>HOME</Link>
       <Link to="/iotportals" className="px-2 flex"><IOTIcon /><span className={spanClasses}/>IOT PORTAL</Link>
-      <Link to="/layout" className="px-2 flex"><LayoutIcon /><span className={spanClasses}/>SITE MAP</Link>
+      <Link to="/sitemap" className="px-2 flex"><MapPinHouseIcon /><span className={spanClasses}/>SITE MAP</Link>
+      <Link to="/charting" className="px-2 flex"><ChartingIcon /><span className={spanClasses}/>CHARTING</Link>
       <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link>
       <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link>
       </>
