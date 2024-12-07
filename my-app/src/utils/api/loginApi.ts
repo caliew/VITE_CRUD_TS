@@ -1,6 +1,7 @@
 // my-app/src/utils/api/loginApi.ts
 import axios from 'axios';
-import { setToken, removeToken, setAccessCode } from './auth';
+import { setAccessCode } from './auth';
+import { SetJWTToken, RemoveJWTToken } from '../../utils';
 
 const api = axios.create({
   baseURL: 'http://localhost:3001/api',
@@ -12,10 +13,10 @@ const loginApi = async (values: any) => {
     try {
       const response = await api.post('/auth/login', values);
       if (response.status === 200) {
-        setToken(response.data.token);
+        SetJWTToken(response.data.token);
         setAccessCode(response.data.accessCode);
       } else {
-        removeToken();
+        RemoveJWTToken();
       }
       return response;
     } catch (error) {

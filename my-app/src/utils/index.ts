@@ -1,5 +1,7 @@
 import { getIcon as GetIcon } from "./getIcon";
-import { getToken as GetToken } from "./api/auth";
+import { getJWTToken as GetJWTToken,
+         setJWTToken as SetJWTToken,
+         removeJWTToken as RemoveJWTToken } from "./api/auth";
 import { getLEDDisplay as GetLEDDisplay } from "./getLEDDisplay";
 import { PageClasses, HeaderClasses, SidebarClasses, 
          ButtonClasses, ButtonLINKClasses,
@@ -8,7 +10,8 @@ import { PageClasses, HeaderClasses, SidebarClasses,
          GridClasses } from "./getClassName";
 import { getSensorUnit as GetSensorUNIT } from "./getSensorUnit";
 
-export { GetIcon, GetToken, GetLEDDisplay, GetSensorUNIT, 
+export { GetIcon, GetLEDDisplay, GetSensorUNIT, 
+         GetJWTToken, SetJWTToken, RemoveJWTToken,
          PageClasses, HeaderClasses, SidebarClasses,
          ButtonClasses, ButtonLINKClasses,
          PageContainClasses, IOTSensorsClasses,

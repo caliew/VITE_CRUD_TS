@@ -1,17 +1,17 @@
 // workers.ts
 import axios from 'axios';
-import { getToken } from './auth';
+import { GetJWTToken } from '../../utils';
 
 const api = axios.create({
     baseURL: 'http://localhost:3001', 
     headers: {
-        Authorization: `${getToken()}`,
+        Authorization: `${GetJWTToken()}`,
     },
     validateStatus: (status) => status >= 200 && status < 600, // Don't throw an error for status codes 200-599
 });
 
 api.interceptors.request.use(async (config) => {
-  const token = await getToken();
+  const token = await GetJWTToken();
   if (token) {
     config.headers.Authorization = `${token}`;
   }

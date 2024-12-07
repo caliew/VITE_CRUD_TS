@@ -1,7 +1,8 @@
 // authSlice.ts
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { loginApi } from '../../utils/api/loginApi';
-import { getToken, removeToken, getAccessCode, removeAccessCode  } from '../../utils/api/auth';
+import { getAccessCode } from '../../utils/api/auth';
+import { GetJWTToken, RemoveJWTToken } from '../../utils';
 
 interface AuthState {
   token: string | null;
@@ -32,7 +33,7 @@ const authSlice = createSlice({
   reducers: {
     logout: (state) => {
       state.token = null;
-      removeToken();
+      RemoveJWTToken();
     }
   },
   extraReducers: (builder) => {
@@ -42,7 +43,7 @@ const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.token = getToken();
+        state.token = GetJWTToken();
         state.accessCode = getAccessCode();
         state.error = action.payload;
       })

@@ -1,14 +1,14 @@
 // my-app/src/utils/auth.ts
-const setToken = (token: string) => {
-    localStorage.setItem('accessToken', token);
+const setJWTToken = (token: string) => {
+    localStorage.setItem('JWTToken', token);
 };
 
-const getToken = () => {
-    return localStorage.getItem('accessToken');
+const getJWTToken = () => {
+    return localStorage.getItem('JWTToken');
 };
 
-const removeToken = () => {
-    localStorage.removeItem('accessToken');
+const removeJWTToken = () => {
+    localStorage.removeItem('JWTToken');
 };
 
 const setAccessCode = (token: string) => {
@@ -23,4 +23,4 @@ const removeAccessCode = () => {
     localStorage.removeItem('accessCode');
 };
 
-export { setToken, getToken, removeToken, setAccessCode, getAccessCode, removeAccessCode };
+export { setJWTToken, getJWTToken, removeJWTToken, setAccessCode, getAccessCode, removeAccessCode };

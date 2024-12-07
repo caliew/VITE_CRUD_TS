@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle } from '../components';
-import { GetIcon, GetToken, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, GetJWTToken, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { Restaurant } from '../models/Restaurant';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
@@ -39,7 +39,7 @@ const RestaurantPage = () => {
   const restaurants = useSelector((state: any) => state.restaurants.restaurants);
 
   useEffect(()=>{
-    const token = GetToken();
+    const token = GetJWTToken();
     if (!token) {
       navigate('/login', { replace: true, state: { error: 'Invalid or expired token' } });
     }

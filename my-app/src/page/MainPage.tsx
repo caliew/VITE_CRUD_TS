@@ -4,14 +4,14 @@ import { useNavigate  } from 'react-router-dom';
 
 import { grid } from '../assets';
 import { Button, HeaderTitle } from "../components";
-import { GetIcon, GetToken, ButtonClasses, ButtonLINKClasses, PageClasses, HeaderClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, GetJWTToken, ButtonClasses, ButtonLINKClasses, PageClasses, HeaderClasses, PageContainClasses, GridClasses } from '../utils';
 
 const HomePage = () => {
 
   const navigate = useNavigate();
 
   useEffect(()=>{
-    const token = GetToken();
+    const token = GetJWTToken();
     if (!token) {
       navigate('/404', { replace: true, state: { error: 'Invalid or expired token' } });
     }
