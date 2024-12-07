@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { config } from "../config";	
 import { useSelector, useDispatch } from 'react-redux';
 
-const Header = () => {
+const HeaderBar = () => {
 
   const { token, error } = useSelector((state) => state.auth);
 
@@ -16,8 +16,9 @@ const Header = () => {
       <>
         <Link to="/" className={spanClasses}>HOME</Link>
         <Link to="/iotportals" className={spanClasses}>IOT PORTAL</Link>
-        {/* <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link> */}
-        {/* <Link to="/workers" className={spanClasses}>WORKERS</Link> */}
+        <Link to="/layout" className={spanClasses}>LAYOUT</Link>
+        <Link to="/restaurants" className={spanClasses}>RESTAURANTS</Link>
+        <Link to="/workers" className={spanClasses}>WORKERS</Link>
         <Link to="/login" className={spanClasses}>{token ? 'LOGOUT':'LOGIN'}</Link>
       </>
     )
@@ -34,4 +35,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default HeaderBar;

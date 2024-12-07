@@ -10,12 +10,15 @@ import {
     Sheet, TriangleAlert, 
     Omega, Radiation, Orbit, Sigma, Cctv, 
     Waypoints, 
+    Map, MapPin, MapPinOff, MapPinHouse,
     Bell, BellOff, 
     LineChart, PieChart, ChartScatter, ChartSpline, ChartArea, ChartLine,
     Drill, FireExtinguisher, 
     Battery,BatteryFull, BatteryLow, BatteryMedium, BatteryWarning,
     BatteryCharging, Plug, PlugZap, 
     BellElectric,
+    LayoutPanelLeft, LayoutPanelTop,
+    PanelsTopLeft, PanelsTopRight, PanelsBottomLeft, PanelsBottomRight,
     Ban
  } from "lucide-react";
 
@@ -43,7 +46,13 @@ import {
     if (name === 'Battery0') return BatteryWarning
     if (name === 'MessageCircle') return MessageCircle
     if (name === 'MessageSquare') return MessageSquare
+    if (name === 'Layout1') return LayoutPanelLeft
+    if (name === 'Layout2') return LayoutPanelTop
+    if (name === 'Map') return Map
+    if (name === 'MapPinHouse') return MapPinHouse
+
     return Ban
 }
+
 
 export { getIcon }

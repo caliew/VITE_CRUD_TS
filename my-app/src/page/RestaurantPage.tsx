@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle } from '../components';
-import { GetIcon, GetToken, HeaderClasses, ButtonClasses } from '../utils';
+import { GetIcon, GetToken, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { Restaurant } from '../models/Restaurant';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
@@ -50,14 +50,12 @@ const RestaurantPage = () => {
   }, [dispatch]);
 
   return (
-    <div className='mt-15 font-Roboto flex flex-col items-center justify-center'>
+    <div className={PageClasses}>
       <HeaderTitle Icon={GetIcon('restaurants')} className={HeaderClasses} title='RESTAURANTS'/>
-      <div className="relative p-8 bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15">
+      <div className={PageContainClasses} >
         <img
-          className="absolute top-0 left-0 w-full"
+          className={GridClasses}
           src={grid}
-          width={550}
-          height={550}
           alt="Grid"
         />
         <table className='table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl'>
@@ -70,7 +68,7 @@ const RestaurantPage = () => {
         </table>
       </div>
       <div className=''>
-        <Button Icon={GetIcon('home')} className={ButtonClasses} href="/">BACK TO HOME</Button>
+        <Button Icon={GetIcon('home')} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
       </div>
     </div>
   );

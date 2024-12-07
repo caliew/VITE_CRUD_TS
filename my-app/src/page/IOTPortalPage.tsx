@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, Card } from '../components';
-import { GetIcon, HeaderClasses, ButtonClasses } from '../utils';
+import { GetIcon, PageClasses, HeaderClasses, IOTSensorsClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { fetchIOTPortal } from '../redux/features/iotPortalSlice';
 
@@ -35,17 +35,15 @@ const IOTPortalPage = () => {
   }
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
   return (
-    <div className="mt-15 font-Roboto flex flex-col items-center justify-center ">
+    <div className={PageClasses}>
       <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL'/>
-      <div className="relative p-8 bg-n-8 overflow-hidden xl:p-15">
+      <div className={PageContainClasses}>
         <img
-          className="absolute top-0 left-0 z-0 w-full opacity-100"
+          className={GridClasses}
           src={grid}
-          width={550}
-          height={550}
           alt="Grid"
         />
-        <div className="flex flex-wrap gap-10 justify-center items-center w-full">
+        <div className={IOTSensorsClasses}>
           {
             iotSensors && Object.keys(iotSensors).map((sensorId,index)=>{
               const ObjSensor = iotSensors[sensorId][1];
@@ -60,9 +58,9 @@ const IOTPortalPage = () => {
             })
           }
         </div>
-        <div className=''>
-          <Button Icon={GetIcon('home')} className={ButtonClasses} href="/">BACK TO HOME</Button>
-        </div>
+      </div>
+      <div className=''>
+        <Button Icon={GetIcon('home')} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
       </div>
     </div>
   );

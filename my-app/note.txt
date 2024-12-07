@@ -1,4 +1,6 @@
+// ------------------------------
 // Install Tailwind CSS with Vite
+// ------------------------------
 npm install -D tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 
@@ -37,6 +39,9 @@ module.exports = {
   ],
 }
 
+// -------------------------
+// REPLACE MATERIAL UI ICONS
+// -------------------------
 1. Heroicons: Heroicons is a popular icon set that is specifically designed to work with Tailwind CSS. 
 It offers a wide range of icons, and the best part is that it's free and open-source. You can use 
 Heroicons in your Tailwind CSS project by installing the heroicons package and importing the icons in your CSS.
@@ -51,3 +56,10 @@ It offers a wide range of icons, and the best part is that it's free and open-so
 Lucide in your Tailwind CSS project by installing the lucide package and importing the icons in your CSS.
 npm install lucide
 npm install lucide-react
+
+// --------------
+// INSTALL MAPBOX
+// --------------
+npm install react-mapbox-gl mapbox-gl
+ACCESS TOKEN = pk.eyJ1IjoiY2FsaWV3IiwiYSI6ImNsYnQ1ZjcwazAzMzczcHQwa2N2OTU5bTUifQ.MXbnNqpc6B3T44G97EmI6Q
+

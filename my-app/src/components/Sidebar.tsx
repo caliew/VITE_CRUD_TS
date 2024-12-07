@@ -2,17 +2,18 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Camera, FileKey2, CircuitBoard, Utensils, User } from 'lucide-react';
-import { GetIcon } from "../utils";
+import { GetIcon, SidebarClasses } from "../utils";
 import { useSelector, useDispatch } from 'react-redux';
 
 
-const Sidebar = () => {
+const SideBar = () => {
 
   const { token, error } = useSelector((state) => state.auth);
   const spanClasses = "relative z-10 px-2";
 
   const HomeIcon = GetIcon('home');
   const IOTIcon = GetIcon('iotportal');
+  const LayoutIcon = GetIcon('MapPinHouse');
   const RestaurantIcon = GetIcon('restaurants');
   const WorkerIcon = GetIcon('workers');
   const LogoutIcon = GetIcon('logout');
@@ -27,14 +28,15 @@ const Sidebar = () => {
       <>
       <Link to="/" className="px-2 flex"><HomeIcon /><span className={spanClasses}/>HOME</Link>
       <Link to="/iotportals" className="px-2 flex"><IOTIcon /><span className={spanClasses}/>IOT PORTAL</Link>
-      {/* <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link> */}
-      {/* <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link> */}
+      <Link to="/layout" className="px-2 flex"><LayoutIcon /><span className={spanClasses}/>SITE MAP</Link>
+      <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link>
+      <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link>
       </>
     )
   }
 
   return (
-    <div className="fixed mt-20 z-30 flex flex-col font-Roboto font-extralight text-xl p-5 gap-5">
+    <div className={SidebarClasses}>
       { loaded() }
       <Link to="/login" className="px-2 flex"><LogoutIcon /><span className={spanClasses}/>
       {token ? 'LOGOUT':'LOGIN'}
@@ -43,4 +45,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default SideBar;

@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ErrorPage, LoginPage, MainPage, IOTPortalPage, RestaurantPage, WorkerPage } from './page';
-import { Header, Footer, Sidebar } from './components';
+import { ErrorPage, LoginPage, MainPage, IOTPortalPage, RestaurantPage, WorkerPage, SiteMapPage } from './page';
+import { RoutesClasses } from './utils';
+import { HeaderBar, Footer, SideBar } from './components';
 import ButtonGradient from './assets/svg/ButtonGradient';
 
 const App = () => {
   return (
     <div className=''>
       <Router >
-        <Header />
+        <HeaderBar />
         <div className='columns-1'>
-          <Sidebar />
-          <div className='relative left-64 w-9/12'>
+          <SideBar />
+          <div className={RoutesClasses}>
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/iotportals" element={<IOTPortalPage />} />
+              <Route path="/layout" element={<SiteMapPage />} />
               <Route path="/restaurants" element={<RestaurantPage />} />
               <Route path="/workers" element={<WorkerPage />} />
               <Route path="*" element={<ErrorPage />} />
