@@ -1,35 +1,39 @@
-import { useEffect, useRef  } from 'react';
+import { useEffect, useState, useRef  } from 'react';
 import mapboxgl from 'mapbox-gl';
 import { MapClasses } from '../utils';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-const Mapbox = ({GeoJSON}:any) => {  
+interface MapboxProps {
+  GeoJSON: any;
+}
+
+const Mapbox: React.FC<MapboxProps> = ({GeoJSON}) => {  
   
   const mapContainerRef = useRef();
-  const mapRef = useRef(null);
 
   useEffect(() => {
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2FsaWV3IiwiYSI6ImNsYnQ1ZjcwazAzMzczcHQwa2N2OTU5bTUifQ.MXbnNqpc6B3T44G97EmI6Q';
 
-    mapRef.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
+      style: 'mapbox://styles/mapbox/standard',
       bounds: [
         [101.65, 3.16],
         [101.66, 3.18]
       ],
-      zoom: 12
+      antialias: true,
+      minZoom: 15,
+      maxZoom: 17      
     });
 
-    mapRef.current.on('load', () => {
-      mapRef.current.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+    map.on('load', () => {
+      map.loadImage('https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
         (error, image) => {
           if (error) throw error;
-          mapRef.current.addImage('custom-marker', image);
-          mapRef.current.addSource('points', GeoJSON);
-
-          mapRef.current.addLayer({
+          map.addImage('custom-marker', image);
+          map.addSource('points', GeoJSON);
+          map.addLayer({
             id: 'points',
             type: 'symbol',
             source: 'points',
@@ -41,13 +45,22 @@ const Mapbox = ({GeoJSON}:any) => {
               'text-anchor': 'top'
             }
           });
+          map.setBearing(15);
+          map.setPitch(65);
+          map.setZoom(15.5);
         }
       );
+      // setMap(map);
     });
-    // return () => map.remove();
+    return () => map.remove();
   }, []);
 
-  return <div id="map" ref={mapContainerRef} className={MapClasses}/>;
+  return (
+    <div 
+      id="map" 
+      ref={mapContainerRef} 
+      className={MapClasses}
+    />)
 
 };
 

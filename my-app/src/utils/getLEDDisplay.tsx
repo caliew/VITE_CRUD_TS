@@ -13,7 +13,7 @@ const getLEDDisplay = ({reading, sensorType}:any) => {
     }
     const digitArray = reading.split(''); // split the string into an array of digits
     return (
-      <div className="flex flex-row py-2">
+      <div className="flex flex-row py-2 justify-center items-center">
         {digitArray.map((digit, index) => {
           if (digit === '-') {
             return <LEDDisplay key={index} displayValue={'-'} width={widthSize} ledSize={ledSize} foregroundCol={fgColor} backgroundCol={bgColor} skew={skewSize} />;

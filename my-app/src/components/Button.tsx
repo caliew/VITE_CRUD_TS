@@ -1,5 +1,6 @@
-import ButtonSvg from "../assets/svg/ButtonSvg";
 import { Link } from 'react-router-dom';
+
+import ButtonSvg from "../assets/svg/ButtonSvg";
 
 interface ButtonProp {
   className?: string,
@@ -18,8 +19,7 @@ const Button = ({ className, Icon, to, onClick, children, px, white }: ButtonPro
     text-decoration-underline text-inherit 
     ${px || "px-7"} 
     ${white ? "text-n-8" : "text-n-1"} 
-    ${className || ""}`;
-    
+    ${className || ""}`;  
   const spanClasses = "relative z-10";
 
   const renderButton = () => (
@@ -28,7 +28,6 @@ const Button = ({ className, Icon, to, onClick, children, px, white }: ButtonPro
       {ButtonSvg(white)}
     </button>
   );
-
   const renderLink = () => (
     <Link to={to} className={classes}>
       <Icon className={className}/>

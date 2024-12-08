@@ -36,7 +36,7 @@ const IOTPortalPage = () => {
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL'/>
+      <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL' />
       <div className={PageContainClasses}>
         <img
           className={GridClasses}
@@ -48,6 +48,7 @@ const IOTPortalPage = () => {
             iotSensors && Object.keys(iotSensors).map((sensorId,index)=>{
               const ObjSensor = iotSensors[sensorId][1];
               let READING = getREADING(sensorId);
+              console.log(ObjSensor);
               return <Card className='font-Roboto font-extralight text-xl' 
                            sensorType={ObjSensor["TYPE"]} 
                            group={ObjSensor['GROUP']||'UNDEFINED'}

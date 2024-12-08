@@ -20,7 +20,6 @@ const SideBar = () => {
   const LogoutIcon = GetIcon('logout');
 
   useEffect(()=>{
-    console.log('..USEEFFECT.. SIDEBAR', token);
   },[])
 
   const loaded = () => {

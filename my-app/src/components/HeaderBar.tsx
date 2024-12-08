@@ -1,7 +1,8 @@
 // my-app/src/components/Header.tsx
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux';
+
 import { config } from "../config";	
-import { useSelector, useDispatch } from 'react-redux';
 
 const HeaderBar = () => {
 
@@ -10,6 +11,7 @@ const HeaderBar = () => {
   const spanClasses = "relative x-2 px-2";
   const AppName = config.applicationName;
   const logo = config.applicationLogo;
+
   const loaded = () => {
     if (!token) return;
     return (
@@ -25,6 +27,7 @@ const HeaderBar = () => {
     )
 
   }
+  
   return (
     <div className="fixed top-0 left-0 z-30 w-full flex flex-row gap-5 p-5 justify-between text-xl font-Roboto font-extralight">
       <div className="flex items-center">
