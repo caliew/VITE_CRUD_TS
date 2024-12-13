@@ -1,22 +1,20 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts';
 
 import { ChartClasses } from "../../utils";
 
-interface EChartProp {
+interface CalendarProp {
   className?: string;
   title?: string
   dateList?: any
   dateRange?: any
 }
 
-
-const Calendar : React.FC<EChartProp> = ({className,title, dateList, dateRange}) => {
+const Calendar : React.FC<CalendarProp> = ({className,title, dateList, dateRange}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
   const [currentDate, setCurrentDate] = useState(new Date());
   
@@ -85,7 +83,7 @@ const Calendar : React.FC<EChartProp> = ({className,title, dateList, dateRange})
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -99,8 +97,15 @@ const Calendar : React.FC<EChartProp> = ({className,title, dateList, dateRange})
         opts={{ renderer: "svg" }}
         style={{width:'850px',height:'450px'}}
       />
+      {title}
     </div>
   );
 };
 
-export default Calendar;
+const propsAreEqual = (prevProps: CalendarProp, nextProps: CalendarProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title 
+  );
+};
+export default React.memo(Calendar,propsAreEqual);

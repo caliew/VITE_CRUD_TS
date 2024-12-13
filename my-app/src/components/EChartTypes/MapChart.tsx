@@ -1,5 +1,5 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
@@ -9,15 +9,14 @@ import axios from 'axios';
 
 import { ChartClasses } from "../../utils";
 
-interface EChartProp {
+interface MapProp {
   className?: string;
   title?: string
 }
 
-const MapChart : React.FC<EChartProp> = ({className,title}) => {
+const MapChart : React.FC<MapProp> = ({className,title}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
   const [svg, setSvg] = useState<string>('');
 
@@ -127,4 +126,10 @@ const MapChart : React.FC<EChartProp> = ({className,title}) => {
   );
 };
 
-export default MapChart;
+const propsAreEqual = (prevProps: MapProp, nextProps: MapProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title 
+  );
+};
+export default React.memo(MapChart,propsAreEqual);

@@ -1,5 +1,5 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
@@ -103,7 +103,7 @@ const dataMock = [
   }
 ];
 
-function transformData(data) {
+function transformData(data:any) {
   const result = [];
   Object.keys(data).forEach((room) => {
     const roomData = data[room];
@@ -124,7 +124,6 @@ function transformData(data) {
 const SunburstChart : React.FC<SunburstProp> = ({className,title,data,onEventCallback}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
   
   useEffect(() => {
@@ -148,7 +147,7 @@ const SunburstChart : React.FC<SunburstProp> = ({className,title,data,onEventCal
       ]
     };
     setOption(option);
-  }, []);
+  }, [data]);
 
   const onChartReadyCallback = () => {};
   const onEvents = {
@@ -159,7 +158,7 @@ const SunburstChart : React.FC<SunburstProp> = ({className,title,data,onEventCal
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
+    <div className="flex flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -170,12 +169,20 @@ const SunburstChart : React.FC<SunburstProp> = ({className,title,data,onEventCal
         theme={""}
         onChartReady={onChartReadyCallback}
         onEvents={onEvents}
-        onEventCallback={onEventCallback}
         style={{width:'850px',height:'650px'}}
         opts={{ renderer: "svg" }}
       />
+      {title}
     </div>
   );
 };
 
-export default SunburstChart;
+const propsAreEqual = (prevProps: SunburstProp, nextProps: SunburstProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title &&
+    prevProps.data === nextProps.data 
+  );
+};
+
+export default React.memo(SunburstChart, propsAreEqual);

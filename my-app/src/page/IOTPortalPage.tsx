@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
@@ -64,10 +64,8 @@ const IOTPortalPage = () => {
     return _HEX;
   }
   const onEventCallback = (nodes:any) => {
-    console.log(nodes);
     const SelectionNodes = GetFINALChildrenNOES(nodes);
     const _IDs = SelectionNodes.map(obj => obj.id);
-    console.log(_IDs)
     setSelIOTSensors(_IDs);
   };
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity

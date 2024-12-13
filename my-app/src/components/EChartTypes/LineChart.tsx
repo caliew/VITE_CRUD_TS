@@ -1,5 +1,5 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
@@ -23,7 +23,6 @@ const getGrid = true ? { top: 80, bottom: 80, left: 80,right: 50 } : [{left: 80,
 const LineChart : React.FC<LineChartProp> = ({className,title,seriesLabels,legendsLabels,merge,inverse,dataX,dataY}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
 
   const getXAxis = [
@@ -65,7 +64,7 @@ const LineChart : React.FC<LineChartProp> = ({className,title,seriesLabels,legen
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -83,4 +82,11 @@ const LineChart : React.FC<LineChartProp> = ({className,title,seriesLabels,legen
   );
 };
 
-export default LineChart;
+const propsAreEqual = (prevProps: LineChartProp, nextProps: LineChartProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title 
+  );
+};
+
+export default React.memo(LineChart,propsAreEqual);

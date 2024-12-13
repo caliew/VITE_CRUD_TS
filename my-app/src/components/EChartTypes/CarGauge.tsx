@@ -1,5 +1,5 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
@@ -13,7 +13,6 @@ interface CarGaugeProp {
 const CarGauge : React.FC<CarGaugeProp> = ({className,title}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
 
   useEffect(() => {
@@ -180,7 +179,7 @@ const CarGauge : React.FC<CarGaugeProp> = ({className,title}) => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -194,8 +193,16 @@ const CarGauge : React.FC<CarGaugeProp> = ({className,title}) => {
         style={{width:'850px',height:'650px'}}
         opts={{ renderer: "svg" }}
       />
+      {title}
     </div>
   );
 };
 
-export default CarGauge;
+const propsAreEqual = (prevProps: CarGaugeProp, nextProps: CarGaugeProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title 
+  );
+};
+
+export default React.memo(CarGauge, propsAreEqual);

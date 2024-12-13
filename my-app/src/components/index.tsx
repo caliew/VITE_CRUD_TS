@@ -10,7 +10,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import LEDDisplay from "./LEDDisplay";
 import Clock from './Clock';
 import MapBox from "./Mapbox";
-import { SimpleGauge, CarGauge, LineChart, BarChart, MapChart, SunburstChart, Calendar } from "./EChartTypes";
+import { EChartTemplate, SimpleGauge, CarGauge, LineChart, BarChart, MapChart, SunburstChart, Calendar } from "./EChartTypes";
 
 export {
   ErrorBoundary,
@@ -18,7 +18,7 @@ export {
   Contents,
   LEDDisplay, Clock,
   MapBox,
-  SimpleGauge, CarGauge, LineChart, BarChart, MapChart, 
+  EChartTemplate, SimpleGauge, CarGauge, LineChart, BarChart, MapChart, 
   Calendar, SunburstChart,
   Button, Card
 };

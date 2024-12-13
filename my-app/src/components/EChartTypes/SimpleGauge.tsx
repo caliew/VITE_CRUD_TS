@@ -18,7 +18,6 @@ interface SimpleGaugeProp {
 const SimpleGauge: React.FC<SimpleGaugeProp> = ({value,name,className,title,min,max,unit}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
 
   useEffect(() => {
@@ -75,7 +74,7 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({value,name,className,title,min,
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl overflow-hidden">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl overflow-hidden">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -93,4 +92,10 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({value,name,className,title,min,
   );
 };
 
-export default SimpleGauge;
+const propsAreEqual = (prevProps:SimpleGaugeProp, nextProps:SimpleGaugeProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title
+  )
+}
+export default React.memo(SimpleGauge, propsAreEqual);

@@ -21,7 +21,7 @@ const CardIconClasses = 'size-8 text-white stroke-[0.75] absoluteStrokeWidth';
 const CardHeaderClasses = 'flex justify-center items-center font-Roboto text-2xl text-center font-extralight border-y-2 border-color-0';
 const CardTitleClasses = 'flex flex-col flex-wrap py-2 font-Roboto text-2xl font-light justify-center items-center';
 const CardTitleGroupClasses = 'flex flex-wrap justify-center item-center font-Roboto text-2xl text-center py-1 border-y-2';
-const CardTitleNameClasses = 'flex flex-wrap justify-center item-center font-Roboto text-lg text-center pt-2';
+const CardTitleNameClasses = 'flex flex-wrap justify-center item-center font-Roboto font-extralight text-xl text-center pt-2';
 // "flex font-Roboto font-extralight text-lg text-justify inline-block truncate text-overflow-ellipsis"
 const CardSensorIDClasses = 'm-2 font-Roboto text-2xl font-extralight border-y-2 border-color-0';
 

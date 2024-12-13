@@ -1,5 +1,5 @@
 // my-app/src/components/EChart.tsx
-import { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
@@ -13,21 +13,13 @@ interface BarChartProp {
 const BarChart : React.FC<BarChartProp> = ({className,title}) => {
 
   const chartRef = useRef(null);
-
   const [option, setOption] = useState({});
 
   useEffect(() => {
     const option = {
-      title: {
-        text: 'Rainfall vs Evaporation',
-        subtext: 'Fake Data'
-      },
-      tooltip: {
-        trigger: 'axis'
-      },
-      legend: {
-        data: ['Rainfall', 'Evaporation']
-      },
+      title: { text: 'Rainfall vs Evaporation', subtext: 'Fake Data' },
+      tooltip: { trigger: 'axis' },
+      legend: { data: ['Rainfall', 'Evaporation'] },
       toolbox: {
         show: true,
         feature: {
@@ -38,50 +30,18 @@ const BarChart : React.FC<BarChartProp> = ({className,title}) => {
         }
       },
       calculable: true,
-      xAxis: [
-        {
-          type: 'category',
-          // prettier-ignore
-          data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value'
-        }
-      ],
+      xAxis: [ { type: 'category', data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] } ],
+      yAxis: [ { type: 'value' } ],
       series: [
-        {
-          name: 'Rainfall',
-          type: 'bar',
-          data: [
-            2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
-          ],
-          markPoint: {
-            data: [
-              { type: 'max', name: 'Max' },
-              { type: 'min', name: 'Min' }
-            ]
-          },
-          markLine: {
-            data: [{ type: 'average', name: 'Avg' }]
-          }
+        { name: 'Rainfall', type: 'bar',
+          data: [ 2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3 ],
+          markPoint: { data: [ { type: 'max', name: 'Max' }, { type: 'min', name: 'Min' } ] },
+          markLine: { data: [{ type: 'average', name: 'Avg' }] }
         },
-        {
-          name: 'Evaporation',
-          type: 'bar',
-          data: [
-            2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
-          ],
-          markPoint: {
-            data: [
-              { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
-              { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 }
-            ]
-          },
-          markLine: {
-            data: [{ type: 'average', name: 'Avg' }]
-          }
+        { name: 'Evaporation', type: 'bar',
+          data: [ 2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3 ],
+          markPoint: { data: [ { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 }, { name: 'Min', value: 2.3, xAxis: 11, yAxis: 3 } ] },
+          markLine: { data: [{ type: 'average', name: 'Avg' }] }
         }
       ]
     };
@@ -96,7 +56,7 @@ const BarChart : React.FC<BarChartProp> = ({className,title}) => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto  font-extralight text-2xl">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -110,8 +70,16 @@ const BarChart : React.FC<BarChartProp> = ({className,title}) => {
         opts={{ renderer: "svg" }}
         style={{width:'850px',height:'450px'}}
       />
+      {title}
     </div>
   );
 };
 
-export default BarChart;
+const propsAreEqual = (prevProps: BarChartProp, nextProps: BarChartProp) => {
+  return (
+    prevProps.className === nextProps.className &&
+    prevProps.title === nextProps.title
+  );
+};
+
+export default React.memo(BarChart, propsAreEqual);

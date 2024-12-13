@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate  } from 'react-router-dom';
 
 import { grid } from '../assets';
-import { Button, HeaderTitle, Clock } from "../components";
+import { Button, HeaderTitle, Clock, EChartTemplate } from "../components";
 import { GetIcon, GetJWTToken, ButtonClasses, ButtonLINKClasses, PageClasses, HeaderClasses, PageContainClasses, GridClasses } from '../utils';
 
 const HomePage = () => {

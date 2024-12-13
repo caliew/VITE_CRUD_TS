@@ -65,8 +65,8 @@ const CalendarPage = () => {
           src={grid}
           alt="Grid"
         />
-        <div className='flex justify-center items-center flex-wrap gap-5'>
-          <Calendar className='' title='' dateList={dateList} dateRange={['2025-1']}/>
+        <div className='flex flex-col flex-wrap justify-center items-center gap-5'>
+          <Calendar className='border' title='CALENDAR' dateList={dateList} dateRange={['2025-1']}/>
         </div>
       </div>
       <div className='mt-5'>
