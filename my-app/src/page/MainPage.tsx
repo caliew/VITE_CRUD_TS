@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate  } from 'react-router-dom';
 
 import { grid } from '../assets';
-import { Button, HeaderTitle } from "../components";
+import { Button, HeaderTitle, Clock } from "../components";
 import { GetIcon, GetJWTToken, ButtonClasses, ButtonLINKClasses, PageClasses, HeaderClasses, PageContainClasses, GridClasses } from '../utils';
 
 const HomePage = () => {
@@ -26,11 +26,15 @@ const HomePage = () => {
           src={grid}
           alt="Grid"
         />
+        <Clock />
         <div className='flex flex-col mt-5'>
         <Button Icon={GetIcon('')} className={ButtonClasses} >FEATURES</Button>
         <Button Icon={GetIcon('iotportal')} className={ButtonLINKClasses} to='/iotportals'>IOT PORTAL</Button>
         <Button Icon={GetIcon('MapPinHouse')} className={ButtonLINKClasses} to='/sitemap'>SITE MAP</Button>
+        <Button Icon={GetIcon('Gauge')} className={ButtonLINKClasses} to='/gauge'>GAUGE</Button>
         <Button Icon={GetIcon('ChartSpline')} className={ButtonLINKClasses} to='/charting'>CHARTING</Button>
+        <Button Icon={GetIcon('Calendar')} className={ButtonLINKClasses} to='/calendar'>CALENDER</Button>
+        <Button Icon={GetIcon('Sunburst')} className={ButtonLINKClasses} to='/sunburst'>SUNBURST</Button>
         <Button Icon={GetIcon('workers')} className={ButtonLINKClasses} to="/workers">WORKERS LISTS</Button>
         <Button Icon={GetIcon('restaurants')} className={ButtonLINKClasses} to='/restaurants'>RESTAURANTS LISTS</Button>
         </div>

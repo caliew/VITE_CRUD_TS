@@ -32,7 +32,7 @@ const getIOTPortal = async () => {
   _day1.setHours(23,59,59);
   const params = { totalLines : 1000, date0:_day0, date1:_day1 };
   // --------------
-  const response = await axios.get(IOT_URL_IKN+'/api/sensors/IKN/rawdata',{params});
+  const response = await axios.get(IOT_URL_IKN+'/api/sensors/shinko/rawdata',{params});
   if (response.status !== 200) return null;
   return response.data
 };

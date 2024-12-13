@@ -3,7 +3,7 @@ import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
-import { Button, HeaderTitle, SimpleGauge, CarGauge, LineChart } from '../components';
+import { Button, HeaderTitle, SimpleGauge, CarGauge, LineChart, BarChart, Calender } from '../components';
 import { GetIcon, PageClasses, HeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const ChartingPage = () => {
@@ -14,8 +14,9 @@ const ChartingPage = () => {
   useEffect(()=>{
   },[])
 
-  const Series = ['PREP(2015)','PREP(2016)']
-  const DataX = ['2016-1', '2016-2', '2016-3', '2016-4', '2016-5', '2016-6', '2016-7', '2016-8', '2016-9', '2016-10', '2016-11', '2016-12'];
+  const LegendsLabels = ['Evaporation','Rainfall']
+  const SeriesLabels = ['Evaporation(m³/s)','Rainfall(mm)']
+  const DataX = ['2009/6/12 2:00', '2009/6/12 3:00', '2009/6/12 4:00', '2009/6/12 5:00', '2009/6/12 6:00', '2009/6/12 7:00', '2009/6/12 8:00', '2009/6/12 9:00', '2009/6/12 10:00', '2009/6/12 11:00', '2009/6/12 12:00', '2009/6/12 13:00'];
   const DataY = [[ 2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3 ],
                  [ 3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7 ]]
 
@@ -28,13 +29,14 @@ const ChartingPage = () => {
           src={grid}
           alt="Grid"
         />
-        <div className='flex flex-wrap'>
-          <div>
-            <SimpleGauge value={35} className='' name='TEMP' min={20} max={65} unit='°C' />
-            <SimpleGauge value={75} className='' name='RH' min={0} max={100} unit='RH' />
+        <div className='flex justify-center items-center flex-wrap gap-5'>
+          <div className='flex'>
+            <LineChart className='' title='LINE PLOT (MERGE)' dataX={DataX} dataY={DataY} merge={true} 
+                        seriesLabels={SeriesLabels} legendsLabels={LegendsLabels} />
+            <LineChart className='' title='LINE PLOT (NOT MERGE)' dataX={DataX} dataY={DataY} merge={false} 
+                        seriesLabels={SeriesLabels} legendsLabels={LegendsLabels}/>
           </div>
-          <CarGauge className='' name='CUSTOMED GAUGE'/>
-          <LineChart className='' name='LINE PLOT' dataX={DataX} dataY={DataY} series={Series}/>
+          <BarChart className='w-[800px]' title='BAR PLOT' />
         </div>
       </div>
       <div className='mt-5'>

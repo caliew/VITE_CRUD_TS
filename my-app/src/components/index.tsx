@@ -8,20 +8,17 @@ import Section from "./Section";
 import HeaderTitle from "./HeaderTitle";
 import ErrorBoundary from "./ErrorBoundary";
 import LEDDisplay from "./LEDDisplay";
+import Clock from './Clock';
 import MapBox from "./Mapbox";
-import { SimpleGauge, CarGauge, LineChart } from "./EChartTypes";
+import { SimpleGauge, CarGauge, LineChart, BarChart, MapChart, SunburstChart, Calendar } from "./EChartTypes";
 
 export {
   ErrorBoundary,
-  Footer,
-  HeaderBar,
-  SideBar,
-  HeaderTitle,
+  Footer, HeaderBar, SideBar, HeaderTitle,
   Contents,
-  LEDDisplay,
+  LEDDisplay, Clock,
   MapBox,
-  SimpleGauge, CarGauge, LineChart,
-  Button,
-  Card,
-  Section,
+  SimpleGauge, CarGauge, LineChart, BarChart, MapChart, 
+  Calendar, SunburstChart,
+  Button, Card
 };

@@ -1,14 +1,18 @@
 // my-app/src/components/EChart.tsx
-import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
+import * as echarts from 'echarts/core';
+
 import { ChartClasses } from "../../utils";
 
 interface CarGaugeProp {
   className?: string;
-  name?:string
+  title?:string
 }
 
-const CarGauge : React.FC<CarGaugeProp> = ({className,name}) => {
+const CarGauge : React.FC<CarGaugeProp> = ({className,title}) => {
+
+  const chartRef = useRef(null);
 
   const [option, setOption] = useState({});
 
@@ -86,7 +90,7 @@ const CarGauge : React.FC<CarGaugeProp> = ({className,name}) => {
             }
           },
           // value is speed
-          data: [ { value: 20, name: name } ]
+          data: [ { value: 20, name: title } ]
         },
         // RIGHT
         {
@@ -178,6 +182,8 @@ const CarGauge : React.FC<CarGaugeProp> = ({className,name}) => {
   return (
     <div className="flex flex-wrap justify-center items-center font-Roboto text-xl">
       <ReactECharts
+        ref={chartRef}
+        echarts={echarts}
         className={`${ChartClasses} ${className}`}
         option={option}
         notMerge={true}

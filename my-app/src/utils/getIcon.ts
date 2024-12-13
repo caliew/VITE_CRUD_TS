@@ -3,13 +3,14 @@ import {
     Thermometer, ThermometerSnowflake, ThermometerSun,
     Wind, WindArrowDown, 
     Gauge, CircleGauge,
+    CalendarDays,
     Mail, MailOpen, Flag,
     MessageCircle, MessageSquare,
     Clipboard, ClipboardCheck, ClipboardPlus, ClipboardMinus, 
     ClipboardPenLine, ClipboardList,
     Sheet, TriangleAlert, 
     Omega, Radiation, Orbit, Sigma, Cctv, 
-    Waypoints, 
+    Waypoints, Rainbow,
     Map, MapPin, MapPinOff, MapPinHouse,
     Bell, BellOff, 
     LineChart, PieChart, ChartScatter, ChartSpline, ChartArea, ChartLine,
@@ -31,8 +32,15 @@ import {
     if (name === 'login') return LogIn
     if (name === 'logout') return LogOutIcon
     if (name === '404') return Ban
+    if (name === 'Sunburst') return Rainbow
     if (name === 'WISENSOR') return Thermometer
+    if (name === 'TEMP & RH') return Thermometer
+    if (name === 'DEW PT.METER') return Thermometer
     if (name === 'DIFF PRESS') return Gauge
+    if (name === 'AIR PRESSURE') return CircleGauge
+    if (name === 'AC CURRENT') return Omega
+    if (name === 'Calendar') return CalendarDays
+    if (name === 'Gauge') return Gauge
     if (name === 'Mail') return Mail
     if (name === 'BellOn') return Bell
     if (name === 'BellOff') return BellOff

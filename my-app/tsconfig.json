@@ -1,4 +1,9 @@
 {
+  "compilerOptions": {
+    // ... other options ...
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

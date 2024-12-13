@@ -1,5 +1,7 @@
 import { GetIcon , GetLEDDisplay, GetSensorUNIT, 
-         CardClasses, CardHeaderClasses, CardTitleClasses, CardIconClasses, CardSensorIDClasses } from "../utils";
+         CardClasses, CardHeaderClasses, 
+         CardTitleClasses, CardTitleGroupClasses, CardTitleNameClasses,
+         CardIconClasses, CardSensorIDClasses } from "../utils";
 import { SimpleGauge } from '../components';
 interface ButtonProp {
   className?: string,
@@ -7,14 +9,15 @@ interface ButtonProp {
   name?: string,
   sensorId?: string,
   group?: string,
-  reading?: string,
+  reading?: any,
+  unitSystem?: any,
   onClick?: any,
   children?: any,
   px?: string,
   white?: string
 }
 
-const Card = ({ className, sensorType, name, sensorId, group, reading, onClick, children, px, white }: ButtonProp) => {
+const Card = ({ className, sensorType, name, sensorId, group, reading, unitSystem, onClick, children, px, white }: ButtonProp) => {
 
   	const Card1classes = `button relative inline-flex items-center justify-center 
       h-11 transition-colors hover:text-color-1 flex flex-col h-full py-5 mb-15
@@ -35,6 +38,10 @@ const Card = ({ className, sensorType, name, sensorId, group, reading, onClick, 
     const MessageSquare = GetIcon('MessageSquare');
     //<AlignCenterVertical size={28} color="#ce1c1c" strokeWidth={0.75} absoluteStrokeWidth />
 
+    // const DisplayValue = reading['CURR'] ?? reading['PRESS'] ?? reading['TEMP'] ?? 0;
+    const RsltKEY = Object.keys(reading);
+    const DisplayValue = reading[RsltKEY[0]] ?? 0;
+
     const renderCard = () => (
     <div className={CardClasses()} >
         <div className={CardHeaderClasses}>
@@ -42,12 +49,14 @@ const Card = ({ className, sensorType, name, sensorId, group, reading, onClick, 
           <div className="px-2 text-1xl py-2">{sensorType}</div>
         </div>
         <div className={CardTitleClasses}>
-          <div>{group}</div>
-          <div>{name}</div>
+          <div className={CardTitleGroupClasses}>{group}</div>
+          <div className={CardTitleNameClasses}>{name}</div>
         </div>
         <div className={CardSensorIDClasses}>{sensorId}</div>
-        {GetLEDDisplay({reading,sensorType})}
-        <SimpleGauge value={reading} className='' name={name} min={0} max={100} unit={GetSensorUNIT(sensorType)} />
+        <div className='flex font-Roboto text-lg font-extralight justify-center items-center'>
+        {RsltKEY[0]}<span className="px-2"/> {GetLEDDisplay({id:sensorId,reading:DisplayValue,sensorType})}<span className="px-1"/>{unitSystem}
+        </div>
+        <SimpleGauge value={DisplayValue} className='' name={name} min={0} max={100} unit={GetSensorUNIT(sensorType)} />
 
         <div className='flex'>
         <MailIcon className={CardIconClasses}/><MessageCircle className={CardIconClasses}/><MessageSquare className={CardIconClasses}/>

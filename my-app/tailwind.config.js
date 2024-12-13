@@ -11,14 +11,21 @@ export default {
     extend: {
       colors: {
         color: {
-          0: "#FFFFFF",
-          1: "#AC6AFF",
-          2: "#FFC876",
-          3: "#FF776F",
-          4: "#7ADB78",
-          5: "#858DFF",
-          6: "#FF98E2",
-          7: "#000000",
+          0: "#FFFFFF", // WHITE
+          1: "#C0C0C0", // SILVER
+          2: "#808080", // GRAY
+          3: "#000000", // BLACK
+          4: "#FF0000", // RED
+          5: "#800000", // MAROON
+          6: "#FFFF00", // YELLOW
+          7: "#808000", // OLIVE
+          8: "#00FF00", // LIME
+          9: "#008000", // GREEN
+          10: "#00FFFF", // AQUA
+          11: "#008080", // TEAL
+          12: "#000080", // NAVY
+          13: "#FF00FF", // FUCHSIA
+          14: "#800080", // PURPLE
         },
         stroke: {
           1: "#26242C",

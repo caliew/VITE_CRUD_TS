@@ -3,7 +3,7 @@ import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
-import { Button, HeaderTitle, MapBox } from '../components';
+import { Button, HeaderTitle, MapBox, MapChart } from '../components';
 import { GetIcon, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const geojson = {
@@ -45,18 +45,21 @@ const SiteMapPage = () => {
     <div className={PageClasses}>
       <HeaderTitle Icon={GetIcon('MapPinHouse')} className={HeaderClasses} title='SITE MAP'/>
       <div className={PageContainClasses} >
-        <img
-          className={GridClasses}
-          src={grid}
-          alt="Grid"
-        />
-        <div className='flex'>
-        <MapBox GeoJSON={geojson}/>
-        <div className='flex flex-col flex-wrap justify-center items-center'> 
-          { geojson.data.features.map((ObjSite: any) => (
-            <div className='flex flex-col px-5 justify-center items-center font-Roboto text-2xl font-extralight'>{ObjSite.id} - {ObjSite.properties.title}</div>
-            )) }
-          </div> 
+        <div className='Container flex flex-col flex-wrap justify-center items-center'>
+          <img
+            className={GridClasses}
+            src={grid}
+            alt="Grid"
+          />
+          <div className='flex'>
+          <MapBox GeoJSON={geojson}/>
+          <div className='flex flex-col flex-wrap justify-center items-center'> 
+            { geojson.data.features.map((ObjSite: any) => (
+              <div className='flex flex-col px-5 justify-center items-center font-Roboto text-2xl font-extralight'>{ObjSite.id} - {ObjSite.properties.title}</div>
+              )) }
+            </div> 
+          </div>
+          <MapChart className='' title='SITE LAYOUT'/>
         </div>
       </div>
       <div className='mt-5'>

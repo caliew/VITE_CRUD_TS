@@ -1,4 +1,4 @@
-const PageClasses = 'mt-15 p-2 font-Roboto flex flex-col items-center justify-center w-full';
+const PageClasses = 'container mt-15 p-2 font-Roboto flex flex-col items-center justify-center ';
 const PageContainClasses = 'relative bg-n-8 rounded-[2.4375rem] overflow-hidden xl:p-15 ';
 const GridClasses = 'absolute top-0 left-0 w-full';
 const HeaderClasses = 'inline-flex size-24 mb-5 mt-5 stroke-[0.75]';
@@ -13,18 +13,23 @@ const ChartClasses = 'w-[450px] h-[600px] p-1 bg-n-8 overflow-hidden';
 const IOTSensorsClasses = 'flex flex-wrap justify-center items-center gap-1 overflow-hidden';
 
 function CardClasses(px?: string,white?: boolean,className?: string): string {
-    return `button relative inline-flex items-center justify-center h-11 
-        transition-colors hover:text-color-1 flex flex-col h-full py-5 mb-15 
-        border border-color-2 border-b-2 border-r-2
-        ${px || "px-3"} ${white ? "text-n-8" : "text-n-1"} ${className || ""} ` }
-const CardHeaderClasses = 'flex justify-center items-center font-Roboto text-2xl font-extralight border-y-2 border-color-0';
-const CardTitleClasses = 'font-Roboto text-2xl font-extralight';
-const CardIconClasses = 'size-10 text-white stroke-[0.75] absoluteStrokeWidth';
+    return `relative flex flex-col items-center justify-center h-11 transition-colors 
+            hover:text-color-8
+            h-full py-5 mb-15 w-[280px] border border-color-1
+            ${px || "px-3"} ${white ? "text-n-8" : "text-n-1"} ${className || ""} ` }
+const CardIconClasses = 'size-8 text-white stroke-[0.75] absoluteStrokeWidth';
+const CardHeaderClasses = 'flex justify-center items-center font-Roboto text-2xl text-center font-extralight border-y-2 border-color-0';
+const CardTitleClasses = 'flex flex-col flex-wrap py-2 font-Roboto text-2xl font-light justify-center items-center';
+const CardTitleGroupClasses = 'flex flex-wrap justify-center item-center font-Roboto text-2xl text-center py-1 border-y-2';
+const CardTitleNameClasses = 'flex flex-wrap justify-center item-center font-Roboto text-lg text-center pt-2';
+// "flex font-Roboto font-extralight text-lg text-justify inline-block truncate text-overflow-ellipsis"
 const CardSensorIDClasses = 'm-2 font-Roboto text-2xl font-extralight border-y-2 border-color-0';
 
 export { PageClasses, HeaderClasses, SidebarClasses, 
          ButtonClasses, ButtonLINKClasses,
          RoutesClasses, 
-         CardClasses, CardHeaderClasses, CardTitleClasses, CardIconClasses, CardSensorIDClasses,
+         CardClasses, CardHeaderClasses, 
+         CardTitleClasses, CardTitleGroupClasses, CardTitleNameClasses,
+         CardIconClasses, CardSensorIDClasses,
          MapClasses, ChartClasses, IOTSensorsClasses,
          PageContainClasses, GridClasses }
