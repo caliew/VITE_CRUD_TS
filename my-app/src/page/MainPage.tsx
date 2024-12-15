@@ -35,8 +35,8 @@ const HomePage = () => {
         <Button Icon={GetIcon('ChartSpline')} className={ButtonLINKClasses} to='/charting'>CHARTING</Button>
         <Button Icon={GetIcon('Calendar')} className={ButtonLINKClasses} to='/calendar'>CALENDER</Button>
         <Button Icon={GetIcon('Sunburst')} className={ButtonLINKClasses} to='/sunburst'>SUNBURST</Button>
-        {/* <Button Icon={GetIcon('workers')} className={ButtonLINKClasses} to="/workers">WORKERS LISTS</Button> */}
-        {/* <Button Icon={GetIcon('restaurants')} className={ButtonLINKClasses} to='/restaurants'>RESTAURANTS LISTS</Button> */}
+        <Button Icon={GetIcon('workers')} className={ButtonLINKClasses} to="/workers">WORKERS LISTS</Button>
+        <Button Icon={GetIcon('restaurants')} className={ButtonLINKClasses} to='/restaurants'>RESTAURANTS LISTS</Button>
         </div>
       </div>
     </div>

@@ -1,7 +1,11 @@
 import express from 'express';
+import cors from 'cors';
+
 import { verifyToken, generateToken } from './auth.js';
 
 const router = express.Router();
+
+router.use(cors({origin: '*'}));
 
 // API endpoints for /api/auth/...
 router.post('/login', (req, res) => {

@@ -1,10 +1,13 @@
 // server/restaurantRouter.js
 import express from 'express';
+import cors from 'cors';
+
 import { verifyToken } from './auth.js';
 import { saveDataToFile } from '../utils/utils.js';
 
 const router = express.Router();
 
+router.use(cors({origin: '*'}));
 router.use(verifyToken);
 
 // API endpoints for ./api/restaurants

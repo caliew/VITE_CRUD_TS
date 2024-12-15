@@ -1,9 +1,12 @@
 // server/workerRouter.js
 import express from 'express';
+import cors from 'cors';
+
 import { verifyToken } from './auth.js';
 
 const router = express.Router();
 
+router.use(cors({origin: '*'}));
 router.use(verifyToken);
 
 // API endpoints for ./api/workers
