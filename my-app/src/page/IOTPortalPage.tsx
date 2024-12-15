@@ -65,8 +65,8 @@ const IOTPortalPage = () => {
           const _SensorData = _SensorDatas[_SensorDatas.length-1];
           const _HEX  = _SensorData?.['RCV.BYTES'] || 0;
           // const READING = parseInt(_HEX,  16)/10.0;
-          const READING = get485SensorData(sensorId,_ObjSensor,_SensorData);
-          sensor = {...sensor, ID:sensorId, HEX:_HEX, READING:READING['CURR'] ?? READING['PRESS'] ?? READING['TEMP'] ?? 0 };
+          const _READING = Get485SensorREADING({..._ObjSensor,HEX:_HEX,SensorData:_SensorData});
+          sensor = {...sensor, ID:sensorId, HEX:_HEX, READING:_READING };
         }
         acc[GroupName][SensorType].push(sensor);
         return acc;
@@ -81,15 +81,7 @@ const IOTPortalPage = () => {
   const getWISensorData = (SensorData:any) => {
     let _TEMP = SensorData['Temperature'] ?? 0;
     let _HUMD = SensorData['Humidity'] ?? 0;
-    return { TEMP:_TEMP, HUMD:_HUMD }
-  }
-  const get485SensorData = (ObjSensor:any,SensorData:any) => {
-    const _HEX  = SensorData['RCV.BYTES'] || 0;
-    // const READING = parseInt(_HEX,  16)/10.0;
-    console.log(SensorData,_HEX);
-    const READING = Get485SensorREADING({...ObjSensor,HEX:_HEX,SensorData});
-    return READING;
-
+    return { TEMP:String(_TEMP.toFixed(2)), HUMD:String(_HUMD.toFixed(2))}
   }
   const getSensorHEX = (sensorId:any) => {
     let sensorData;
@@ -123,15 +115,23 @@ const IOTPortalPage = () => {
           { groupIOTSensors && <div className="w-auto m-1"><SunburstChart className='' data={groupIOTSensors} onEventCallback={onEventCallback}/></div> }
           { selIOTSensors && selIOTSensors.map((sensorId:any)=>{
             const ObjSensor = iotSensors[sensorId][1];
-            let _HEX = getSensorHEX(sensorId);
-            console.log(sensorId,_HEX);
-            let READING = Get485SensorREADING({...ObjSensor,HEX:_HEX});
+            const _TYPE = ObjSensor['TYPE'];
+            let _HEX;
+            let _READING;
+            if (_TYPE == 'WISENSOR') { 
+              const _SensorDatas = iotSensorData['WISensor'][sensorId];
+              const _SensorData = _SensorDatas[_SensorDatas.length-1]
+              _READING = getWISensorData(_SensorData);
+            } else {
+              _HEX = getSensorHEX(sensorId);
+              _READING = Get485SensorREADING({...ObjSensor,HEX:_HEX});
+            }
             return <Card className='font-Roboto font-extralight text-xl' 
                          sensorType={ObjSensor["TYPE"]} 
                          group={ObjSensor['GROUP']||'UNDEFINED'}
                          name={ObjSensor['NAME']||'UNDEFINED'}
                          sensorId={sensorId}
-                         reading={READING}
+                         reading={_READING}
                          unitSystem={ObjSensor.UNITSYSTEM}
                          px='px-10' />
             }) } 

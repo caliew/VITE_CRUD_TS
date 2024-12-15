@@ -1,7 +1,7 @@
 import { LEDDisplay } from "../components";
 import { GetSensorUNIT } from "../utils";
 
-const getLEDDisplay = ({id,reading, sensorType}:any) => {
+const getLEDDisplay = ({reading}:any) => {
     // ------------------
     const ledSize = 3;
     const widthSize = 18;

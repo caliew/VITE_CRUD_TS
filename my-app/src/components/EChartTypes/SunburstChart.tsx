@@ -110,10 +110,15 @@ function transformData(data:any) {
     const children = [];
     Object.keys(roomData).forEach((sensorType) => {
       const sensorData = roomData[sensorType];
-      const sensorChildren = sensorData.map((sensor) => ({
-        name: `${sensor?.READING}`,
-        children: [{ name:`${sensor?.NAME}`, id:sensor?.ID, value:1 }]
-      }));
+      const sensorChildren = sensorData.map((sensor) => {
+        const _RSLT = sensor.READING;
+        const _VAR = Object.keys(_RSLT);
+        const _READING = _VAR.map((key) => `${key}=${_RSLT[key]}\n`);
+        return {
+          name: `${_READING}`,
+          children: [{ name:`${sensor?.NAME}`, id:sensor?.ID, value:1 }]
+        }
+      });
       children.push({ name: sensorType, children: sensorChildren });
     });
     result.push({ name: room, children });

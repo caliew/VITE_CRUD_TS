@@ -1,13 +1,14 @@
 // ----------------
-const getSensorUNIT = (sensorType: string, key: string | undefined,unitSystem: string | undefined) => {
+const getSensorUNIT = (sensorType: any, key: string | undefined,unitSystem: string | undefined) => {
     switch (sensorType) {
         case "AC CURRENT":
             return "A";
-        case "WISENSOR":
+        case "WISENSOR":            
         case "DEW PT.METER":
         case "TEMP & RH":
-            if (key === "TEMP") return "°C";
-            if (key === "RH") return "%";
+        case "TEMP":
+            if (key == "TEMP") return "°C";
+            if (key == "RH" || key == "HUMD") return "%";
             return "°C";
         case "AIR PRESSURE":
         case "DIFF PRESS":
