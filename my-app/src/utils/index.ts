@@ -12,12 +12,15 @@ import { PageClasses, HeaderClasses, SidebarClasses,
          RoutesClasses, ChartClasses, MapClasses,
          GridClasses } from "./getClassName";
 import { getSensorUNIT as GetSensorUNIT, 
-         getSensorREADING as GetSensorREADING,
+         getWISensorREADIng as GetWISensorREADING,
+         get485SensorREADING as Get485SensorREADING,
          getFinalChildrenNODES as GetFINALChildrenNOES } from './SENSORUtils';
 
 
 export { GetIcon, GetLEDDisplay, 
-         GetSensorUNIT, GetSensorREADING, GetFINALChildrenNOES,
+         GetSensorUNIT, 
+         Get485SensorREADING, GetWISensorREADING,
+         GetFINALChildrenNOES,
          GetJWTToken, SetJWTToken, RemoveJWTToken,
          CardClasses, CardHeaderClasses, 
          CardTitleClasses, CardTitleGroupClasses, CardTitleNameClasses,

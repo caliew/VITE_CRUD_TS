@@ -3,7 +3,9 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, Card, SunburstChart } from '../components';
-import { GetIcon, GetSensorREADING, GetFINALChildrenNOES,
+import { GetIcon, 
+         Get485SensorREADING, GetWISensorREADING,
+         GetFINALChildrenNOES,
          PageClasses, HeaderClasses, IOTSensorsClasses, 
          ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
@@ -13,6 +15,10 @@ const IOTPortalPage = () => {
 
   const dispatch = useDispatch();
   const iotPortal = useSelector((state: any) => state.iotPortal.iotPortal);
+  const isLoading = useSelector((state: any) => state.iotPortal.isLoading);
+
+  const LoadingIcon = GetIcon('Loading');
+
   const [iotSensors, setIOTSensors] = useState({});
   const [iotSensorData, setIOTSensorData] = useState([]);
   // ----------------------------------------------------
@@ -24,12 +30,17 @@ const IOTPortalPage = () => {
   },[dispatch])
 
   useEffect(()=>{
+    //
     let IOTSensors = iotPortal?.['settings']?.['IOT_SENSORS'] || {};
-    let IOTSensorData = iotPortal?.['sensorData'] || [];
-    IOTSensorData = IOTSensorData.filter((data:any)=>data['MODE']=='RS485');
+    let IOT485SensorData = iotPortal?.['sensorData'] || [];
+    let WISensorData = iotPortal?.['WISensor'] || [];
+    //
+    IOT485SensorData = IOT485SensorData.filter((data:any)=>data['MODE']=='RS485');
+    const SensorIDs = Object.keys(IOTSensors) ?? [];
+    const IOTSensorData = {'485':IOT485SensorData,'WISensor':WISensorData};
+    // -----------------------
     setIOTSensors(IOTSensors);
     setIOTSensorData(IOTSensorData);
-    const SensorIDs = Object.keys(IOTSensors);
     setSelIOTSensors(SensorIDs);
     // -----------------------------
     const prepareGroupIOTSensorData = async() => {
@@ -42,11 +53,21 @@ const IOTPortalPage = () => {
         if (!acc[GroupName][SensorType]) acc[GroupName][SensorType] = [];
         // ----------------------------------
         const _ObjSensor = IOTSensors[sensorId][1];
-        const _SensorDatas = IOTSensorData.filter((data:any)=>data['DTU.ID']==sensorId);
-        const _HEX = _SensorDatas?.[_SensorDatas.length-1]?.['RCV.BYTES'] || 0;
-        // const READING = parseInt(_HEX,  16)/10.0;
-        const READING = GetSensorREADING({..._ObjSensor,HEX:_HEX,ID:sensorId,FLAG:false});
-        sensor = {...sensor, ID:sensorId, HEX:_HEX, READING:READING['CURR'] ?? READING['PRESS'] ?? READING['TEMP'] ?? 0 };
+        const _TYPE = String(_ObjSensor['TYPE']).toUpperCase();
+        let _SensorDatas;
+        if (_TYPE == 'WISENSOR') {
+          _SensorDatas = WISensorData[sensorId];
+          const _SensorData = _SensorDatas[_SensorDatas.length-1]
+          let _RSLT = getWISensorData(_SensorData);
+          sensor = {...sensor, ID:sensorId, READING: _RSLT };
+        } else {
+          _SensorDatas = IOTSensorData['485'].filter((data:any)=>data['DTU.ID']==sensorId);
+          const _SensorData = _SensorDatas[_SensorDatas.length-1];
+          const _HEX  = _SensorData?.['RCV.BYTES'] || 0;
+          // const READING = parseInt(_HEX,  16)/10.0;
+          const READING = get485SensorData(sensorId,_ObjSensor,_SensorData);
+          sensor = {...sensor, ID:sensorId, HEX:_HEX, READING:READING['CURR'] ?? READING['PRESS'] ?? READING['TEMP'] ?? 0 };
+        }
         acc[GroupName][SensorType].push(sensor);
         return acc;
       }, {});
@@ -57,8 +78,27 @@ const IOTPortalPage = () => {
     // ---------
   },[iotPortal]);
   
+  const getWISensorData = (SensorData:any) => {
+    let _TEMP = SensorData['Temperature'] ?? 0;
+    let _HUMD = SensorData['Humidity'] ?? 0;
+    return { TEMP:_TEMP, HUMD:_HUMD }
+  }
+  const get485SensorData = (ObjSensor:any,SensorData:any) => {
+    const _HEX  = SensorData['RCV.BYTES'] || 0;
+    // const READING = parseInt(_HEX,  16)/10.0;
+    console.log(SensorData,_HEX);
+    const READING = Get485SensorREADING({...ObjSensor,HEX:_HEX,SensorData});
+    return READING;
+
+  }
   const getSensorHEX = (sensorId:any) => {
-    let sensorData = iotSensorData.filter((data:any)=>data['DTU.ID']==sensorId);
+    let sensorData;
+    const _TYPE = iotSensors[sensorId][1]['TYPE'];
+    if (_TYPE == 'WISENSOR') {
+      sensorData = iotSensorData['WISensor'][sensorId];
+    } else {
+      sensorData = iotSensorData['485'].filter((data:any)=>data['DTU.ID']==sensorId);
+    }
     let _data = sensorData[sensorData.length-1];
     let _HEX = _data?.['RCV.BYTES'] || 0;
     return _HEX;
@@ -68,18 +108,24 @@ const IOTPortalPage = () => {
     const _IDs = SelectionNodes.map(obj => obj.id);
     setSelIOTSensors(_IDs);
   };
-  // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
+
   return (
     <div className={PageClasses}>
       <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL' />
       <div className={PageContainClasses}>
         <img className={GridClasses} src={grid} alt="Grid" />
+        { isLoading && (
+          <div className="flex justify-center items-center w-full h-full font-Roboto font-extralight text-4xl">
+            <LoadingIcon className='size-36 text-white stroke-[0.75] absoluteStrokeWidth animate-spin'/>
+            Loading...
+          </div>) }
         <div className={IOTSensorsClasses}>
-          { groupIOTSensors && <SunburstChart data={groupIOTSensors} onEventCallback={onEventCallback}/> }
-          { selIOTSensors && selIOTSensors.map((sensorId,index)=>{
+          { groupIOTSensors && <div className="w-auto m-1"><SunburstChart className='' data={groupIOTSensors} onEventCallback={onEventCallback}/></div> }
+          { selIOTSensors && selIOTSensors.map((sensorId:any)=>{
             const ObjSensor = iotSensors[sensorId][1];
             let _HEX = getSensorHEX(sensorId);
-            let READING = GetSensorREADING({...ObjSensor,HEX:_HEX,ID:sensorId});
+            console.log(sensorId,_HEX);
+            let READING = Get485SensorREADING({...ObjSensor,HEX:_HEX});
             return <Card className='font-Roboto font-extralight text-xl' 
                          sensorType={ObjSensor["TYPE"]} 
                          group={ObjSensor['GROUP']||'UNDEFINED'}

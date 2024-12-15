@@ -20,7 +20,7 @@ const Button = ({ className, Icon, to, onClick, children, px, white }: ButtonPro
     ${px || "px-7"} 
     ${white ? "text-n-8" : "text-n-1"} 
     ${className || ""}`;  
-  const spanClasses = "relative z-10";
+  const spanClasses:any = "relative z-10";
 
   const renderButton = () => (
     <button className={classes} onClick={onClick}>

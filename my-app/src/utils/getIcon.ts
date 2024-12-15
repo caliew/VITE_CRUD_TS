@@ -1,4 +1,5 @@
 import { 
+    Loader ,
     CircuitBoard, KeyRound, House, Utensils, User, LogOutIcon, LogIn, 
     Thermometer, ThermometerSnowflake, ThermometerSun,
     Wind, WindArrowDown, 
@@ -17,7 +18,7 @@ import {
     Drill, FireExtinguisher, 
     Battery,BatteryFull, BatteryLow, BatteryMedium, BatteryWarning,
     BatteryCharging, Plug, PlugZap, 
-    BellElectric,
+    BellElectric, LoaderCircle,
     LayoutPanelLeft, LayoutPanelTop,
     PanelsTopLeft, PanelsTopRight, PanelsBottomLeft, PanelsBottomRight,
     Ban
@@ -25,6 +26,7 @@ import {
 
  const getIcon = (name: any) => {
     if (name === 'iotportal') return CircuitBoard
+    if (name === 'Loading') return Loader
     if (name === 'key') return KeyRound
     if (name === 'home') return House
     if (name === 'restaurants') return Utensils

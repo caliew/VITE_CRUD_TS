@@ -55,7 +55,7 @@ const Calendar : React.FC<CalendarProp> = ({className,title, dateList, dateRange
           label: { 
             show: true, color: 'black',
             fontFamily:'Roboto', fontSize:14, fontWeight: 300,
-            formatter: function (params) {
+            formatter: function (params:any) {
               var d = echarts.number.parseDate(params.value[0]);
               return d.getDate() + '\n' + params.value[2] + '\n';
             }
@@ -65,7 +65,7 @@ const Calendar : React.FC<CalendarProp> = ({className,title, dateList, dateRange
           type: 'scatter', coordinateSystem: 'calendar',symbolSize: 0,
           data: lunarData, silent: true,
           label: { show: true,
-            formatter: function (params) { return '\n\n\n' + (params.value[3] || ''); },
+            formatter: function (params:any) { return '\n\n\n' + (params.value[3] || ''); },
             fontFamily:'Roboto', fontSize: 14, fontWeight: 300, color: 'blue'
           },
         },

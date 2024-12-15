@@ -1,5 +1,6 @@
 # Exclude node_modules directories
 my-app/node_modules
+my-app/dist
 my-app/package-lock.json
 server/node_modules
 CorporatePassBookingSystem

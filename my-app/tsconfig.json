@@ -1,6 +1,8 @@
 {
   "compilerOptions": {
     // ... other options ...
+    "strict": true,    
+    "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
   },

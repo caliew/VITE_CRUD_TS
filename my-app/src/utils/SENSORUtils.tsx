@@ -1,13 +1,17 @@
 // ----------------
-const getSensorUNIT = (sensorType: string | undefined) => {
+const getSensorUNIT = (sensorType: string, key: string | undefined,unitSystem: string | undefined) => {
     switch (sensorType) {
+        case "AC CURRENT":
+            return "A";
         case "WISENSOR":
         case "DEW PT.METER":
-        case "Temperature":
+        case "TEMP & RH":
+            if (key === "TEMP") return "°C";
+            if (key === "RH") return "%";
             return "°C";
-        case "Humidity":
-            return "%";
+        case "AIR PRESSURE":
         case "DIFF PRESS":
+            return unitSystem;
         case "Pressure":
             return "hPa";
         case "CO2":
@@ -26,10 +30,10 @@ const getPRESSFactor = (UNITSYSTEM:any) => {
       (UNITSYSTEM.toUpperCase() === 'BAR') ? 1.0E-5: 1.0;
 }
 // -------------------------
-function hexToDecimal(hex) {
+function hexToDecimal(hex:any) {
     return (parseInt(hex.slice(0, 2), 16) * 256 + parseInt(hex.slice(2, 4), 16)) / 10000 
 };
-function HEXTOINT(hex) {
+function HEXTOINT(hex:any) {
     if (hex.length % 2 != 0) { hex = "0" + hex; }
     var num = parseInt(hex, 16);
     var maxVal = Math.pow(2, hex.length / 2 * 8);
@@ -84,7 +88,7 @@ function calculateAirPressure(HEX:any,OFFSET_PRESS:any,UNITSYSTEM:any) {
     return objResult;
 }
 function calculateDiffPressure(HEX:any,OFFSET_PRESS:any) {
-    const decimalNumber = parseInt(HEX, 16);
+    const decimalNumber = parseInt(HEX, 16)/10.0;
     let objResult : any = {
         PRESS : decimalNumber.toFixed(2)
     }
@@ -93,8 +97,8 @@ function calculateDiffPressure(HEX:any,OFFSET_PRESS:any) {
 function calculateTempAndRH(HEX:string, OFFSET_Temp:string, OFFSET_RH:string) {
     let HEX1 = HEX.slice(0,4);
     let HEX2 = HEX.slice(4,8);
-    let RH = HEXTOINT(HEX1)/10.0 + OFFSET_RH ?? 0;
-    let TEMP = HEXTOINT(HEX2)/10.0 + OFFSET_Temp ?? 0;
+    let RH = HEXTOINT(HEX1)/10.0 + (OFFSET_RH ?? 0);
+    let TEMP = (HEXTOINT(HEX2)/10.0) + (OFFSET_Temp ?? 0);
     let objResult : any = {
         TEMP : TEMP.toFixed(2),
         RH : RH.toFixed(2)
@@ -113,7 +117,10 @@ function calculateDewPoint(HEX:string) {
     return objResult;
 }
 // -----
-const getSensorREADING = ({ID,TYPE,HEX,UNITSYSTEM,CTRATIO,OFFSET_Temp,OFFSET_RH,OFFSET_PRESS,FLAG}: any) => {
+const getWISensorREADIng = () => {
+
+}
+const get485SensorREADING = ({ID,TYPE,HEX,UNITSYSTEM,CTRATIO,OFFSET_Temp,OFFSET_RH,OFFSET_PRESS}: any) => {
     let _VALUE = {};
     switch (TYPE) {
         case 'AC CURRENT':
@@ -134,7 +141,7 @@ const getSensorREADING = ({ID,TYPE,HEX,UNITSYSTEM,CTRATIO,OFFSET_Temp,OFFSET_RH,
         default:
             break;
     }
-    FLAG && console.log('GETSENSORREADING..',ID,TYPE,_VALUE)
+    // console.log('GETSENSORREADING..',ID,TYPE,HEX,_VALUE)
     return _VALUE;
 }
 // ----------------------------
@@ -155,4 +162,4 @@ const getFinalChildrenNODES = (node:any) =>  {
     return finalChildren;
 }
 
-export { getSensorUNIT, getSensorREADING, getFinalChildrenNODES }
+export { getSensorUNIT, get485SensorREADING, getWISensorREADIng, getFinalChildrenNODES }
