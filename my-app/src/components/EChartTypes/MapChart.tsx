@@ -4,7 +4,7 @@ import ReactECharts from "echarts-for-react";
 import * as echarts from 'echarts/core';
 
 // import MapSVG from '../../assets/Map_of_Iceland.svg?raw';
-import MapSVG from '../../assets/floorplan.svg?raw';
+import MapSVG from '/assets/floorplan.svg?raw';
 import axios from 'axios';
 
 import { ChartClasses } from "../../utils";
