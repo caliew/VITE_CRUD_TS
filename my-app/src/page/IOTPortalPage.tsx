@@ -79,9 +79,9 @@ const IOTPortalPage = () => {
   },[iotPortal]);
   
   const getWISensorData = (SensorData:any) => {
-    let _TEMP = SensorData['Temperature'] ?? 0;
-    let _HUMD = SensorData['Humidity'] ?? 0;
-    return { TEMP:String(_TEMP.toFixed(2)), HUMD:String(_HUMD.toFixed(2))}
+    let _TEMP = SensorData?.['Temperature'] ?? 0;
+    let _HUMD = SensorData?.['Humidity'] ?? 0;
+    return { TEMP:_TEMP.toFixed(2), HUMD:_HUMD.toFixed(2) }
   }
   const getSensorHEX = (sensorId:any) => {
     let sensorData;
@@ -120,7 +120,7 @@ const IOTPortalPage = () => {
             let _READING;
             if (_TYPE == 'WISENSOR') { 
               const _SensorDatas = iotSensorData['WISensor'][sensorId];
-              const _SensorData = _SensorDatas[_SensorDatas.length-1]
+              const _SensorData = _SensorDatas[_SensorDatas.length-1];
               _READING = getWISensorData(_SensorData);
             } else {
               _HEX = getSensorHEX(sensorId);

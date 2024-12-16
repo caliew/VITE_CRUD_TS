@@ -3,7 +3,7 @@ import axios from 'axios';
 import { GetJWTToken } from '../../utils';
 
 const api = axios.create({
-    baseURL: 'http://localhost:3002', 
+    baseURL: 'http://202.59.9.164:3002', 
     headers: {
         Authorization: `${GetJWTToken()}`,
     },
