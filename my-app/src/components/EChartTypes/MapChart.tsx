@@ -34,12 +34,12 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
   useEffect(() => {
     // Initializd the Chart
     if (svg) {
-      echarts.registerMap('iceland_svg', { svg: MapSVG });
+      echarts.registerMap('FloorPlan_svg', { svg: MapSVG });
       const option = {
         tooltip: {},
         geo: {
           tooltip: { show: true },
-          map: 'iceland_svg', roam: true
+          map: 'FloorPlan_svg', roam: true
         },
         series: {
           type: 'custom', coordinateSystem: 'geo', geoIndex: 0, zlevel: 2,

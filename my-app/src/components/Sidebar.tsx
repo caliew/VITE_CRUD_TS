@@ -36,8 +36,8 @@ const SideBar = () => {
       <Link to="/gauge" className="px-2 flex"><GaugeIcon /><span className={spanClasses}/>GAUGE</Link>
       <Link to="/calendar" className="px-2 flex"><CalendarIcon /><span className={spanClasses}/>CALENDAR</Link>
       <Link to="/Sunburst" className="px-2 flex"><RainbowIcon /><span className={spanClasses}/>SUNBURST</Link>
-      <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link>
-      <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link>
+      {/* <Link to="/restaurants" className="px-2 flex"><RestaurantIcon /><span className={spanClasses}/>RESTAURANTS</Link>
+      <Link to="/workers" className="px-2 flex"><WorkerIcon /><span className={spanClasses}/>WORKERS</Link> */}
       </>
     )
   }
