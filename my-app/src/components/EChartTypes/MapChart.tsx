@@ -33,25 +33,21 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
 
   useEffect(() => {
     // Initializd the Chart
-    if (svg) {
+    if (MapSVG) {
       echarts.registerMap('FloorPlan_svg', { svg: MapSVG });
       const option = {
-        tooltip: {},
+        tooltip: { formatter: (params: any) => { return `${params.data[2]}`; } },
         geo: {
           tooltip: { show: true },
           map: 'FloorPlan_svg', roam: true
         },
         series: {
           type: 'custom', coordinateSystem: 'geo', geoIndex: 0, zlevel: 2,
-          data: [ 
-            [250, 150, 'A'], [700, 120, 'B'], [300, 200, 'C'],
-            [600, 300, 'D'], [100, 500, 'E'], [400, 450, 'F'] ],
+          label: { show: true },
+          data: [ [220, 150, 'A'], [650, 120, 'B'], [280, 300, 'C'], [580, 300, 'D'], [100, 500, 'E'], [420, 450, 'F'] ],
           renderItem(params, api) {
-            const coord = api.coord([
-              api.value(0, params.dataIndex),
-              api.value(1, params.dataIndex),
-              api.value(2, params.dataIndex)
-            ]);
+            console.log(params);
+            const coord = api.coord([api.value(0, params.dataIndex),api.value(1, params.dataIndex),api.value(2, params.dataIndex)]);
             const circles = [];
             for (let i = 0; i < 5; i++) {
               circles.push({
@@ -68,8 +64,7 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
               });
             }
             return {
-              type: 'group',
-              x: coord[0], y: coord[1],
+              type: 'group', x: coord[0], y: coord[1],
               children: [ 
                 ...circles,
                 {

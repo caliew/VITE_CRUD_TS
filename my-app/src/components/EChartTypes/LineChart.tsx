@@ -41,7 +41,9 @@ const LineChart : React.FC<LineChartProp> = ({className,title,seriesLabels,legen
     const option = {
       color: colors,
       title: { left: 'center',bottom: '0',text: title, textStyle: { fontFamily: 'Roboto', fontSize: 24, fontWeight: 1, color: '#fff', }},
-      legend: { padding:15, orient:'vertical', top:'15%', left:'15%', textStyle: { fontFamily: 'Roboto', fontSize: 16, fontWeight: 1, color: 'yellow', padding: [0, 0, 0, 0]} },
+      legend: { 
+        padding:15, orient:'vertical', top:'15%', left:'15%', 
+        textStyle: { fontFamily: 'Roboto', fontSize: 16, fontWeight: 1, color: 'yellow', padding: [0, 0, 0, 0]} },
       tooltip: { trigger: 'axis', axisPointer: { type: 'cross', animation: false, label: { backgroundColor: '#505765' } } },
       grid: getGrid,
       xAxis: getXAxis,

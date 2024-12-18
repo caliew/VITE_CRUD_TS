@@ -68,3 +68,7 @@ ECharts-for-react
 // --------------
 npm install echarts-for-react
 
+// ----------
+// IMAGE TILT
+// ----------
+npm install react-parallax-tilt

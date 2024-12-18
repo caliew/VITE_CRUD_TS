@@ -3,7 +3,7 @@ import { useNavigate  } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
-import { Button, HeaderTitle, MapBox, MapChart } from '../components';
+import { Button, HeaderTitle, MapBox, MapChart, TiltedImage } from '../components';
 import { GetIcon, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const geojson = {
@@ -60,6 +60,7 @@ const SiteMapPage = () => {
             </div> 
           </div>
           <MapChart className='' title='SITE LAYOUT'/>
+          <TiltedImage />
         </div>
       </div>
       <div className='mt-5'>
