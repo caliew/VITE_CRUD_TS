@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets';
 import { Button, HeaderTitle } from '../components';
-import { GetIcon, GetJWTToken, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, GetJWTToken, PageClasses, PageHeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { Worker } from '../models/Worker';
 import { fetchWorkers } from '../redux/features/workersSlice';
@@ -51,7 +51,7 @@ const WorkerPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('workers')} className={HeaderClasses} title='WORKERS'/>
+      <HeaderTitle Icon={GetIcon('workers')} className={PageHeaderClasses} title='WORKERS'/>
       <div className={PageContainClasses}>
         <img
           className={GridClasses}

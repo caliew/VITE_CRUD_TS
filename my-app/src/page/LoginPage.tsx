@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
 
 import { Button, HeaderTitle } from '../components';
-import { GetIcon, HeaderClasses, ButtonClasses } from '../utils';
+import { GetIcon, PageClasses, PageHeaderClasses, ButtonClasses } from '../utils';
 
 import { login, logout } from '../redux/features/authSlice';
 
@@ -30,8 +30,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="mt-15 font-Roboto flex flex-col items-center justify-center">
-            <HeaderTitle Icon={GetIcon('key')} className={HeaderClasses} title='LOGIN'/>
+        <div className={PageClasses}>
+        <HeaderTitle Icon={GetIcon('key')} className={PageHeaderClasses} title='LOGIN'/>
             <div className='m-10'>
                 <Formik
                 initialValues={{ accessCode: '' }}

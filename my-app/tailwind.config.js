@@ -10,6 +10,9 @@ export default {
   theme: {
     extend: {
       colors: {
+        screen: {
+          '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+        },
         color: {
           0: "#FFFFFF", // WHITE
           1: "#C0C0C0", // SILVER

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, MapBox, MapChart, TiltedImage } from '../components';
-import { GetIcon, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, PageClasses, PageHeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const geojson = {
   type: 'geojson',
@@ -43,24 +43,26 @@ const SiteMapPage = () => {
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('MapPinHouse')} className={HeaderClasses} title='SITE MAP'/>
+      <HeaderTitle Icon={GetIcon('MapPinHouse')} className={PageHeaderClasses} title='SITE MAP'/>
       <div className={PageContainClasses} >
-        <div className='Container flex flex-col flex-wrap justify-center items-center'>
+        <div className='flex flex-row flex-wrap justify-center items-center'>
           <img
             className={GridClasses}
             src={grid}
             alt="Grid"
           />
-          <div className='flex'>
-          <MapBox GeoJSON={geojson}/>
-          <div className='flex flex-col flex-wrap justify-center items-center'> 
-            { geojson.data.features.map((ObjSite: any) => (
-              <div className='flex flex-col px-5 justify-center items-center font-Roboto text-2xl font-extralight'>{ObjSite.id} - {ObjSite.properties.title}</div>
-              )) }
-            </div> 
+          <div className='flex flex-wrap'>
+            <div><MapBox GeoJSON={geojson}/></div>
+            <div className='flex flex-col flex-wrap justify-center items-center'> 
+              { geojson.data.features.map((ObjSite: any) => (
+                <div className='flex flex-col px-5 justify-center items-center font-Roboto text-2xl font-extralight'>{ObjSite.id} - {ObjSite.properties.title}</div>
+                )) }
+              </div> 
           </div>
-          <MapChart className='' title='SITE LAYOUT'/>
-          <TiltedImage />
+          <div className='flex flex-col flex-wrap'>
+            <MapChart className='' title='SITE LAYOUT'/>
+            <TiltedImage className='w-[350px] h-[350px]'/>
+          </div>
         </div>
       </div>
       <div className='mt-5'>

@@ -46,7 +46,6 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
           label: { show: true },
           data: [ [220, 150, 'A'], [650, 120, 'B'], [280, 300, 'C'], [580, 300, 'D'], [100, 500, 'E'], [420, 450, 'F'] ],
           renderItem(params, api) {
-            console.log(params);
             const coord = api.coord([api.value(0, params.dataIndex),api.value(1, params.dataIndex),api.value(2, params.dataIndex)]);
             const circles = [];
             for (let i = 0; i < 5; i++) {
@@ -100,7 +99,7 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
   };
 
   return (
-    <div className="flex flex-wrap justify-center items-center font-Roboto font-extralight text-2xl ">
+    <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl ">
       <ReactECharts
         ref={chartRef}
         echarts={echarts}
@@ -112,7 +111,7 @@ const MapChart : React.FC<MapProp> = ({className,title}) => {
         onChartReady={onChartReadyCallback}
         onEvents={onEvents}
         opts={{ renderer: "svg" }}
-        style={{width:'1250px',height:'850px'}}
+        style={{width:'850px',height:'500px'}}
       />
       <div className="flex flex-col flex-wrap justify-center items-center pt-5">
         {title}

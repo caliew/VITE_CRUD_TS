@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle } from '../components';
-import { GetIcon, GetJWTToken, PageClasses, HeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, GetJWTToken, PageClasses, PageHeaderClasses, ButtonClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { Restaurant } from '../models/Restaurant';
 import { fetchRestaurants } from '../redux/features/restaurantsSlice';
@@ -51,7 +51,7 @@ const RestaurantPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('restaurants')} className={HeaderClasses} title='RESTAURANTS'/>
+      <HeaderTitle Icon={GetIcon('restaurants')} className={PageHeaderClasses} title='RESTAURANTS'/>
       <div className={PageContainClasses} >
         <img
           className={GridClasses}

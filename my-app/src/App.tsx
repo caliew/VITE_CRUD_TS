@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ErrorPage, LoginPage, MainPage, IOTPortalPage, RestaurantPage, WorkerPage, 
+import { ErrorPage, LoginPage, MainPage, 
+         IOTPortalPage, SPKAPortalPage,
+         RestaurantPage, WorkerPage, 
          SiteMapPage, SunburstPage,
          GaugePage, CalendarPage, ChartingPage } from './page';
 import { RoutesClasses } from './utils';
@@ -8,16 +10,16 @@ import ButtonGradient from './assets/svg/ButtonGradient';
 
 const App = () => {
   return (
-    <div className=''>
+    <div className='mx-auto h-full p-4 shadow-2xl shadow-indigo-50 hover:shadow-lime-500/50'>
       <Router >
         <HeaderBar />
-        <div className='columns-1'>
           <SideBar />
           <div className={RoutesClasses}>
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/iotportals" element={<IOTPortalPage />} />
+              <Route path="/IOTPortals" element={<IOTPortalPage />} />
+              <Route path="/SPKAPortals" element={<SPKAPortalPage />} />
               <Route path="/sitemap" element={<SiteMapPage />} />
               <Route path="/gauge" element={<GaugePage />} />
               <Route path="/charting" element={<ChartingPage />} />
@@ -28,7 +30,6 @@ const App = () => {
               <Route path="*" element={<ErrorPage />} />
             </Routes>
           </div>
-        </div>
         <Footer />
       </Router>
       <ButtonGradient />

@@ -1,8 +1,8 @@
 .tilt {
     position: relative;
     perspective: 1000px;
-    width: 300px; /* Adjust the width as needed */
-    height: 200px; /* Adjust the height as needed */
+    width: 400px; /* Adjust the width as needed */
+    height: 400px; /* Adjust the height as needed */
     margin: 50px auto;
     background-color: white;
   }

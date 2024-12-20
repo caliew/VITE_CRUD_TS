@@ -193,7 +193,6 @@ const CarGauge : React.FC<CarGaugeProp> = ({className,title}) => {
         style={{width:'850px',height:'650px'}}
         opts={{ renderer: "svg" }}
       />
-      {title}
     </div>
   );
 };

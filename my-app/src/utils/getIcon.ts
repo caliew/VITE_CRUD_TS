@@ -2,6 +2,7 @@ import {
     Loader ,
     CircuitBoard, KeyRound, House, Utensils, User, LogOutIcon, LogIn, 
     Thermometer, ThermometerSnowflake, ThermometerSun,
+    FireExtinguisher,
     Wind, WindArrowDown, 
     Gauge, CircleGauge,
     CalendarDays,
@@ -25,7 +26,8 @@ import {
  } from "lucide-react";
 
  const getIcon = (name: any) => {
-    if (name === 'iotportal') return CircuitBoard
+    if (name === 'IOTPortal') return CircuitBoard
+    if (name === 'SPKAPortal') return FireExtinguisher
     if (name === 'Loading') return Loader
     if (name === 'key') return KeyRound
     if (name === 'home') return House

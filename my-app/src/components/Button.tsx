@@ -16,11 +16,12 @@ const Button = ({ className, Icon, to, onClick, children, px, white }: ButtonPro
 
   const classes = `button relative inline-flex items-center justify-center h-11 
     transition-colors 
-    text-decoration-underline text-inherit 
+    text-decoration-underline text-inherit
+    hover:text-rose-500
     ${px || "px-7"} 
     ${white ? "text-n-8" : "text-n-1"} 
     ${className || ""}`;  
-  const spanClasses:any = "relative z-10";
+  const spanClasses:any = "px-5";
 
   const renderButton = () => (
     <button className={classes} onClick={onClick}>
@@ -31,8 +32,10 @@ const Button = ({ className, Icon, to, onClick, children, px, white }: ButtonPro
   const renderLink = () => (
     <Link to={to} className={classes}>
       <Icon className={className}/>
-      {children}
-      {ButtonSvg(white)}
+      <span className={spanClasses}>
+        {children}
+      </span>
+        {ButtonSvg(white)}
     </Link>
   );
 

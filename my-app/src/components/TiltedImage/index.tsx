@@ -5,19 +5,20 @@ import './index.css'; // Add some custom styles if needed
 import mreFloorPlan from '/assets/floorplan.png'; // Adjust the path based on your file location
 
 interface TiltedImageProp {
+  className?: string;
   markerEntries?: any;
   tiltX?: any;
   tiltY?: any
 }
 
-const TiltedImage = ({markerEntries,tiltX,tiltY}:TiltedImageProp) => {
+const TiltedImage = ({className,markerEntries,tiltX,tiltY}:TiltedImageProp) => {
   return (
     <Tilt
-      className="tilt"
+      className={`tilt ${className}`}
       tiltMaxAngleX={tiltX}
       tiltMaxAngleY={tiltY}
       perspective={1000}
-      scale={3.6}
+      scale={1.2}
       transitionSpeed={1000}
     >
       <div className="tilt-inner">

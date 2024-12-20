@@ -6,7 +6,7 @@ import { Button, HeaderTitle, Card, SunburstChart } from '../components';
 import { GetIcon, 
          Get485SensorREADING, GetWISensorREADING,
          GetFINALChildrenNOES,
-         PageClasses, HeaderClasses, IOTSensorsClasses, 
+         PageClasses, PageHeaderClasses, IOTSensorsClasses, 
          ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 import { fetchIOTPortal } from '../redux/features/iotPortalSlice';
@@ -103,7 +103,7 @@ const IOTPortalPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('iotportal')} className={HeaderClasses} title='IOT PORTAL' />
+      <HeaderTitle Icon={GetIcon('IOTPortal')} className={PageHeaderClasses} title='IOT PORTAL' />
       <div className={PageContainClasses}>
         <img className={GridClasses} src={grid} alt="Grid" />
         { isLoading && (
@@ -112,7 +112,10 @@ const IOTPortalPage = () => {
             Loading...
           </div>) }
         <div className={IOTSensorsClasses}>
-          { groupIOTSensors && <div className="w-auto m-1"><SunburstChart className='' data={groupIOTSensors} onEventCallback={onEventCallback}/></div> }
+          { groupIOTSensors && 
+              <div className="relative w-auto m-1">
+                <SunburstChart className='' data={groupIOTSensors} onEventCallback={onEventCallback}/>
+              </div> }
           { selIOTSensors && selIOTSensors.map((sensorId:any)=>{
             const ObjSensor = iotSensors[sensorId][1];
             const _TYPE = ObjSensor['TYPE'];

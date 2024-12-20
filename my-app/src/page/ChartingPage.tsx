@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, SimpleGauge, CarGauge, LineChart, BarChart, Calender } from '../components';
-import { GetIcon, PageClasses, HeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const ChartingPage = () => {
 
@@ -22,7 +22,7 @@ const ChartingPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('ChartSpline')} className={HeaderClasses} title='CHARTING'/>
+      <HeaderTitle Icon={GetIcon('ChartSpline')} className={PageHeaderClasses} title='CHARTING'/>
       <div className={PageContainClasses} >
         <img
           className={GridClasses}
@@ -30,13 +30,18 @@ const ChartingPage = () => {
           alt="Grid"
         />
         <div className='flex justify-center items-center flex-wrap gap-5'>
-          <div className='flex'>
-            <LineChart className='' title='LINE PLOT (MERGE)' dataX={DataX} dataY={DataY} merge={true} 
+          <div className='container flex'>
+            <div>
+            <LineChart className='' title='Line Plot (MERGE)' dataX={DataX} dataY={DataY} merge={true} 
                         seriesLabels={SeriesLabels} legendsLabels={LegendsLabels} />
-            <LineChart className='' title='LINE PLOT (NOT MERGE)' dataX={DataX} dataY={DataY} merge={false} 
+            </div>
+            <div>
+            <LineChart className='' title='Line Plot (NOT MERGE)' dataX={DataX} dataY={DataY} merge={false} 
                         seriesLabels={SeriesLabels} legendsLabels={LegendsLabels}/>
+            </div>
           </div>
-          <BarChart className='w-[800px]' title='BAR PLOT' />
+          <BarChart className='w-[800px]' title="Rainfall vs Evaporation" subtitle='Fake Data'
+                    seriesLabels={SeriesLabels} legendsLabels={LegendsLabels}/>
         </div>
       </div>
       <div className='mt-5'>

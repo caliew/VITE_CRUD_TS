@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, SunburstChart } from '../components';
-import { GetIcon, PageClasses, HeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const SunburstPage = () => {
 
@@ -16,7 +16,7 @@ const SunburstPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('Sunburst')} className={HeaderClasses} title='SUNBURST'/>
+      <HeaderTitle Icon={GetIcon('Sunburst')} className={PageHeaderClasses} title='SUNBURST'/>
       <div className={PageContainClasses} >
         <img
           className={GridClasses}

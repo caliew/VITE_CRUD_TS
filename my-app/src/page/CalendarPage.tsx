@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { grid } from '../assets'
 import { Button, HeaderTitle, SimpleGauge, CarGauge, LineChart, BarChart, Calendar } from '../components';
-import { GetIcon, PageClasses, HeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
+import { GetIcon, PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from '../utils';
 
 const CalendarPage = () => {
 
@@ -58,7 +58,7 @@ const CalendarPage = () => {
 
   return (
     <div className={PageClasses}>
-      <HeaderTitle Icon={GetIcon('Calendar')} className={HeaderClasses} title='CALENDAR'/>
+      <HeaderTitle Icon={GetIcon('Calendar')} className={PageHeaderClasses} title='CALENDAR'/>
       <div className={PageContainClasses} >
         <img
           className={GridClasses}
@@ -66,7 +66,7 @@ const CalendarPage = () => {
           alt="Grid"
         />
         <div className='flex flex-col flex-wrap justify-center items-center gap-5'>
-          <Calendar className='border' title='CALENDAR' dateList={dateList} dateRange={['2025-1']}/>
+          <Calendar className='' title='CALENDAR' dateList={dateList} dateRange={['2025-1']}/>
         </div>
       </div>
       <div className='mt-5'>
