@@ -54,17 +54,17 @@ const IOTPortalPage = () => {
         // ----------------------------------
         const _ObjSensor = IOTSensors[sensorId][1];
         const _TYPE = String(_ObjSensor['TYPE']).toUpperCase();
-        let _SensorDatas;
+        let _SensorDatas,_SensorData,_RSLT,_HEX;
+        console.log(sensorId,SensorType,GroupName);
         if (_TYPE == 'WISENSOR') {
           _SensorDatas = WISensorData[sensorId];
-          const _SensorData = _SensorDatas[_SensorDatas.length-1]
-          let _RSLT = getWISensorData(_SensorData);
+          _SensorData = _SensorDatas[_SensorDatas.length-1]
+          _RSLT = getWISensorData(_SensorData);
           sensor = {...sensor, ID:sensorId, READING: _RSLT };
         } else {
           _SensorDatas = IOTSensorData['485'].filter((data:any)=>data['DTU.ID']==sensorId);
-          const _SensorData = _SensorDatas[_SensorDatas.length-1];
-          const _HEX  = _SensorData?.['RCV.BYTES'] || 0;
-          // const READING = parseInt(_HEX,  16)/10.0;
+          _SensorData = _SensorDatas[_SensorDatas.length-1];
+          _HEX  = _SensorData?.['RCV.BYTES'] || '00';
           const _READING = Get485SensorREADING({..._ObjSensor,HEX:_HEX,SensorData:_SensorData});
           sensor = {...sensor, ID:sensorId, HEX:_HEX, READING:_READING };
         }
@@ -73,6 +73,7 @@ const IOTPortalPage = () => {
       }, {});
       // ---------
       setGroupIOTSensorData(GroupIOTSensors);
+      console.log(GroupIOTSensors);
     }
     prepareGroupIOTSensorData();
     // ---------
@@ -81,7 +82,7 @@ const IOTPortalPage = () => {
   const getWISensorData = (SensorData:any) => {
     let _TEMP = SensorData?.['Temperature'] ?? 0;
     let _HUMD = SensorData?.['Humidity'] ?? 0;
-    return { TEMP:_TEMP.toFixed(2), HUMD:_HUMD.toFixed(2) }
+    return { TEMP:Number(_TEMP).toFixed(2), HUMD:Number(_HUMD).toFixed(2) }
   }
   const getSensorHEX = (sensorId:any) => {
     let sensorData;
@@ -92,7 +93,7 @@ const IOTPortalPage = () => {
       sensorData = iotSensorData['485'].filter((data:any)=>data['DTU.ID']==sensorId);
     }
     let _data = sensorData[sensorData.length-1];
-    let _HEX = _data?.['RCV.BYTES'] || 0;
+    let _HEX = _data?.['RCV.BYTES'] || '00';
     return _HEX;
   }
   const onEventCallback = (nodes:any) => {
@@ -117,10 +118,10 @@ const IOTPortalPage = () => {
                 <SunburstChart className='' data={groupIOTSensors} onEventCallback={onEventCallback}/>
               </div> }
           { selIOTSensors && selIOTSensors.map((sensorId:any)=>{
-            const ObjSensor = iotSensors[sensorId][1];
-            const _TYPE = ObjSensor['TYPE'];
             let _HEX;
             let _READING;
+            const ObjSensor = iotSensors[sensorId][1];
+            const _TYPE = ObjSensor['TYPE'];
             if (_TYPE == 'WISENSOR') { 
               const _SensorDatas = iotSensorData['WISensor'][sensorId];
               const _SensorData = _SensorDatas[_SensorDatas.length-1];

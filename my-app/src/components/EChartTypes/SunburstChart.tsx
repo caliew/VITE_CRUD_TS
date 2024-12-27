@@ -105,6 +105,7 @@ const dataMock = [
 
 function transformData(data:any) {
   const result = [];
+  console.log(data);
   Object.keys(data).forEach((room) => {
     const roomData = data[room];
     const children = [];

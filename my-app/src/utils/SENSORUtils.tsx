@@ -69,9 +69,9 @@ function parseFloat(str:any) {
 // -----------
 function calculateCurrent(HEX:string, CTRATIO:any) {
     let _CURR = (typeof CTRATIO === 'undefined') ? Math.abs(HEXTOINT(HEX) / 100.0) : Math.abs(hexToDecimal(HEX));
-    _CURR = _CURR * 1.0;    
+    _CURR = _CURR * 1.0;
     let objResult : any = { 
-        CURR  : _CURR.toFixed(2)
+        CURR  : Number(_CURR).toFixed(2)
     }
     return objResult;
 }
@@ -80,18 +80,18 @@ function calculateAirPressure(HEX:any,OFFSET_PRESS:any,UNITSYSTEM:any) {
     let HEX2 = HEX.slice(4,8);
     let newHEX = HEX2 + HEX1;
     let _reading  = `0x${newHEX}`;
-    let _Value = parseFloat(_reading) + Number(OFFSET_PRESS?? 0);
+    let _Value = Number(parseFloat(_reading)) + Number(OFFSET_PRESS?? 0);
     let _factor: any = getPRESSFactor(UNITSYSTEM);
     _Value = (_Value * _factor) ;    
     let objResult : any = {
-        PRESS : _Value.toFixed(2)
+        PRESS : Number(_Value).toFixed(2)
     }
     return objResult;
 }
 function calculateDiffPressure(HEX:any,OFFSET_PRESS:any) {
     const decimalNumber = parseInt(HEX, 16)/10.0;
     let objResult : any = {
-        PRESS : decimalNumber.toFixed(2)
+        PRESS : Number(decimalNumber).toFixed(2)
     }
     return objResult;
 }
@@ -101,8 +101,8 @@ function calculateTempAndRH(HEX:string, OFFSET_Temp:string, OFFSET_RH:string) {
     let RH = HEXTOINT(HEX1)/10.0 + (OFFSET_RH ?? 0);
     let TEMP = (HEXTOINT(HEX2)/10.0) + (OFFSET_Temp ?? 0);
     let objResult : any = {
-        TEMP : TEMP.toFixed(2),
-        RH : RH.toFixed(2)
+        TEMP : Number(TEMP).toFixed(2),
+        RH : Number(RH).toFixed(0)
     };
     return objResult;
 }
@@ -111,9 +111,9 @@ function calculateDewPoint(HEX:string) {
     let DEW = HEXTOINT(HEX.substr(4,4))/10;
     let TEMP = HEXTOINT(HEX.substr(8,4))/10;
     let objResult : any = {
-        TEMP : TEMP.toFixed(2),
-        RH : RH.toFixed(2),
-        DEW : DEW.toFixed(2)
+        TEMP : Number(TEMP).toFixed(2),
+        RH : Number(RH).toFixed(0),
+        DEW : Number(DEW).toFixed(2)
     }
     return objResult;
 }
