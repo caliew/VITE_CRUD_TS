@@ -1,15 +1,15 @@
 // my-app/src/components/Header.tsx
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { APP_NAME } from "@shared/utils/api/configs/URL";
 
-import { NavHeaderClass } from "../utils";
+import { NavHeaderClass } from "@shared/utils";
 import { config } from "../config";
 
 const HeaderBar = () => {
   const { token, error } = useSelector((state) => state.auth);
 
   const spanClasses = "relative x-2 px-2 text-Roboto font-extralight text-lg hover:text-rose-500";
-  const AppName = config.applicationName;
   const logo = config.applicationLogo;
 
   const loaded = () => {
@@ -38,12 +38,12 @@ const HeaderBar = () => {
   return (
     <div className="container mx-auto p-4 text-Roboto font-extralight text-lg shadow-indigo-500/50 ">
       <header className="fixed top-0 left-0 w-full py-4 z-10 ">
-        <div className="mx-auto flex justify-between items-center">
-          <div className="flex justify-center ">
+        <div className={NavHeaderClass}>
+          <div className={'flex'}>
             <img src={logo} alt="Logo" className="h-auto w-10 mr-2 fill-red" />
-            <span>{AppName}</span>
+            <span>{APP_NAME}</span>
           </div>
-          <div className="">{loaded()}</div>
+          <div className={''}>{loaded()}</div>
         </div>
       </header>
     </div>

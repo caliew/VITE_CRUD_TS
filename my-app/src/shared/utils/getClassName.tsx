@@ -1,4 +1,4 @@
-const NavHeaderClass = '';
+const NavHeaderClass = 'mx-auto flex justify-between items-center font-Roboto font-extralight text-2xl';
 
 const RoutesClasses = ''; // ml-64 p-4
 

@@ -1,7 +1,7 @@
-import { Route, Routes } from "react-router-dom";
-import { useErrorHandler, ErrorBoundary } from "react-error-boundary";
+import { Routes, Route } from "react-router-dom";
+import { ErrorBoundary } from "react-error-boundary";
 import {
-  ErrorFallback,PageNotFound,
+  PageNotFound,
   LoginPage,
   MainPage,
   IOTPortalPage,
@@ -13,17 +13,13 @@ import {
   GaugePage,
   CalendarPage,
   ChartingPage,
-} from "./features";
+  ErrorFallback
+} from "@features/index";
 import { RoutesClasses } from "@shared/utils";
-import { Button, HeaderBar, Footer, SideBar } from "@shared/components";
+import { HeaderBar, Footer, SideBar } from "@shared/components";
 import ButtonGradient from "@assets/svg/ButtonGradient";
 
 const App = () => {
-
-  const handleError = useErrorHandler();  
-  const handleSimulateError = () => { 
-    handleError(new Error('Simulated error')); 
-  };  
   const handleReset = () => {
     console.log('Error boundary reset triggered.');
     window.location.reload(); // Example: Reload the page
@@ -56,7 +52,6 @@ const App = () => {
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </div>
-        <Button className="font-Roboto text-2xl font-extralight" onClick={handleSimulateError}>SIMULATE ERROR..</Button>
         <Footer />
         <ButtonGradient />
       </ErrorBoundary>

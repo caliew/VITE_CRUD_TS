@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useErrorHandler } from "react-error-boundary";
 
-import grid from "@assets/grid.png";
+import { grid } from "@assets/index";
 import { Button, HeaderTitle, SunburstChart } from "@shared/components";
 import {
   GetIcon,
@@ -16,6 +17,7 @@ import {
 const SunburstPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const handleError = useErrorHandler();
 
   useEffect(() => {}, []);
 
@@ -33,10 +35,9 @@ const SunburstPage = () => {
           SUNBURST
         </div>
       </div>
-      <div className="mt-5">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          BACK TO HOME
-        </Button>
+      <div className="mt-15 flex flex-wrap flex-col">
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
+        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
       </div>
     </div>
   );

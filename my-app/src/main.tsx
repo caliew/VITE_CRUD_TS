@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx'
 import { ROOT_PATH } from '@shared/constants/paths';
-import store from './shared/store/store.js';
+import store from './shared/store/store';
 // import store from './redux/store.ts';
 import './index.css';
 

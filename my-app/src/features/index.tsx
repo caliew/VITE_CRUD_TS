@@ -13,7 +13,6 @@ import SunburstPage from "./SunburstPage";
 import LoginPage from "./LoginPage";
 
 export {
-  ErrorFallback,
   PageNotFound,
   MainPage,
   LoginPage,
@@ -25,5 +24,6 @@ export {
   WorkerPage,
   GaugePage,
   CalendarPage,
-  SunburstPage
+  SunburstPage,
+  ErrorFallback
 };

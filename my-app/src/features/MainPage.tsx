@@ -1,8 +1,9 @@
 // my-app/src/components/HomePage.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import grid from "@assets/grid.png";
+import { useErrorHandler } from "react-error-boundary";
+import { APP_NAME } from "@shared/utils/api/configs/URL";
+import { grid } from "@assets/index";
 import { Button, HeaderTitle, Clock } from "@shared/components";
 import {
   GetIcon,
@@ -17,6 +18,7 @@ import {
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const handleError = useErrorHandler();
 
   useEffect(() => {
     const token = GetJWTToken();
@@ -28,12 +30,14 @@ const HomePage = () => {
     }
   }, []);
 
+  const GetAppTitle = () => `${APP_NAME}`
+
   return (
     <div className={PageClasses}>
       <HeaderTitle
         Icon={GetIcon("home")}
         className={PageHeaderClasses}
-        title="MAIN MENU"
+        title={GetAppTitle()}
       />
       <Clock />
       <div className={PageContainClasses}>

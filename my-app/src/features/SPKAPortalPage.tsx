@@ -1,11 +1,13 @@
 // my-app/src/components/HomePage.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useErrorHandler } from "react-error-boundary";
 
-import grid from "@assets/grid.png";
+import { grid } from "@assets/index";
 import {
   HeaderTitle,
   Clock,
+  Button,
   MapBox,
   LineChart,
   MapChart,
@@ -15,6 +17,7 @@ import {
 import {
   GetIcon,
   GetJWTToken,
+  ButtonLINKClasses,
   SPKAPageClasses,
   PageHeaderClasses,
   PageContainClasses,
@@ -50,6 +53,7 @@ const geojson = {
 
 const SPKAPortalPage = () => {
   const navigate = useNavigate();
+  const handleError = useErrorHandler();
 
   useEffect(() => {
     const token = GetJWTToken();
@@ -123,6 +127,10 @@ const SPKAPortalPage = () => {
               legendsLabels={LegendsLabels}
             />
           </div>
+        </div>
+        <div className="mt-15 flex flex-wrap flex-col">
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
+        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
         </div>
       </div>
     </div>
