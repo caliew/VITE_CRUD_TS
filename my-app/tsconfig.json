@@ -1,14 +1,27 @@
 {
   "compilerOptions": {
-    // ... other options ...
-    "strict": true,    
-    "allowJs": true,
-    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext", "ESNext.String"],
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "useDefineForClassFields": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "include": ["src", "@types", "internals", "tailwind.config.js", "vite.config.ts","vite-env.d.ts"],
+  "extends": "./tsconfig.paths.json",
+  "exclude": ["node_modules","dist"]
 }

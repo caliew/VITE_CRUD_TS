@@ -1,18 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.tsx'
-import { ErrorBoundary } from './components';
 import { Provider } from 'react-redux';
-import store from './redux/store.ts';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.tsx'
+import { ROOT_PATH } from '@shared/constants/paths';
+import store from './shared/store/store.js';
+// import store from './redux/store.ts';
 import './index.css';
 
 ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <ErrorBoundary>
+  <React.StrictMode>
+    <Provider store={store}>
+      <BrowserRouter basename={ROOT_PATH}>
         <App />
-      </ErrorBoundary>
-    </React.StrictMode>
-  </Provider>,
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>,
   document.getElementById('root')
 );

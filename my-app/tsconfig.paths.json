@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "baseUrl": "./src",
+      "paths": {
+        "@configs/*": ["configs/*"],
+        "@features/*": ["features/*"],
+        "@components/*": ["features/components/*"],
+        "@mocks/*": ["mocks/data/*"],
+        "@shared/*": ["shared/*"],
+        "@assets/*": ["shared/assets/*"],
+        "@utils/*": ["shared/utils/*"],
+        "@stores/*": ["shared/stores/*"],
+        "@tests/*": ["tests/*"]
+      }
+    }
+  }
