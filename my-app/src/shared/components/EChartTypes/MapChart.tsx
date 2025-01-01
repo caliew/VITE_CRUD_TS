@@ -7,7 +7,7 @@ import * as echarts from "echarts/core";
 import MapSVG from "@assets/floorplan.svg?raw";
 import axios from "axios";
 
-import { ChartClasses } from "@shared/utils";
+import { ChartClasses } from "@shared/utils/classname";
 
 interface MapProp {
   className?: string;

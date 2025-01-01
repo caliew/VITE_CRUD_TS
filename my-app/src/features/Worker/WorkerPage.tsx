@@ -5,19 +5,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle } from "../../shared/components";
+import { Button, HeaderTitle } from "@shared/components";
+import { GetIcon, GetJWTToken } from '@shared/utils';
 import {
-  GetIcon,
-  GetJWTToken,
   PageClasses,
   PageHeaderClasses,
   ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
-} from "../../shared/utils";
+} from "@shared/utils/classname";
 
 import { Worker } from "./Worker.types";
-import { fetchWorkers } from "@shared/store/features/workersSlice";
+import { fetchWorkers } from "@stores/features/workersSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (

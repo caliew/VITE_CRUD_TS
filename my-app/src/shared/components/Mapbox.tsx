@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import mapboxgl from "mapbox-gl";
-import { MapClasses } from "../utils";
+import { MapClasses } from "@shared/utils/classname";
 import "mapbox-gl/dist/mapbox-gl.css";
 
 interface MapboxProps {

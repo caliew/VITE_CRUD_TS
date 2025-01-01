@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { APP_NAME } from "@shared/utils/api/configs/URL";
 
-import { NavHeaderClass } from "@shared/utils";
+import { NavHeaderClass } from "@shared/utils/classname";
 import { config } from "../config";
 
 const HeaderBar = () => {

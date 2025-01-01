@@ -14,15 +14,14 @@ import {
   SunburstChart,
   BarChart,
 } from "@shared/components";
+import { GetIcon, GetJWTToken } from "@shared/utils";
 import {
-  GetIcon,
-  GetJWTToken,
   ButtonLINKClasses,
   SPKAPageClasses,
   PageHeaderClasses,
   PageContainClasses,
-  GridClasses,
-} from "@shared/utils";
+  GridClasses
+} from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",

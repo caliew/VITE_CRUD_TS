@@ -5,19 +5,18 @@ import { useSelector, useDispatch } from "react-redux";
 import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle } from "../../shared/components";
-import {
-  GetIcon,
-  GetJWTToken,
+import { Button, HeaderTitle } from "@shared/components";
+import { GetIcon, GetJWTToken } from '@shared/utils';
+import { 
   PageClasses,
   PageHeaderClasses,
   ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
-} from "../../shared/utils";
+} from "@shared/utils/classname";
 
 import { Restaurant } from "./Restaurant.types";
-import { fetchRestaurants } from "@shared/store/features/restaurantsSlice";
+import { fetchRestaurants } from "@stores/features/restaurantsSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (

@@ -6,14 +6,14 @@ import { useErrorHandler } from "react-error-boundary";
 import { Formik, Form, Field } from "formik";
 
 import { Button, HeaderTitle } from "@shared/components";
+import { GetIcon } from "@shared/utils";
 import {
-  GetIcon,
   PageClasses,
   PageHeaderClasses,
   ButtonClasses,
-} from "@shared/utils";
+} from "@shared/utils/classname";
 
-import { login, logout } from "@shared/store/features/authSlice";
+import { login, logout } from "@shared/stores/features/authSlice";
 
 const LoginPage = () => {
   const navigate = useNavigate();

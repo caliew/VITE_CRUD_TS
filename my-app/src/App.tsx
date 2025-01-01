@@ -15,7 +15,7 @@ import {
   ChartingPage,
   ErrorFallback
 } from "@features/index";
-import { RoutesClasses } from "@shared/utils";
+import { RoutesClasses } from "@shared/utils/classname";
 import { HeaderBar, Footer, SideBar } from "@shared/components";
 import ButtonGradient from "@assets/svg/ButtonGradient";
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { FallbackProps } from 'react-error-boundary';
 
-import { ButtonLINKClasses, PageClasses, GetIcon } from "@shared/utils";
+import { GetIcon } from '@shared/utils';
+import { ButtonLINKClasses } from "@shared/utils/classname";
 import { Button } from "@shared/components";
 
 export const ErrorFallback: React.FC<FallbackProps> = ({ error, resetErrorBoundary }) => (

@@ -3,7 +3,7 @@ import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts/core";
 
-import { ChartClasses } from "../../utils";
+import { ChartClasses } from "@shared/utils/classname";
 
 interface CarGaugeProp {
   className?: string;

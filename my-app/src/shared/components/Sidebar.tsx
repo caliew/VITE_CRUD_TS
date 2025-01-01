@@ -1,7 +1,8 @@
 // my-app/src/components/Sidebar.tsx
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { GetIcon, SidebarClasses } from "../utils";
+import { GetIcon } from '@shared/utils'
+import { SidebarClasses } from "@shared/utils/classname";
 import { useSelector, useDispatch } from "react-redux";
 
 const SideBar = () => {

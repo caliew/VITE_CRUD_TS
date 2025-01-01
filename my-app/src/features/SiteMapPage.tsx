@@ -11,14 +11,14 @@ import {
   MapChart,
   TiltedImage,
 } from "@shared/components";
+import { GetIcon } from "@shared/utils";
 import {
-  GetIcon,
   PageClasses,
   PageHeaderClasses,
   ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
-} from "@shared/utils";
+} from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",

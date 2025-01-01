@@ -7,20 +7,16 @@ import { grid } from "@assets/index";
 import {
   Button,
   HeaderTitle,
-  SimpleGauge,
-  CarGauge,
-  LineChart,
-  BarChart,
   Calendar,
 } from "@shared/components";
+import { GetIcon } from '@shared/utils';
 import {
-  GetIcon,
   PageClasses,
   PageHeaderClasses,
   ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
-} from "@shared/utils";
+} from "@shared/utils/classname";
 
 const CalendarPage = () => {
   const navigate = useNavigate();

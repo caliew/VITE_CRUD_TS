@@ -1,7 +1,5 @@
+import { GetIcon, GetLEDDisplay, GetSensorUNIT } from '@shared/utils';
 import {
-  GetIcon,
-  GetLEDDisplay,
-  GetSensorUNIT,
   CardClasses,
   CardHeaderClasses,
   CardTitleClasses,
@@ -9,7 +7,7 @@ import {
   CardTitleNameClasses,
   CardIconClasses,
   CardSensorIDClasses,
-} from "../utils";
+} from "@shared/utils/classname";
 import { SimpleGauge } from "../components";
 interface ButtonProp {
   className?: string;
