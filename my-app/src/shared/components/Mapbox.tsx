@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import mapboxgl from "mapbox-gl";
+import { MAPGL_ACCESSTOKEN } from "@shared/utils/api/configs/URL";
 import { MapClasses } from "@shared/utils/classname";
 import "mapbox-gl/dist/mapbox-gl.css";
 
@@ -11,8 +12,8 @@ const Mapbox: React.FC<MapboxProps> = ({ GeoJSON }) => {
   const mapContainerRef = useRef();
 
   useEffect(() => {
-    mapboxgl.accessToken =
-      "pk.eyJ1IjoiY2FsaWV3IiwiYSI6ImNsYnQ1ZjcwazAzMzczcHQwa2N2OTU5bTUifQ.MXbnNqpc6B3T44G97EmI6Q";
+    mapboxgl.accessToken = MAPGL_ACCESSTOKEN;
+      // "pk.eyJ1IjoiY2FsaWV3IiwiYSI6ImNsYnQ1ZjcwazAzMzczcHQwa2N2OTU5bTUifQ.MXbnNqpc6B3T44G97EmI6Q";
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,

@@ -63,7 +63,6 @@ const IOTPortalPage = () => {
           const _ObjSensor = IOTSensors[sensorId][1];
           const _TYPE = String(_ObjSensor["TYPE"]).toUpperCase();
           let _SensorDatas, _SensorData, _RSLT, _HEX;
-          console.log(sensorId, SensorType, GroupName);
           if (_TYPE == "WISENSOR") {
             _SensorDatas = WISensorData[sensorId];
             _SensorData = _SensorDatas[_SensorDatas.length - 1];
@@ -89,7 +88,6 @@ const IOTPortalPage = () => {
       );
       // ---------
       setGroupIOTSensorData(GroupIOTSensors);
-      console.log(GroupIOTSensors);
     };
     prepareGroupIOTSensorData();
     // ---------

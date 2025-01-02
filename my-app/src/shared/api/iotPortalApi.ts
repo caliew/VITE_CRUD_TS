@@ -1,7 +1,7 @@
 // workers.ts
 import axios from "axios";
 import { GetJWTToken } from "../utils/index";
-import { config } from "../config";
+import { WEB_ACCESSTOKEN } from "@shared/utils/api/configs/URL";
 
 const IOT_URL_IKN = "http://202.59.9.164:5000";
 
@@ -24,7 +24,7 @@ api.interceptors.request.use(async (config) => {
 const getIOTPortal = async () => {
   // ------
   // axios.defaults.headers.common['x-auth-token'] = token["token"];
-  axios.defaults.headers.common["x-auth-token"] = config.Web_AccessToken;
+  axios.defaults.headers.common["x-auth-token"] = WEB_ACCESSTOKEN;
   let _day0: Date = new Date();
   let _day1: Date = new Date();
   _day0.setHours(-23, 0, 0);

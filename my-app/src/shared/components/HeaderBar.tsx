@@ -1,16 +1,15 @@
 // my-app/src/components/Header.tsx
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { APP_NAME } from "@shared/utils/api/configs/URL";
+import { APP_NAME, APP_LOGO } from "@shared/utils/api/configs/URL";
 
 import { NavHeaderClass } from "@shared/utils/classname";
-import { config } from "../config";
 
 const HeaderBar = () => {
   const { token, error } = useSelector((state) => state.auth);
 
   const spanClasses = "relative x-2 px-2 text-Roboto font-extralight text-lg hover:text-rose-500";
-  const logo = config.applicationLogo;
+  const logo = APP_LOGO;
 
   const loaded = () => {
     if (!token) return;
