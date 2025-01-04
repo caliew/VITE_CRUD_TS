@@ -5,7 +5,7 @@ import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import { Button, HeaderTitle, LineChart, BarChart } from "@shared/components";
-import { GetIcon } from '@shared/utils';
+import { GetIcon } from '@utils/icon';
 import {
   PageClasses,
   PageHeaderClasses,

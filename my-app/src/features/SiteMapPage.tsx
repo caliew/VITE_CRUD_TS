@@ -4,21 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import {
-  Button,
-  HeaderTitle,
-  MapBox,
-  MapChart,
-  TiltedImage,
-} from "@shared/components";
-import { GetIcon } from "@shared/utils";
-import {
-  PageClasses,
-  PageHeaderClasses,
-  ButtonLINKClasses,
-  PageContainClasses,
-  GridClasses,
-} from "@shared/utils/classname";
+import { Button, HeaderTitle, MapBox, MapChart, TiltedImage } from "@shared/components";
+import { GetIcon } from "@utils/icon";
+import { PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",

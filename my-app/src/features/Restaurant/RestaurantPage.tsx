@@ -6,17 +6,12 @@ import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import { Button, HeaderTitle } from "@shared/components";
-import { GetIcon, GetJWTToken } from '@shared/utils';
-import { 
-  PageClasses,
-  PageHeaderClasses,
-  ButtonLINKClasses,
-  PageContainClasses,
-  GridClasses,
-} from "@shared/utils/classname";
+import { GetJWTToken } from "@utils/index";
+import { GetIcon } from "@utils/icon";
+import { PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
 
-import { Restaurant } from "./Restaurant.types";
-import { fetchRestaurants } from "@stores/features/restaurantsSlice";
+import { Restaurant } from "./types/restaurant.types";
+import { fetchRestaurants } from "@features/Restaurant/stores/restaurantSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (
@@ -62,7 +57,7 @@ const RestaurantPage = () => {
   useEffect(() => {
     dispatch(fetchRestaurants());
   }, [dispatch]);
-  
+
   return (
     <div className={PageClasses}>
       <HeaderTitle
@@ -83,8 +78,18 @@ const RestaurantPage = () => {
         </table>
       </div>
       <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
-        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
+          BACK TO HOME
+        </Button>
+        <Button
+          Icon={GetIcon("404")}
+          className={ButtonLINKClasses}
+          onClick={() => {
+            handleError(new Error("Simulated error"));
+          }}
+        >
+          SIMULATE ERROR
+        </Button>
       </div>
     </div>
   );

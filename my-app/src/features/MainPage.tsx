@@ -5,7 +5,8 @@ import { useErrorHandler } from "react-error-boundary";
 import { APP_NAME } from "@shared/utils/api/configs/URL";
 import { grid } from "@assets/index";
 import { Button, HeaderTitle, Clock } from "@shared/components";
-import { GetIcon, GetJWTToken } from "@shared/utils";
+import { GetIcon } from "@utils/icon";
+import { GetJWTToken } from "@utils/index";
 import {
   ButtonClasses,
   ButtonLINKClasses,

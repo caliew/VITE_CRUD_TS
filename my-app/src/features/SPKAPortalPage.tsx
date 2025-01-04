@@ -4,24 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import {
-  HeaderTitle,
-  Clock,
-  Button,
-  MapBox,
-  LineChart,
-  MapChart,
-  SunburstChart,
-  BarChart,
-} from "@shared/components";
-import { GetIcon, GetJWTToken } from "@shared/utils";
-import {
-  ButtonLINKClasses,
-  SPKAPageClasses,
-  PageHeaderClasses,
-  PageContainClasses,
-  GridClasses
-} from "@shared/utils/classname";
+import { HeaderTitle, Clock, Button, MapBox, LineChart, MapChart, SunburstChart, BarChart } from "@shared/components";
+import { GetJWTToken } from "@utils/index";
+import { GetIcon } from "@utils/icon";
+
+import { ButtonLINKClasses, SPKAPageClasses, PageHeaderClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",

@@ -3,3 +3,9 @@ export interface IRestaurantsState {
     isLoading: boolean;
     error: any;
 }
+
+export interface Restaurant {
+    id: number;
+    name: string;
+    address: string;
+}

@@ -1,0 +1,1 @@
+export { updateLoginDate } from './updateLoginDate';

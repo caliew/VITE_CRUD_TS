@@ -1,6 +1,6 @@
 // workers.ts
 import axios from "axios";
-import { GetJWTToken } from "../utils/index";
+import { GetJWTToken } from "@utils/index";
 import { WEB_ACCESSTOKEN } from "@shared/utils/api/configs/URL";
 
 const IOT_URL_IKN = "http://202.59.9.164:5000";

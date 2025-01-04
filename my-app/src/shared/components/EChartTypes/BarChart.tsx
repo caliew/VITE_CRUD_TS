@@ -22,7 +22,6 @@ const BarChart: React.FC<BarChartProp> = ({
 }) => {
   const chartRef = useRef(null);
   const [option, setOption] = useState({});
-  console.log(title, subtitle);
 
   useEffect(() => {
     const option = {

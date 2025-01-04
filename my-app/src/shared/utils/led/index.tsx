@@ -68,4 +68,4 @@ const getLEDDisplay = ({ reading }: any) => {
   );
 };
 
-export { getLEDDisplay };
+export { getLEDDisplay as GetLEDDisplay };

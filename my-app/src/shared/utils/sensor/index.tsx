@@ -118,7 +118,7 @@ function calculateDewPoint(HEX:string) {
     return objResult;
 }
 // -----
-const getWISensorREADIng = () => {
+const getWISensorREADING = () => {
 
 }
 const get485SensorREADING = ({ID,TYPE,HEX,UNITSYSTEM,CTRATIO,OFFSET_Temp,OFFSET_RH,OFFSET_PRESS}: any) => {
@@ -163,4 +163,7 @@ const getFinalChildrenNODES = (node:any) =>  {
     return finalChildren;
 }
 
-export { getSensorUNIT, get485SensorREADING, getWISensorREADIng, getFinalChildrenNODES }
+export { getSensorUNIT as GetSensorUNIT, 
+         get485SensorREADING as Get485SensorREADING, 
+         getWISensorREADING as GetWISensorREADING, 
+         getFinalChildrenNODES as GetFINALChildrenNOES }

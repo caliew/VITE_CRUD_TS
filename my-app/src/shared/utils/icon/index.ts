@@ -67,4 +67,4 @@ import {
 }
 
 
-export { getIcon }
+export { getIcon as GetIcon }

@@ -12,6 +12,11 @@ import grid from './grid.png';
 import bg1 from './bg1.jpg';
 import brainwave from './brainwave.svg';
 
+import NHGLogo from './Payment/logo-nhg.svg';
+import NUHSLogo from './Payment/logo-nuhs.svg';
+import SHSLogo from './Payment/logo-shs.svg';
+
 export { benefitCard1, benefitCard2, benefitCard3, benefitCard4, benefitCard5, benefitCard6,
          benefitIcon1, benefitIcon2, benefitIcon3, benefitIcon4, 
+         NHGLogo, NUHSLogo, SHSLogo, 
          grid, bg1, brainwave }

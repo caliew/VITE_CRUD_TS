@@ -10,7 +10,7 @@ import {
   SimpleGauge,
   CarGauge
 } from "@shared/components";
-import { GetIcon } from "@shared/utils";
+import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,

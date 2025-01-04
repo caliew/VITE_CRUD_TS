@@ -5,14 +5,8 @@ import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import { Button, HeaderTitle, SunburstChart } from "@shared/components";
-import { GetIcon } from "@shared/utils";
-import {
-  PageClasses,
-  PageHeaderClasses,
-  ButtonLINKClasses,
-  PageContainClasses,
-  GridClasses,
-} from "@shared/utils/classname";
+import { GetIcon } from "@utils/icon";
+import { PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
 
 const SunburstPage = () => {
   const navigate = useNavigate();

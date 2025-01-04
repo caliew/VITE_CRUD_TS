@@ -1,4 +1,4 @@
-import { GetIcon } from "@shared/utils";
+import { GetIcon } from "@utils/icon";
 
 const PageNotFound = () => {
 

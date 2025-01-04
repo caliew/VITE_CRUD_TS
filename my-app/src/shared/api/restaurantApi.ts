@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GetJWTToken } from "../utils";
+import { GetJWTToken } from "@utils/index";
 
 const api = axios.create({
   baseURL: "http://202.59.9.164:3002",

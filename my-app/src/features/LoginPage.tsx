@@ -6,7 +6,7 @@ import { useErrorHandler } from "react-error-boundary";
 import { Formik, Form, Field } from "formik";
 
 import { Button, HeaderTitle } from "@shared/components";
-import { GetIcon } from "@shared/utils";
+import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,

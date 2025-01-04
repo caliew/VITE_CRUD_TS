@@ -1,7 +1,7 @@
 import React from 'react';
 import { FallbackProps } from 'react-error-boundary';
 
-import { GetIcon } from '@shared/utils';
+import { GetIcon } from '@utils/icon';
 import { ButtonLINKClasses } from "@shared/utils/classname";
 import { Button } from "@shared/components";
 

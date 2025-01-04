@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Inter';
+  src: url('shared/configs/theme/fonts/Inter-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('shared/configs/theme/fonts/Inter-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('shared/configs/theme/fonts/Inter-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('shared/configs/theme/fonts/Inter-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('shared/configs/theme/fonts/Inter-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('shared/configs/theme/fonts/NotoSansSC-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('shared/configs/theme/fonts/NotoSansSC-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('shared/configs/theme/fonts/NotoSansSC-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('shared/configs/theme/fonts/NotoSansSC-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Noto Sans SC';
+  src: url('shared/configs/theme/fonts/NotoSansSC-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@layer base {
+  body {
+    @apply font-sans !important;
+    @apply bg-functional-smoke !important;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  label,
+  span {
+    @apply text-functional-black;
+  }
+}
+
+.row {
+  display: block;
+  margin-bottom: 20px;
+}
+
+/***     Button Section     ***/
+.button {
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  padding: 10px 16px;
+  border: 1px solid #c0c0c0;
+  border-radius: 5px;
+}
+
+.button-primary {
+  background: #30515b;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+}
+
+.button-white {
+  color: #30515b;
+  border: 1px solid #30515b;
+  border-radius: 8px;
+  background-color: white;
+  font-weight: 600;
+}
+
+.card {
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  margin: 0 auto;
+  width: 100%;
+
+  .title {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: -0.25px;
+    color: #333333;
+    margin-bottom: 10px;
+    width: 90%;
+  }
+
+  .address,
+  .desc {
+    display: block;
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.25px;
+    color: #636366;
+    margin-bottom: 10px;
+  }
+
+  .desc {
+    margin: 15px 0;
+  }
+
+  .tel {
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.25px;
+    color: #007aaf;
+  }
+
+  .institution {
+    font-weight: 400;
+    font-size: 0.875rem;
+    letter-spacing: -0.25px;
+    color: #636366;
+  }
+
+  .note {
+    font-style: normal;
+    font-size: 0.875rem;
+    letter-spacing: -0.25px;
+    color: #404040;
+    display: block;
+    margin: 15px 0;
+  }
+
+  .note b {
+    font-weight: 600;
+    display: block;
+  }
+
+  .note:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.input {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px 16px;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+
+input::placeholder {
+  color: #636366 !important;
+}
+
+.ant-modal-content {
+  border-radius: 8px !important;
+}
+
+.ant-form-item-explain-error {
+  @apply text-error-color !important;
+}
+
+@layer base {
+  @import './themes/channelThemes/hh.less';
+  @import './themes/channelThemes/hb.less';
+  @import './themes/channelThemes/nma.less';
+}

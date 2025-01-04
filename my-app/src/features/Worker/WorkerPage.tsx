@@ -6,7 +6,8 @@ import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import { Button, HeaderTitle } from "@shared/components";
-import { GetIcon, GetJWTToken } from '@shared/utils';
+import { GetJWTToken } from "@utils/index";
+import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
@@ -15,8 +16,8 @@ import {
   GridClasses,
 } from "@shared/utils/classname";
 
-import { Worker } from "./Worker.types";
-import { fetchWorkers } from "@stores/features/workersSlice";
+import { Worker } from "./types/Worker.types";
+import { fetchWorkers } from "@features/Worker/stores/workerSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (
@@ -81,8 +82,18 @@ const WorkerPage = () => {
         </table>
       </div>
       <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
-        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
+          BACK TO HOME
+        </Button>
+        <Button
+          Icon={GetIcon("404")}
+          className={ButtonLINKClasses}
+          onClick={() => {
+            handleError(new Error("Simulated error"));
+          }}
+        >
+          SIMULATE ERROR
+        </Button>
       </div>
     </div>
   );

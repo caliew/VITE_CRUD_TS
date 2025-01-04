@@ -1,0 +1,1 @@
+export { enableConsoleLoggingForAllowedEnvironments } from './enableConsoleLoggingForAllowedEnvironments';
