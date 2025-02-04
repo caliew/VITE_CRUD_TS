@@ -58,7 +58,7 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({
             distance: 5,
             color: "#999",
             fontSize: 14,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             formatter: function (value) {
               return value.toFixed(0);
             },
@@ -68,7 +68,7 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({
           title: {
             color: "cyan",
             fontSize: 22,
-            fontFamily: "Roboto",
+            fontFamily: "Arial",
             fontWeight: 80,
             offsetCenter: [0, 60],
           },
@@ -79,7 +79,7 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({
             rich: {
               a: {
                 fontSize: 22,
-                fontFamily: "Roboto",
+                fontFamily: "Arial",
                 fontWeight: 80,
                 color: "#fff",
                 align: "center",
@@ -87,7 +87,7 @@ const SimpleGauge: React.FC<SimpleGaugeProp> = ({
               },
               b: {
                 fontSize: 13,
-                fontFamily: "Roboto",
+                fontFamily: "Arial",
                 fontWeight: 80,
                 color: "#fff",
                 padding: [0, 0, 10, 0],

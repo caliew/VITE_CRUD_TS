@@ -41,7 +41,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
           title: {
             fontSize: 16,
             fontWeight: 5,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             color: "#fff",
             offsetCenter: [0, "-40%"],
           },
@@ -72,7 +72,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
           axisLabel: {
             distance: 16,
             fontSize: 17,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             color: "white",
           },
           anchor: {},
@@ -92,7 +92,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
             color: "#fff",
             fontSize: 18,
             fontWeight: 100,
-            fontFamily: "Roboto",
+            fontFamily: "Arial",
             offsetCenter: [0, 20],
           },
           detail: { show: false },
@@ -145,7 +145,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
           axisLabel: {
             distance: 14,
             fontSize: 30,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             color: "cyan",
           },
           anchor: {},
@@ -165,7 +165,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
             color: "#fff",
             fontSize: 18,
             fontWeight: 80,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             offsetCenter: [0, "0%"],
           },
           data: [{ value: 4.6, name: "1/min x 1000" }],
@@ -188,7 +188,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
           title: {
             color: "cyan",
             fontSize: 28,
-            fontFamily: "Roboto",
+            fontFamily: "Arial",
             fontWeight: 80,
             offsetCenter: [0, 120],
           },
@@ -199,7 +199,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
               a: {
                 fontSize: 40,
                 fontWeight: 80,
-                fontFamily: "Roboto",
+                fontFamily: "Arial",
                 color: "#fff",
                 align: "center",
                 padding: [0, 5, 0, 0],
@@ -207,7 +207,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
               b: {
                 fontSize: 15,
                 fontWeight: 80,
-                fontFamily: "Roboto",
+                fontFamily: "Arial",
                 color: "#fff",
                 padding: [0, 0, 30, 0],
               },
@@ -238,22 +238,22 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
             offsetCenter: ["-25%", 0],
             formatter: [
               "{a|                   00:00}",
-              "{a|行驶时间       0:00}{b| h}",
-              "{a|行驶距离        0.0}{b| km}",
-              "{a|平均耗能        ---}{b| 1/100km}",
-              "{a|平均速度        ---}{b| km/h}",
+              "{a|TIME           0:00}{b| h}",
+              "{a|DIST           0.0}{b| km}",
+              "{a|CONSPT         ---}{b| 1/100km}",
+              "{a|AVG.SPEED      ---}{b| km/h}",
             ].join("\n"),
             rich: {
               a: {
                 fontSize: 14,
-                fontFamily: "Tahoma",
+                fontFamily: "Arial",
                 lineHeight: 22,
                 color: "#fff",
                 align: "left",
               },
               b: {
                 fontSize: 14,
-                fontFamily: "Tahoma",
+                fontFamily: "Arial",
                 lineHeight: 12,
                 color: "white",
                 align: "left",
@@ -296,7 +296,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
             distance: 12,
             fontSize: 18,
             fontWeight: 80,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             color: "#fff",
             formatter: function (value) {
               if (value === 0.5) {
@@ -325,10 +325,10 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
               a: {
                 fontSize: 15,
                 fontWeight: 80,
-                fontFamily: "Tahoma",
+                fontFamily: "Arial",
                 color: "#fff",
               },
-              b: { fontWeight: 60, fontFamily: "Tahoma", color: "#fff" },
+              b: { fontWeight: 60, fontFamily: "Arial", color: "#fff" },
             },
           },
           data: [{ value: 0.85, name: "" }],
@@ -367,7 +367,7 @@ const CarGauge: React.FC<CarGaugeProp> = ({ className, title }) => {
             distance: 14,
             fontSize: 18,
             fontWeight: 80,
-            fontFamily: "Tahoma",
+            fontFamily: "Arial",
             color: "#fff",
             formatter: function (value) {
               return -value + "";

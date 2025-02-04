@@ -205,8 +205,8 @@ const SunburstChart: React.FC<SunburstProp> = ({
 
     const option = {
       textStyle: {
-        fontFamily: "Roboto",
-        fontSize: 10,
+        fontFamily: "Tahoma",
+        fontSize: 8,
         fontWeight: 100,
         color: "#FFFFFF",
       },
@@ -219,9 +219,9 @@ const SunburstChart: React.FC<SunburstProp> = ({
           data: convData ?? dataMock,
           label: {
             rotate: 0,
-            fontSize: 12,
-            fontFamily: "Roboto",
-            fontWeight: 300,
+            fontSize: 10,
+            fontFamily: "Tahoma",
+            fontWeight: 200,
             color: "#000000",
           },
           levels: [{}],
