@@ -1,0 +1,198 @@
+{
+  "operation": {
+    "id": "OP-2023-0425",
+    "name": "Laparoscopic Cholecystectomy",
+    "patient": {
+      "id": "PT-78910",
+      "name": "John Smith",
+      "age": 45,
+      "gender": "male",
+      "medicalRecordNumber": "MRN-123456"
+    },
+    "scheduledStart": "2023-11-15T08:00:00",
+    "estimatedDuration": 120, // minutes
+    "location": "Operating Room 3",
+    "priority": "high"
+  },
+
+  "teams": [
+    {
+      "id": "TEAM-1",
+      "name": "Surgical Team",
+      "members": [
+        {
+          "id": "DR-101",
+          "name": "Dr. Sarah Johnson",
+          "role": "Surgeon",
+          "specialty": "General Surgery",
+          "startTime": "2023-11-15T07:30:00",
+          "endTime": "2023-11-15T10:30:00"
+        },
+        {
+          "id": "DR-102",
+          "name": "Dr. Michael Chen",
+          "role": "Assistant Surgeon",
+          "specialty": "General Surgery",
+          "startTime": "2023-11-15T07:45:00",
+          "endTime": "2023-11-15T10:15:00"
+        },
+        {
+          "id": "NURSE-201",
+          "name": "Emily Rodriguez",
+          "role": "Scrub Nurse",
+          "startTime": "2023-11-15T07:30:00",
+          "endTime": "2023-11-15T10:30:00"
+        }
+      ]
+    },
+    {
+      "id": "TEAM-2",
+      "name": "Anesthesia Team",
+      "members": [
+        {
+          "id": "DR-301",
+          "name": "Dr. Robert Kim",
+          "role": "Anesthesiologist",
+          "specialty": "Anesthesia",
+          "startTime": "2023-11-15T07:45:00",
+          "endTime": "2023-11-15T10:00:00"
+        },
+        {
+          "id": "NURSE-302",
+          "name": "David Wilson",
+          "role": "Anesthesia Technician",
+          "startTime": "2023-11-15T07:30:00",
+          "endTime": "2023-11-15T10:15:00"
+        }
+      ]
+    }
+  ],
+
+  "resources": [
+    {
+      "id": "EQUIP-001",
+      "name": "Laparoscopy Tower",
+      "type": "Equipment",
+      "requiredFrom": "2023-11-15T07:00:00",
+      "requiredUntil": "2023-11-15T11:00:00",
+      "status": "reserved"
+    },
+    {
+      "id": "EQUIP-002",
+      "name": "Electrosurgical Unit",
+      "type": "Equipment",
+      "requiredFrom": "2023-11-15T07:30:00",
+      "requiredUntil": "2023-11-15T10:30:00",
+      "status": "confirmed"
+    },
+    {
+      "id": "MED-101",
+      "name": "Propofol 200mg",
+      "type": "Medication",
+      "quantity": 2,
+      "status": "prepared"
+    }
+  ],
+
+  "schedule": {
+    "phases": [
+      {
+        "id": "PH-1",
+        "name": "Pre-Op Preparation",
+        "start": "2023-11-15T07:30:00",
+        "end": "2023-11-15T08:00:00",
+        "tasks": [
+          {
+            "id": "TASK-101",
+            "name": "Patient Check-in",
+            "assignedTo": ["NURSE-201"],
+            "duration": 15,
+            "status": "scheduled"
+          },
+          {
+            "id": "TASK-102",
+            "name": "Anesthesia Assessment",
+            "assignedTo": ["DR-301", "NURSE-302"],
+            "duration": 20,
+            "status": "scheduled"
+          }
+        ]
+      },
+      {
+        "id": "PH-2",
+        "name": "Surgical Procedure",
+        "start": "2023-11-15T08:00:00",
+        "end": "2023-11-15T09:45:00",
+        "tasks": [
+          {
+            "id": "TASK-201",
+            "name": "Anesthesia Induction",
+            "assignedTo": ["DR-301"],
+            "duration": 15,
+            "status": "scheduled",
+            "dependencies": ["TASK-102"]
+          },
+          {
+            "id": "TASK-202",
+            "name": "Surgical Incision",
+            "assignedTo": ["DR-101", "DR-102"],
+            "duration": 10,
+            "status": "scheduled",
+            "dependencies": ["TASK-201"]
+          }
+        ]
+      },
+      {
+        "id": "PH-3",
+        "name": "Post-Op Recovery",
+        "start": "2023-11-15T09:45:00",
+        "end": "2023-11-15T10:30:00",
+        "tasks": [
+          {
+            "id": "TASK-301",
+            "name": "Anesthesia Reversal",
+            "assignedTo": ["DR-301"],
+            "duration": 10,
+            "status": "scheduled"
+          },
+          {
+            "id": "TASK-302",
+            "name": "Patient Transfer to PACU",
+            "assignedTo": ["NURSE-201", "NURSE-302"],
+            "duration": 15,
+            "status": "scheduled",
+            "dependencies": ["TASK-301"]
+          }
+        ]
+      }
+    ],
+
+    "dependencies": [
+      {
+        "from": "PH-1",
+        "to": "PH-2",
+        "type": "finish-to-start"
+      },
+      {
+        "from": "PH-2",
+        "to": "PH-3",
+        "type": "finish-to-start"
+      }
+    ]
+  },
+
+  "constraints": [
+    {
+      "type": "resource",
+      "resourceId": "EQUIP-001",
+      "required": true,
+      "window": ["07:00", "11:00"]
+    },
+    {
+      "type": "personnel",
+      "role": "Surgeon",
+      "required": true,
+      "minDuration": 90
+    }
+  ]
+}

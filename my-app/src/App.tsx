@@ -1,26 +1,38 @@
-import dayjs from 'dayjs';
-import isBetween from 'dayjs/plugin/isBetween';
-import isToday from 'dayjs/plugin/isToday';
-import localeData from 'dayjs/plugin/localeData';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
-import weekday from 'dayjs/plugin/weekday';
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+import isToday from "dayjs/plugin/isToday";
+import localeData from "dayjs/plugin/localeData";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+import weekday from "dayjs/plugin/weekday";
 
-import { Suspense } from 'react';
+import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Routes, Route } from "react-router-dom";
 
-import { PageNotFound, LoginPage, MainPage, 
-  IOTPortalPage, SPKAPortalPage, RestaurantPage,
-  WorkerPage, SiteMapPage, SunburstPage, GaugePage,
-  CalendarPage, ChartingPage, ErrorFallback
+import {
+  PageNotFound,
+  LoginPage,
+  MainPage,
+  SchedulerPage,
+  IOTPortalPage,
+  SPKAPortalPage,
+  RestaurantPage,
+  WorkerPage,
+  SiteMapPage,
+  SunburstPage,
+  GaugePage,
+  CalendarPage,
+  ChartingPage,
+  PhotoAlbumPage,
+  ErrorFallback,
 } from "@features/index";
 
 import { RoutesClasses } from "@shared/utils/classname";
-import { HeaderBar, Footer} from "@shared/components";
-import { SideBar } from '@shared/components/SideBar'
+import { HeaderBar, Footer } from "@shared/components";
+import { SideBar } from "@shared/components/SideBar";
 import ButtonGradient from "@assets/svg/ButtonGradient";
-import SectionSvg from '@shared/assets/svg/SectionSvg';
+import SectionSvg from "@shared/assets/svg/SectionSvg";
 
 dayjs.extend(utc);
 dayjs.extend(weekday);
@@ -30,28 +42,29 @@ dayjs.extend(isToday);
 dayjs.extend(isBetween);
 
 const App = () => {
-
   const handleReset = () => {
-    console.log('Error boundary reset triggered.');
+    console.log("Error boundary reset triggered.");
     window.location.reload(); // Example: Reload the page
   };
 
   return (
-    <div className="mx-auto h-full p-4 shadow-2xl shadow-indigo-50 hover:shadow-lime-500/50">\
+    <div className="mx-auto h-full p-4 shadow-2xl shadow-indigo-50 hover:shadow-lime-500/50">
       <HeaderBar />
       <SideBar />
-      <ErrorBoundary 
+      <ErrorBoundary
         FallbackComponent={ErrorFallback}
         onReset={handleReset}
         onError={(error, info) => {
-          console.error('Logging error:', error);
-          console.info('Error info:', info);
-        }}>
+          console.error("Logging error:", error);
+          console.info("Error info:", info);
+        }}
+      >
         <Suspense fallback={null}>
           <div className={RoutesClasses}>
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/Scheduler" element={<SchedulerPage />} />
               <Route path="/IOTPortals" element={<IOTPortalPage />} />
               <Route path="/SPKAPortals" element={<SPKAPortalPage />} />
               <Route path="/sitemap" element={<SiteMapPage />} />
@@ -61,6 +74,7 @@ const App = () => {
               <Route path="/restaurants" element={<RestaurantPage />} />
               <Route path="/sunburst" element={<SunburstPage />} />
               <Route path="/workers" element={<WorkerPage />} />
+              <Route path="/slideshow" element={<PhotoAlbumPage />} />
               <Route path="*" element={<PageNotFound />} />
             </Routes>
           </div>

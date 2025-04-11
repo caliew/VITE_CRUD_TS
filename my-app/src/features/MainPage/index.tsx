@@ -30,7 +30,7 @@ const HomePage = () => {
     }
   }, []);
 
-  const GetAppTitle = () => `${APP_NAME}`
+  const GetAppTitle = () => `${APP_NAME}`;
 
   return (
     <div className={PageClasses}>
@@ -45,6 +45,13 @@ const HomePage = () => {
         <div className="flex flex-col mt-5">
           <Button Icon={GetIcon("")} className={ButtonClasses}>
             FEATURES
+          </Button>
+          <Button
+            Icon={GetIcon("Scheduler")}
+            className={ButtonLINKClasses}
+            to="/Scheduler"
+          >
+            SCHEDULER
           </Button>
           <Button
             Icon={GetIcon("IOTPortal")}

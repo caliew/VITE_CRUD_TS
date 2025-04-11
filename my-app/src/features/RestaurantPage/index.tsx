@@ -8,10 +8,16 @@ import { grid } from "@assets/index";
 import { Button, HeaderTitle } from "@shared/components";
 import { GetJWTToken } from "@utils/index";
 import { GetIcon } from "@utils/icon";
-import { PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
+import {
+  PageClasses,
+  PageHeaderClasses,
+  ButtonLINKClasses,
+  PageContainClasses,
+  GridClasses,
+} from "@shared/utils/classname";
 
 import { Restaurant } from "./types/restaurant.types";
-import { fetchRestaurants } from "@features/Restaurant/stores/restaurantSlice";
+import { fetchRestaurants } from "@features/RestaurantPage/stores/restaurantSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (
@@ -61,7 +67,7 @@ const RestaurantPage = () => {
   return (
     <div className={PageClasses}>
       <HeaderTitle
-        Icon={GetIcon("restaurants")}
+        Icon={GetIcon("Restaurants")}
         className={PageHeaderClasses}
         title="RESTAURANTS"
       />

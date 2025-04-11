@@ -1,7 +1,7 @@
 // my-app/src/components/Sidebar.tsx
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { GetIcon } from '@utils/icon'
+import { GetIcon } from "@utils/icon";
 import { SidebarClasses } from "@shared/utils/classname";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -9,17 +9,18 @@ const SideBar = () => {
   const { token, error } = useSelector((state) => state.auth);
   const spanClasses = "relative z-10 px-2";
 
-  const HomeIcon = GetIcon("home");
+  const HomeIcon = GetIcon("Home");
   const IOTIcon = GetIcon("IOTPortal");
   const SPKAIcon = GetIcon("SPKAPortal");
   const MapPinHouseIcon = GetIcon("MapPinHouse");
   const ChartingIcon = GetIcon("ChartSpline");
   const GaugeIcon = GetIcon("Gauge");
   const CalendarIcon = GetIcon("Calendar");
-  const RestaurantIcon = GetIcon("restaurants");
   const RainbowIcon = GetIcon("Sunburst");
-  const WorkerIcon = GetIcon("workers");
-  const LogoutIcon = GetIcon("logout");
+  const RestaurantIcon = GetIcon("Restaurants");
+  const WorkerIcon = GetIcon("Workers");
+  const PhotoAlbumIcon = GetIcon("PhotoAlbum");
+  const LogoutIcon = GetIcon("Logout");
 
   useEffect(() => {}, []);
 
@@ -28,34 +29,59 @@ const SideBar = () => {
     return (
       <>
         <Link to="/" className="px-2 flex hover:text-rose-500">
-          <HomeIcon /><span className={spanClasses} />HOME
+          <HomeIcon />
+          <span className={spanClasses} />
+          HOME
         </Link>
         <Link to="/IOTPortals" className="px-2 flex hover:text-rose-500">
-          <IOTIcon /><span className={spanClasses} />IOT PORTAL
+          <IOTIcon />
+          <span className={spanClasses} />
+          IOT PORTAL
         </Link>
         <Link to="/SPKAPortals" className="px-2 flex hover:text-rose-500">
-          <SPKAIcon /><span className={spanClasses} />SPKA PORTAL
+          <SPKAIcon />
+          <span className={spanClasses} />
+          SPKA PORTAL
         </Link>
         <Link to="/sitemap" className="px-2 flex hover:text-rose-500">
-          <MapPinHouseIcon /><span className={spanClasses} />SITE MAP
+          <MapPinHouseIcon />
+          <span className={spanClasses} />
+          SITE MAP
         </Link>
         <Link to="/charting" className="px-2 flex hover:text-rose-500">
-          <ChartingIcon /><span className={spanClasses} />CHARTING
+          <ChartingIcon />
+          <span className={spanClasses} />
+          CHARTING
         </Link>
         <Link to="/gauge" className="px-2 flex hover:text-rose-500">
-          <GaugeIcon /><span className={spanClasses} />GAUGE
+          <GaugeIcon />
+          <span className={spanClasses} />
+          GAUGE
         </Link>
         <Link to="/calendar" className="px-2 flex hover:text-rose-500">
-          <CalendarIcon /><span className={spanClasses} />CALENDAR
+          <CalendarIcon />
+          <span className={spanClasses} />
+          CALENDAR
         </Link>
         <Link to="/Sunburst" className="px-2 flex hover:text-rose-500">
-          <RainbowIcon /><span className={spanClasses} />SUNBURST
+          <RainbowIcon />
+          <span className={spanClasses} />
+          SUNBURST
         </Link>
         <Link to="/restaurants" className="px-2 flex">
-          <RestaurantIcon /><span className={spanClasses}/>RESTAURANTS
+          <RestaurantIcon />
+          <span className={spanClasses} />
+          RESTAURANTS
         </Link>
         <Link to="/workers" className="px-2 flex">
-          <WorkerIcon /><span className={spanClasses}/>WORKERS
+          <WorkerIcon />
+          <span className={spanClasses} />
+          WORKERS
+        </Link>
+        <Link to="/slideshow" className="px-2 flex">
+          <PhotoAlbumIcon />
+          <span className={spanClasses} />
+          SLIDEHOW
         </Link>
       </>
     );

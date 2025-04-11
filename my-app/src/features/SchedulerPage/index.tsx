@@ -16,8 +16,8 @@ import {
   GridClasses,
 } from "@shared/utils/classname";
 
-import { Worker } from "./types/Worker.types";
-import { fetchWorkers } from "@features/Worker/stores/workerSlice";
+import { Schedule } from "./types/scheduler.types";
+import { fetchWorkers } from "@features/WorkerPage/stores/workerSlice";
 
 const TableHeaders = ({ className }: any) => {
   return (
@@ -31,7 +31,7 @@ const TableHeaders = ({ className }: any) => {
   );
 };
 
-const TableRowComponent = ({ worker }: { worker: Worker }) => {
+const TableRowComponent = ({ worker }: { worker: Schedule }) => {
   return (
     <tr key={worker.id}>
       <td>{worker.id}</td>
@@ -41,7 +41,7 @@ const TableRowComponent = ({ worker }: { worker: Worker }) => {
   );
 };
 
-const WorkerPage = () => {
+const SchedulerPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleError = useErrorHandler();
@@ -65,9 +65,9 @@ const WorkerPage = () => {
   return (
     <div className={PageClasses}>
       <HeaderTitle
-        Icon={GetIcon("workers")}
+        Icon={GetIcon("Scheduler")}
         className={PageHeaderClasses}
-        title="WORKERS"
+        title="SCHED0ULER - OPERATIONAL TASKS"
       />
       <div className={PageContainClasses}>
         <img className={GridClasses} src={grid} alt="Grid" />
@@ -99,4 +99,4 @@ const WorkerPage = () => {
   );
 };
 
-export default WorkerPage;
+export default SchedulerPage;

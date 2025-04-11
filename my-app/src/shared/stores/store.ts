@@ -1,14 +1,22 @@
 import { configureStore, Middleware } from "@reduxjs/toolkit";
-import { FLUSH, PAUSE, PERSIST, PURGE, REGISTER, REHYDRATE, persistStore } from "redux-persist";
-import { baseApi } from '@shared/utils/api/configs/rtkBaseQueryDemo';
+import {
+  FLUSH,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+  REHYDRATE,
+  persistStore,
+} from "redux-persist";
+import { baseApi } from "@shared/utils/api/configs/rtkBaseQueryDemo";
 
 import authReducer from "./features/authSlice";
-import workersReducer from "@features/Worker/stores/workerSlice";
-import restaurantsReducer from "@features/Restaurant/stores/restaurantSlice";
+import workersReducer from "@features/WorkerPage/stores/workerSlice";
+import restaurantsReducer from "@features/RestaurantPage/stores/restaurantSlice";
 import iotPortalReducer from "@features/IOTPortal/stores/iotPortalSlice";
 
-import { persistedReducer } from './rootReducer';
-import rtkQueryMiddlewares from './rtkQueryMiddlewares';
+import { persistedReducer } from "./rootReducer";
+import rtkQueryMiddlewares from "./rtkQueryMiddlewares";
 
 const middlewares: Middleware[] = [baseApi.middleware];
 
@@ -24,7 +32,7 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    })
+    }),
 });
 
 export const persistor = persistStore(store);

@@ -4,6 +4,7 @@ import { setAccessCode } from "./auth";
 import { SetJWTToken, RemoveJWTToken } from "../utils/index";
 
 const api = axios.create({
+  // baseURL: "http://localhost:3002/api",
   baseURL: "http://202.59.9.164:3002/api",
   headers: { "Content-Type": "application/json" },
   validateStatus: (status) => status >= 200 && status < 600, // Don't throw an error for status codes 200-599
@@ -11,7 +12,9 @@ const api = axios.create({
 
 const loginApi = async (values: any) => {
   try {
+    console.log(values);
     const response = await api.post("/auth/login", values);
+    console.log(response);
     if (response.status === 200) {
       SetJWTToken(response.data.token);
       setAccessCode(response.data.accessCode);
