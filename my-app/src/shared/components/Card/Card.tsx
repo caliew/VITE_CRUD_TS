@@ -1,6 +1,5 @@
-import { GetSensorUNIT } from "@utils/sensor";
 import { GetIcon } from "@utils/icon";
-import { GetLEDDisplay } from "@utils/led";
+import { LED, SENSOR } from "@shared/utils";
 import {
   CardClasses,
   CardHeaderClasses,
@@ -70,14 +69,14 @@ const Card = ({
           {RsltKEY.map((key, index) => (
             <div key={index} className="flex justify-center items-center">
               <div className="px-2">{key}</div>
-              {GetLEDDisplay({
+              {LED.GetLEDDisplay({
                 id: sensorId,
                 reading: reading[key],
                 sensorType,
               })}
               <span className="px-1" />
               <div className="font-extralight pb-10">
-                {GetSensorUNIT(sensorType, key, unitSystem)}
+                {SENSOR.GetSensorUNIT(sensorType, key, unitSystem)}
               </div>
             </div>
           ))}
@@ -90,7 +89,7 @@ const Card = ({
                 name={name}
                 min={0}
                 max={100}
-                unit={GetSensorUNIT(sensorType, unitSystem)}
+                unit={SENSOR.GetSensorUNIT(sensorType, unitSystem)}
               />
             ))}
         </div>

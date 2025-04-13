@@ -7,7 +7,7 @@ import {
   getWorkersByRestaurantId,
 } from "@shared/api";
 
-import { Worker } from "../types/scheduler.types";
+import { Worker } from "../types/cpa.types";
 
 interface WorkersState {
   workers: any[];

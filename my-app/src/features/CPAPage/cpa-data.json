@@ -1,0 +1,10 @@
+[
+  { "id": "A", "name": "Task A", "duration": 5, "dependencies": [] },
+  { "id": "B", "name": "Task B", "duration": 3, "dependencies": ["A"] },
+  { "id": "C", "name": "Task C", "duration": 2, "dependencies": ["B"] },
+  { "id": "D", "name": "Task D", "duration": 4, "dependencies": ["C"] },
+  { "id": "E", "name": "Task E", "duration": 6, "dependencies": ["A"] },
+  { "id": "F", "name": "Task F", "duration": 3, "dependencies": ["E"] },
+  { "id": "G", "name": "Task G", "duration": 2, "dependencies": ["F"] },
+  { "id": "H", "name": "Task H", "duration": 4, "dependencies": ["G"] }
+]

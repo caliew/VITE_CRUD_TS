@@ -1,5 +1,4 @@
 import { LEDDisplay } from "../../components";
-import { GetSensorUNIT } from "..";
 
 const getLEDDisplay = ({ reading }: any) => {
   // ------------------
