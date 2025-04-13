@@ -1,16 +1,19 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle, Card, SunburstChart } from "@shared/components";
-import { GetIcon } from '@utils/icon';
+import {
+  HeaderTitle,
+  Card,
+  SunburstChart,
+  PageAction,
+} from "@shared/components";
+import { GetIcon } from "@utils/icon";
 import { Get485SensorREADING, GetFINALChildrenNOES } from "@utils/sensor";
 import {
   PageClasses,
   PageHeaderClasses,
   IOTSensorsClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
@@ -21,7 +24,6 @@ const IOTPortalPage = () => {
   const dispatch = useDispatch();
   const iotPortal = useSelector((state: any) => state.iotPortal.iotPortal);
   const isLoading = useSelector((state: any) => state.iotPortal.isLoading);
-  const handleError = useErrorHandler();
 
   const LoadingIcon = GetIcon("Loading");
 
@@ -30,6 +32,10 @@ const IOTPortalPage = () => {
   // ----------------------------------------------------
   const [selIOTSensors, setSelIOTSensors] = useState(null);
   const [groupIOTSensors, setGroupIOTSensorData] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchIOTPortal());
@@ -173,20 +179,8 @@ const IOTPortalPage = () => {
             })}
         </div>
       </div>
-      <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          BACK TO HOME
-        </Button>
-        <Button
-          Icon={GetIcon("404")}
-          className={ButtonLINKClasses}
-          onClick={() => {
-            handleError(new Error("Simulated error"));
-          }}
-        >
-          SIMULATE ERROR
-        </Button>
-      </div>
+
+      <PageAction />
     </div>
   );
 };

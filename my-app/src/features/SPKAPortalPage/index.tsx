@@ -1,14 +1,27 @@
 // my-app/src/components/HomePage.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { HeaderTitle, Clock, Button, MapBox, LineChart, MapChart, SunburstChart, BarChart } from "@shared/components";
+import {
+  HeaderTitle,
+  Clock,
+  MapBox,
+  LineChart,
+  MapChart,
+  SunburstChart,
+  BarChart,
+  PageAction,
+} from "@shared/components";
 import { GetJWTToken } from "@utils/index";
 import { GetIcon } from "@utils/icon";
 
-import { ButtonLINKClasses, SPKAPageClasses, PageHeaderClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
+import {
+  SPKAPageClasses,
+  PageHeaderClasses,
+  PageContainClasses,
+  GridClasses,
+} from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",
@@ -39,9 +52,9 @@ const geojson = {
 
 const SPKAPortalPage = () => {
   const navigate = useNavigate();
-  const handleError = useErrorHandler();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const token = GetJWTToken();
     if (!token) {
       navigate("/404", {
@@ -114,11 +127,9 @@ const SPKAPortalPage = () => {
             />
           </div>
         </div>
-        <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
-        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
-        </div>
       </div>
+
+      <PageAction />
     </div>
   );
 };

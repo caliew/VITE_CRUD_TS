@@ -1,29 +1,21 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import {
-  Button,
   HeaderTitle,
   SimpleGauge,
-  CarGauge
+  CarGauge,
+  PageAction,
 } from "@shared/components";
 import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
 
 const GaugePage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const handleError = useErrorHandler();
-
   useEffect(() => {}, []);
 
   return (
@@ -57,10 +49,8 @@ const GaugePage = () => {
           <CarGauge className="" title="CUSTOMED GAUGE" />
         </div>
       </div>
-      <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
-        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
-      </div>
+
+      <PageAction />
     </div>
   );
 };

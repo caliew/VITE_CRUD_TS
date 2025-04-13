@@ -1,7 +1,6 @@
 // my-app/src/components/HomePage.tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useErrorHandler } from "react-error-boundary";
 import { APP_NAME } from "@shared/utils/api/configs/URL";
 import { grid } from "@assets/index";
 import { Button, HeaderTitle, Clock } from "@shared/components";
@@ -18,9 +17,9 @@ import {
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const handleError = useErrorHandler();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     const token = GetJWTToken();
     if (!token) {
       navigate("/404", {
@@ -49,9 +48,9 @@ const HomePage = () => {
           <Button
             Icon={GetIcon("Scheduler")}
             className={ButtonLINKClasses}
-            to="/Scheduler"
+            to="/CPA"
           >
-            SCHEDULER
+            CRITICAL PATH ANALYSIS
           </Button>
           <Button
             Icon={GetIcon("IOTPortal")}

@@ -14,7 +14,7 @@ import {
   PageNotFound,
   LoginPage,
   MainPage,
-  SchedulerPage,
+  CPAPage,
   IOTPortalPage,
   SPKAPortalPage,
   RestaurantPage,
@@ -64,7 +64,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/Scheduler" element={<SchedulerPage />} />
+              <Route path="/CPA" element={<CPAPage />} />
               <Route path="/IOTPortals" element={<IOTPortalPage />} />
               <Route path="/SPKAPortals" element={<SPKAPortalPage />} />
               <Route path="/sitemap" element={<SiteMapPage />} />

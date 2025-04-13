@@ -1,12 +1,20 @@
-import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
+import { useEffect } from "react";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle, MapBox, MapChart, TiltedImage } from "@shared/components";
+import {
+  HeaderTitle,
+  MapBox,
+  MapChart,
+  TiltedImage,
+  PageAction,
+} from "@shared/components";
 import { GetIcon } from "@utils/icon";
-import { PageClasses, PageHeaderClasses, ButtonLINKClasses, PageContainClasses, GridClasses } from "@shared/utils/classname";
+import {
+  PageClasses,
+  PageHeaderClasses,
+  PageContainClasses,
+  GridClasses,
+} from "@shared/utils/classname";
 
 const geojson = {
   type: "geojson",
@@ -36,11 +44,9 @@ const geojson = {
 };
 
 const SiteMapPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const handleError = useErrorHandler();
-
-  useEffect(() => {}, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // absolute top-0 left-0 w-full max-w-full bg-blend-luminosity
   return (
@@ -71,10 +77,8 @@ const SiteMapPage = () => {
           </div>
         </div>
       </div>
-      <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">BACK TO HOME</Button>
-        <Button Icon={GetIcon("404")} className={ButtonLINKClasses} onClick={() => { handleError(new Error('Simulated error')) }}>SIMULATE ERROR</Button>
-      </div>
+
+      <PageAction />
     </div>
   );
 };

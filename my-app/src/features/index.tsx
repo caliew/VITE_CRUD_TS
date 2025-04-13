@@ -3,7 +3,7 @@ import ErrorFallback from "./ErrorFallback";
 import PageNotFound from "./PageNotFound";
 import IOTPortalPage from "./IOTPortal/IOTPortalPage";
 import SPKAPortalPage from "./SPKAPortalPage";
-import SchedulerPage from "./SchedulerPage";
+import CPAPage from "./CPAPage";
 import RestaurantPage from "./RestaurantPage";
 import WorkerPage from "./WorkerPage";
 import SiteMapPage from "./SiteMapPage";
@@ -18,7 +18,7 @@ export {
   PageNotFound,
   MainPage,
   LoginPage,
-  SchedulerPage,
+  CPAPage,
   ChartingPage,
   SiteMapPage,
   IOTPortalPage,

@@ -2,16 +2,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle } from "@shared/components";
+import { HeaderTitle, PageAction } from "@shared/components";
 import { GetJWTToken } from "@utils/index";
 import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
@@ -41,12 +39,15 @@ const TableRowComponent = ({ worker }: { worker: Schedule }) => {
   );
 };
 
-const SchedulerPage = () => {
+const CPAPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleError = useErrorHandler();
 
   const workers = useSelector((state: any) => state.workers.workers);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
 
   useEffect(() => {
     const token = GetJWTToken();
@@ -81,22 +82,10 @@ const SchedulerPage = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          BACK TO HOME
-        </Button>
-        <Button
-          Icon={GetIcon("404")}
-          className={ButtonLINKClasses}
-          onClick={() => {
-            handleError(new Error("Simulated error"));
-          }}
-        >
-          SIMULATE ERROR
-        </Button>
-      </div>
+
+      <PageAction />
     </div>
   );
 };
 
-export default SchedulerPage;
+export default CPAPage;

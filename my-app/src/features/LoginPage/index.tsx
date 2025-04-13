@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
 
 import { Formik, Form, Field } from "formik";
 
@@ -18,7 +17,6 @@ import { login, logout } from "@shared/stores/features/authSlice";
 const LoginPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleError = useErrorHandler();
 
   const { token, error } = useSelector((state) => state.auth);
 

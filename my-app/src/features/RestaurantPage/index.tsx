@@ -2,16 +2,14 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle } from "@shared/components";
+import { HeaderTitle, PageAction } from "@shared/components";
 import { GetJWTToken } from "@utils/index";
 import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
@@ -44,7 +42,6 @@ const TableRowComponent = ({ restaurant }: { restaurant: Restaurant }) => {
 const RestaurantPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleError = useErrorHandler();
 
   const restaurants = useSelector(
     (state: any) => state.restaurants.restaurants
@@ -83,20 +80,8 @@ const RestaurantPage = () => {
           </tbody>
         </table>
       </div>
-      <div className="mt-15 flex flex-wrap flex-col">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          BACK TO HOME
-        </Button>
-        <Button
-          Icon={GetIcon("404")}
-          className={ButtonLINKClasses}
-          onClick={() => {
-            handleError(new Error("Simulated error"));
-          }}
-        >
-          SIMULATE ERROR
-        </Button>
-      </div>
+
+      <PageAction />
     </div>
   );
 };
