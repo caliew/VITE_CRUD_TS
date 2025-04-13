@@ -92,22 +92,11 @@ class CPA {
         this.dfs(successorNode, visited, stack);
       }
     });
-
     stack.push({ ...node, est: this.est[node.id] });
   }
-
   // Get the critical path
   getCriticalPath() {
     return this.criticalPath;
-  }
-  getGraphEST() {
-    return this.est;
-  }
-  getGraphLST() {
-    return this.lst;
-  }
-  getGraphSLACK() {
-    return this.slack;
   }
 }
 
@@ -130,8 +119,6 @@ const TableCPAHeaders = ({ className }: any) => {
         <th className={className}>ID</th>
         <th className={className}>ACTIVITY</th>
         <th className={className}>EST</th>
-        <th className={className}>LST</th>
-        <th className={className}>SLACK</th>
       </tr>
     </thead>
   );
@@ -151,8 +138,8 @@ const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
   return (
     <tr key={activity.id}>
       <td>{activity.id}</td>
-      <td>{activity.name}</td>
-      <td>{activity.est}</td>
+      <td className="text-center">{activity.name}</td>
+      <td className="text-center">{activity.est}</td>
     </tr>
   );
 };
@@ -181,13 +168,8 @@ const CPAPage = () => {
     cpa.analyze();
     // Get the critical path
     const criticalPath = cpa.getCriticalPath();
-    const EST = cpa.getGraphEST();
-    const LST = cpa.getGraphLST();
-    const SLACK = cpa.getGraphSLACK();
     setGraphNode(cpa.graph);
     setCriticalPath(criticalPath);
-    console.log(criticalPath);
-    console.log(EST, LST, SLACK);
   }, [data]);
 
   return (
