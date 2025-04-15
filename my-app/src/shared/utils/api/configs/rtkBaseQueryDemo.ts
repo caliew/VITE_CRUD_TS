@@ -1,19 +1,19 @@
-import { SerializedError } from '@reduxjs/toolkit';
-import { BaseQueryFn } from '@reduxjs/toolkit/dist/query';
-import { EndpointBuilder } from '@reduxjs/toolkit/dist/query';
-import { createApi } from '@reduxjs/toolkit/query/react';
-import axios, { AxiosRequestConfig } from 'axios';
-import { REHYDRATE } from 'redux-persist';
+import { SerializedError } from "@reduxjs/toolkit";
+import { BaseQueryFn } from "@reduxjs/toolkit/dist/query";
+import { EndpointBuilder } from "@reduxjs/toolkit/dist/query";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import axios, { AxiosRequestConfig } from "axios";
+import { REHYDRATE } from "redux-persist";
 
-import { getRequestOptions } from '@shared/utils/api/configs/requestOption';
-import { parseResponse } from '@shared/utils/api/handlers/parseResponse/parseResponse';
+import { getRequestOptions } from "@shared/utils/api/configs/requestOption";
+import { parseResponse } from "@shared/utils/api/handlers/parseResponse/parseResponse";
 
 export interface BaseQueryFnArgument {
   isErrMsgConcatErrCode?: boolean;
   url: string;
-  method: AxiosRequestConfig['method'];
-  data?: AxiosRequestConfig['data'];
-  params?: AxiosRequestConfig['params'];
+  method: AxiosRequestConfig["method"];
+  data?: AxiosRequestConfig["data"];
+  params?: AxiosRequestConfig["params"];
 }
 
 export type BuilderType<T extends string = string> = EndpointBuilder<
@@ -29,7 +29,12 @@ interface AxiosBaseQuery {
 const axiosBaseQueryDemo =
   ({
     isIncludedClientMessageId,
-  }: AxiosBaseQuery): BaseQueryFn<BaseQueryFnArgument, unknown, SerializedError, unknown> =>
+  }: AxiosBaseQuery): BaseQueryFn<
+    BaseQueryFnArgument,
+    unknown,
+    SerializedError,
+    unknown
+  > =>
   async ({ data, isErrMsgConcatErrCode, method, params, url }) => {
     try {
       const response = await axios({
@@ -45,21 +50,21 @@ const axiosBaseQueryDemo =
       return {
         error: {
           message: (error as Error).message,
-          code: '',
+          code: "",
         },
       };
     }
   };
 
 export const baseApi = createApi({
-  reducerPath: 'baseApi',
+  reducerPath: "baseApi",
   refetchOnMountOrArgChange: 600,
   baseQuery: axiosBaseQueryDemo({
     isIncludedClientMessageId: true,
   }),
   extractRehydrationInfo: (action, { reducerPath }) => {
     if (action.type === REHYDRATE) {
-      return action.payload?.[reducerPath];
+      return (action.payload as { [key: string]: any })?.[reducerPath];
     }
     return undefined;
   },

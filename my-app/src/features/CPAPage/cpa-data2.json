@@ -1,0 +1,87 @@
+{
+  "activity": [
+    {
+      "id": "A",
+      "name": "Pre-op Admission",
+      "duration": 1,
+      "dependencies": [],
+      "resources": ["R1"]
+    },
+    {
+      "id": "B",
+      "name": "Pre-op Evaluation",
+      "duration": 2,
+      "dependencies": ["A"],
+      "resources": ["R2"]
+    },
+    {
+      "id": "C1",
+      "name": "Blood Test",
+      "duration": 1,
+      "dependencies": ["B"],
+      "resources": ["R3"]
+    },
+    {
+      "id": "C2",
+      "name": "ECG",
+      "duration": 1,
+      "dependencies": ["B"],
+      "resources": ["R4"]
+    },
+    {
+      "id": "C3",
+      "name": "Consent Signing",
+      "duration": 1,
+      "dependencies": ["B"],
+      "resources": ["R5"]
+    },
+    {
+      "id": "D",
+      "name": "Anesthesia Review",
+      "duration": 1,
+      "dependencies": ["C1", "C2", "C3"],
+      "resources": ["R6"]
+    },
+    {
+      "id": "E",
+      "name": "Surgery Prep",
+      "duration": 1,
+      "dependencies": ["D"],
+      "resources": ["R7"]
+    },
+    {
+      "id": "F",
+      "name": "Surgical Operation",
+      "duration": 3,
+      "dependencies": ["E"],
+      "resources": ["R8", "R9"]
+    },
+    {
+      "id": "G",
+      "name": "Post-op Monitoring",
+      "duration": 2,
+      "dependencies": ["F"],
+      "resources": ["R10"]
+    },
+    {
+      "id": "H",
+      "name": "Discharge Planning",
+      "duration": 1,
+      "dependencies": ["G"],
+      "resources": ["R11"]
+    }
+  ],
+  "resources": [
+    { "id": "R1", "name": "Admissions Nurse", "type": "Personnel" },
+    { "id": "R2", "name": "Pre-op Doctor", "type": "Personnel" },
+    { "id": "R3", "name": "Lab Technician", "type": "Personnel" },
+    { "id": "R4", "name": "Cardiologist", "type": "Personnel" },
+    { "id": "R5", "name": "Patient Advocate", "type": "Personnel" },
+    { "id": "R6", "name": "Anesthesiologist", "type": "Personnel" },
+    { "id": "R7", "name": "OR Prep Nurse", "type": "Personnel" },
+    { "id": "R8", "name": "Surgeon", "type": "Personnel" },
+    { "id": "R9", "name": "Surgical Assistant", "type": "Personnel" },
+    { "id": "R10", "name": "Recovery Nurse", "type": "Personnel" },
+    { "id": "R11", "name": "Discharge Planner", "type": "Personnel" }
+  ]
+}

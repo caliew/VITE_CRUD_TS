@@ -32,7 +32,6 @@ import { RoutesClasses } from "@shared/utils/classname";
 import { HeaderBar, Footer } from "@shared/components";
 import { SideBar } from "@shared/components/SideBar";
 import ButtonGradient from "@assets/svg/ButtonGradient";
-import SectionSvg from "@shared/assets/svg/SectionSvg";
 
 dayjs.extend(utc);
 dayjs.extend(weekday);

@@ -1,9 +1,7 @@
 import { useEffect } from "react";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
 import {
-  Button,
   HeaderTitle,
   LineChart,
   BarChart,
@@ -13,14 +11,11 @@ import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
 
 const ChartingPage = () => {
-  const handleError = useErrorHandler();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

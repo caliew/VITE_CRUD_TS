@@ -1,20 +1,16 @@
 import { useEffect } from "react";
-import { useErrorHandler } from "react-error-boundary";
 
 import { grid } from "@assets/index";
-import { Button, HeaderTitle, Calendar, PageAction } from "@shared/components";
+import { HeaderTitle, Calendar, PageAction } from "@shared/components";
 import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
   PageHeaderClasses,
-  ButtonLINKClasses,
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
 
 const CalendarPage = () => {
-  const handleError = useErrorHandler();
-
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);

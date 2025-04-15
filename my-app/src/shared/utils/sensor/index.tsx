@@ -110,7 +110,7 @@ function calculateAirPressure(HEX: any, OFFSET_PRESS: any, UNITSYSTEM: any) {
   return objResult;
 }
 function calculateDiffPressure(HEX: any, OFFSET_PRESS: any) {
-  const decimalNumber = parseInt(HEX, 16) / 10.0;
+  const decimalNumber = parseInt(HEX, 16) / 10.0 + Number(OFFSET_PRESS ?? 0);
   let objResult: any = {
     PRESS: Number(decimalNumber).toFixed(2),
   };
@@ -145,7 +145,6 @@ function calculateDewPoint(HEX: string) {
 // -----
 const getWISensorREADING = () => {};
 const get485SensorREADING = ({
-  ID,
   TYPE,
   HEX,
   UNITSYSTEM,

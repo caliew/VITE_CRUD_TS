@@ -24,7 +24,7 @@ const getLEDDisplay = ({ reading }: any) => {
   const digitArray = reading.split(""); // split the string into an array of digits
   return (
     <div className="flex flex-row py-2 justify-center items-center font-Roboto text-2xl font-extralight">
-      {digitArray.map((digit, index) => {
+      {digitArray.map((digit: any, index: number) => {
         if (digit === "-") {
           return (
             <LEDDisplay

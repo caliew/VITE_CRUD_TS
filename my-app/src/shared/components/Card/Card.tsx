@@ -25,17 +25,13 @@ interface ButtonProp {
 }
 
 const Card = ({
-  className,
   sensorType,
   name,
   sensorId,
   group,
   reading,
   unitSystem,
-  onClick,
   children,
-  px,
-  white,
 }: ButtonProp) => {
   const Icon = GetIcon(sensorType);
   const MailIcon = GetIcon("Mail");

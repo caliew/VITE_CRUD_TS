@@ -15,6 +15,7 @@
   "PUBLIC_URL": "./",
   "dependencies": {
     "@axa-fr/react-oidc": "^7.24.0",
+    "@dagrejs/graphlib": "^2.2.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^6.1.1",
@@ -26,6 +27,7 @@
     "dotenv": "^16.4.7",
     "echarts-for-react": "^3.0.2",
     "formik": "^2.4.6",
+    "graphlib": "^2.1.8",
     "i18next": "^24.2.0",
     "i18next-http-backend": "^3.0.1",
     "lucide": "^0.462.0",
