@@ -132,38 +132,6 @@ class GraphCPA {
   }
 }
 
-const TableCPAHeaders = ({ className }: any) => {
-  return (
-    <thead className={className}>
-      <tr className="">
-        <th className={className}>ID</th>
-        <th className={className}>ACTIVITY</th>
-        <th className={className}>DUR</th>
-        <th className={className}>RESOURCES</th>
-        <th className={className}>START</th>
-        <th className={className}>END</th>
-        <th className={className}>SLACK</th>
-        <th className={className}>DEP</th>
-      </tr>
-    </thead>
-  );
-};
-
-const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
-  return (
-    <tr key={activity.id}>
-      <td>{activity.id}</td>
-      <td>{activity.name}</td>
-      <td className="text-center">{activity.duration}</td>
-      <td className="text-center">{activity.resources.join(",")}</td>
-      <td className="text-center">{activity.start}</td>
-      <td className="text-center">{activity.end}</td>
-      <td className="text-center">{activity.slack}</td>
-      <td className="text-center">{activity.dependencies.join("-")}</td>
-    </tr>
-  );
-};
-
 const printTasks = (tasks) => {
   console.log("\n📊 Task Schedule:");
   tasks.forEach((task) => {
@@ -251,9 +219,44 @@ const CPAPage = () => {
     // -----------------------------
     setScheduleJSON1(scheduleJSON1);
     setScheduleJSON2(scheduleJSON2);
-    console.log(result1.criticalPath);
-    console.log(scheduleJSON1);
   }, [dataCPA1]);
+
+  const TableCPAHeaders = ({ className }: any) => {
+    return (
+      <thead className={className}>
+        <tr className="">
+          <th className={className}>ID</th>
+          <th className={className}>ACTIVITY</th>
+          <th className={className}>DUR</th>
+          <th className={className}>RESOURCES</th>
+          <th className={className}>START</th>
+          <th className={className}>END</th>
+          <th className={className}>SLACK</th>
+          <th className={className}>DEP</th>
+        </tr>
+      </thead>
+    );
+  };
+
+  const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
+    const handleRowClick = (e) => {
+      debugger;
+      console.log("handleRowClick was called");
+      console.log(e);
+    };
+    return (
+      <tr key={activity.id} onClick={handleRowClick}>
+        <td>{activity.id}</td>
+        <td>{activity.name}</td>
+        <td className="text-center">{activity.duration}</td>
+        <td className="text-center">{activity.resources.join(",")}</td>
+        <td className="text-center">{activity.start}</td>
+        <td className="text-center">{activity.end}</td>
+        <td className="text-center">{activity.slack}</td>
+        <td className="text-center">{activity.dependencies.join("-")}</td>
+      </tr>
+    );
+  };
 
   return (
     <div className={PageClasses}>
