@@ -16,8 +16,7 @@ import {
 import dataCPA1 from "./cpa-data1.json";
 import dataCPA2 from "./cpa-data2.json";
 import dataCPA3 from "./cpa-data3.json";
-import { title } from "process";
-import { data } from "react-router-dom";
+import dataCPA4 from "./cpa-data4.json";
 
 interface Node {
   id: string;
@@ -152,6 +151,40 @@ const printGantt = (tasks: any[]) => {
     console.log(`${task.id}: ${prefix}${bar} (${task.name})`);
   });
 };
+const printExecutionOrder = (executionOrder: any[], complexGraph: Graph) => {
+  console.log("Execution Order:");
+  executionOrder.forEach((nodeId, index) => {
+    console.log(`${index + 1}. ${nodeId} -`, complexGraph.node(nodeId).name);
+  });
+};
+const printTaskDetails = (executionOrder: any[], complexGraph) => {
+  console.log("\nTask Details for Optimization Analysis:");
+  executionOrder.forEach((nodeId) => {
+    const node = complexGraph.node(nodeId);
+    // For demonstration, show basic info:
+    console.log(
+      `Task: ${node.name}, Duration: ${
+        node.duration
+      } unit(s), Resources: ${node.resources.join(", ")}`
+    );
+  });
+};
+const printOptimizationAnalysis = (tasks: any[]) => {
+  console.log("\nOptimization Insights (Forecast Shortfalls):");
+  tasks
+    .filter((node) => node.name.startsWith("Forecast"))
+    .forEach((node) => {
+      const deviation =
+        node.forecast.expectedUsage -
+        (node.inventory ? node.inventory.current : 0);
+      console.log(node);
+      if (deviation > 0) {
+        console.log(
+          `${node.name} for ${node.drug}: Shortfall of ${deviation} units.`
+        );
+      }
+    });
+};
 const processCPAData = ({ title, data }) => {
   const graphCPA = new GraphCPA();
   data.forEach((node: any) => {
@@ -164,6 +197,7 @@ const processCPAData = ({ title, data }) => {
   });
   const result = graphCPA.analyze();
   const criticalPath = result.criticalPath;
+
   const scheduleJSON = result.tasks.map((task) => ({
     id: task.id,
     name: task.name,
@@ -183,6 +217,7 @@ const CPAPage = () => {
   const [scheduleJSON1, setScheduleJSON1] = useState<any>([]);
   const [scheduleJSON2, setScheduleJSON2] = useState<any>([]);
   const [scheduleJSON3, setScheduleJSON3] = useState<any>([]);
+  const [scheduleJSON4, setScheduleJSON4] = useState<any>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -192,6 +227,7 @@ const CPAPage = () => {
     const data1 = dataCPA1["activity"];
     const data2 = dataCPA2["activity"];
     const data3 = dataCPA3["activity"];
+    const data4 = dataCPA4["activity"];
     const { graphCPA: graphCPA1, scheduleJSON: scheduleJSON1 } = processCPAData(
       { title: data1?.title ?? "", data: data1 }
     );
@@ -201,11 +237,42 @@ const CPAPage = () => {
     const { graphCPA: graphCPA3, scheduleJSON: scheduleJSON3 } = processCPAData(
       { title: data3?.title ?? "", data: data3 }
     );
+    const { graphCPA: graphCPA4, scheduleJSON: scheduleJSON4 } = processCPAData(
+      { title: data4?.title ?? "", data: data4 }
+    );
     // -----------------------------
     setScheduleJSON1(scheduleJSON1);
     setScheduleJSON2(scheduleJSON2);
     setScheduleJSON3(scheduleJSON3);
-  }, [dataCPA1, dataCPA2, dataCPA3]);
+    setScheduleJSON4(scheduleJSON4);
+    // -----------------------------
+    const complexGraph = new Graph({ directed: true });
+    // -------------
+    // Add all nodes
+    // Add all dependencies
+    data4.forEach((node) => {
+      complexGraph.setNode(node.id, node);
+      (node.dependencies || []).forEach((dep) => {
+        complexGraph.setEdge(dep, node.id);
+      });
+    });
+    // Check for cycles
+    if (!alg.isAcyclic(complexGraph)) {
+      console.error("The graph has cycles. Please review the dependencies.");
+    } else {
+      // Get a topological order of the tasks
+      const executionOrder = alg.topsort(complexGraph);
+      printExecutionOrder(executionOrder, complexGraph);
+      printTaskDetails(executionOrder, complexGraph);
+      printOptimizationAnalysis(data4);
+
+      // Example Analysis: Identify Critical Steps
+      // (A more advanced analysis would compute earliest and latest start times,
+      // slack, and the critical path. Here we simply print out durations and dependencies.)
+      // Optimization Insight:
+      // Identify any forecast nodes that show a shortfall (demand > consumption)
+    }
+  }, [dataCPA1, dataCPA2, dataCPA3, dataCPA4]);
 
   const TableCPAHeaders = ({ className }: any) => {
     return (
@@ -271,6 +338,7 @@ const CPAPage = () => {
       {TableCPA({ title: dataCPA1?.title, scheduleJSON: scheduleJSON1 })}
       {TableCPA({ title: dataCPA2?.title, scheduleJSON: scheduleJSON2 })}
       {TableCPA({ title: dataCPA3?.title, scheduleJSON: scheduleJSON3 })}
+      {TableCPA({ title: dataCPA4?.title, scheduleJSON: scheduleJSON4 })}
       <PageAction />
     </div>
   );

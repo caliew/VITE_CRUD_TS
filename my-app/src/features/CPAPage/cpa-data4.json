@@ -1,0 +1,222 @@
+{
+  "title": "Complex Medication Procurement and Supply Chain",
+  "activity": [
+    {
+      "id": "F_A",
+      "name": "Forecast Drug A",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "drug": "Drug A",
+      "forecast": { "expectedUsage": 150, "confidence": 0.9 }
+    },
+    {
+      "id": "F_B",
+      "name": "Forecast Drug B",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "drug": "Drug B",
+      "forecast": { "expectedUsage": 100, "confidence": 0.85 }
+    },
+    {
+      "id": "F_C",
+      "name": "Forecast Drug C",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "drug": "Drug C",
+      "forecast": { "expectedUsage": 200, "confidence": 0.9 }
+    },
+    {
+      "id": "F_D",
+      "name": "Forecast Drug D",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "drug": "Drug D",
+      "forecast": { "expectedUsage": 120, "confidence": 0.8 }
+    },
+    {
+      "id": "F_E",
+      "name": "Forecast Drug E",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "drug": "Drug E",
+      "forecast": { "expectedUsage": 180, "confidence": 0.92 }
+    },
+    {
+      "id": "CF",
+      "name": "Consolidated Forecast Review",
+      "duration": 1,
+      "dependencies": ["F_A", "F_B", "F_C", "F_D", "F_E"],
+      "resources": ["R2"],
+      "notes": "Aggregate forecasts to determine overall procurement needs."
+    },
+    {
+      "id": "BA",
+      "name": "Budget Approval",
+      "duration": 1,
+      "dependencies": ["CF"],
+      "resources": ["R3"],
+      "budget": { "allocated": 50000 }
+    },
+    {
+      "id": "IC_A",
+      "name": "Inventory Check Drug A",
+      "duration": 1,
+      "dependencies": ["BA"],
+      "resources": ["R4"],
+      "drug": "Drug A",
+      "inventory": { "current": 50, "safetyStock": 30 }
+    },
+    {
+      "id": "IC_B",
+      "name": "Inventory Check Drug B",
+      "duration": 1,
+      "dependencies": ["BA"],
+      "resources": ["R4"],
+      "drug": "Drug B",
+      "inventory": { "current": 40, "safetyStock": 30 }
+    },
+    {
+      "id": "IC_C",
+      "name": "Inventory Check Drug C",
+      "duration": 1,
+      "dependencies": ["BA"],
+      "resources": ["R4"],
+      "drug": "Drug C",
+      "inventory": { "current": 70, "safetyStock": 50 }
+    },
+    {
+      "id": "IC_D",
+      "name": "Inventory Check Drug D",
+      "duration": 1,
+      "dependencies": ["BA"],
+      "resources": ["R4"],
+      "drug": "Drug D",
+      "inventory": { "current": 30, "safetyStock": 20 }
+    },
+    {
+      "id": "IC_E",
+      "name": "Inventory Check Drug E",
+      "duration": 1,
+      "dependencies": ["BA"],
+      "resources": ["R4"],
+      "drug": "Drug E",
+      "inventory": { "current": 60, "safetyStock": 40 }
+    },
+    {
+      "id": "OD_A",
+      "name": "Order Drug A",
+      "duration": 1,
+      "dependencies": ["IC_A"],
+      "resources": ["R5"],
+      "drug": "Drug A",
+      "order": { "minOrder": 100, "maxOrder": 300 }
+    },
+    {
+      "id": "OD_B",
+      "name": "Order Drug B",
+      "duration": 1,
+      "dependencies": ["IC_B"],
+      "resources": ["R5"],
+      "drug": "Drug B",
+      "order": { "minOrder": 80, "maxOrder": 250 }
+    },
+    {
+      "id": "OD_C",
+      "name": "Order Drug C",
+      "duration": 1,
+      "dependencies": ["IC_C"],
+      "resources": ["R5"],
+      "drug": "Drug C",
+      "order": { "minOrder": 150, "maxOrder": 400 }
+    },
+    {
+      "id": "OD_D",
+      "name": "Order Drug D",
+      "duration": 1,
+      "dependencies": ["IC_D"],
+      "resources": ["R5"],
+      "drug": "Drug D",
+      "order": { "minOrder": 100, "maxOrder": 300 }
+    },
+    {
+      "id": "OD_E",
+      "name": "Order Drug E",
+      "duration": 1,
+      "dependencies": ["IC_E"],
+      "resources": ["R5"],
+      "drug": "Drug E",
+      "order": { "minOrder": 130, "maxOrder": 350 }
+    },
+    {
+      "id": "SL_A",
+      "name": "Supplier Lead Time Drug A",
+      "duration": 3,
+      "dependencies": ["OD_A"],
+      "resources": ["R6"],
+      "drug": "Drug A"
+    },
+    {
+      "id": "SL_B",
+      "name": "Supplier Lead Time Drug B",
+      "duration": 3,
+      "dependencies": ["OD_B"],
+      "resources": ["R6"],
+      "drug": "Drug B"
+    },
+    {
+      "id": "SL_C",
+      "name": "Supplier Lead Time Drug C",
+      "duration": 3,
+      "dependencies": ["OD_C"],
+      "resources": ["R6"],
+      "drug": "Drug C"
+    },
+    {
+      "id": "SL_D",
+      "name": "Supplier Lead Time Drug D",
+      "duration": 3,
+      "dependencies": ["OD_D"],
+      "resources": ["R6"],
+      "drug": "Drug D"
+    },
+    {
+      "id": "SL_E",
+      "name": "Supplier Lead Time Drug E",
+      "duration": 3,
+      "dependencies": ["OD_E"],
+      "resources": ["R6"],
+      "drug": "Drug E"
+    },
+    {
+      "id": "QC",
+      "name": "Quality Check (All Drugs)",
+      "duration": 1,
+      "dependencies": ["SL_A", "SL_B", "SL_C", "SL_D", "SL_E"],
+      "resources": ["R7"],
+      "notes": "Ensure product quality before final delivery."
+    },
+    {
+      "id": "RC",
+      "name": "Receive and Update Inventory",
+      "duration": 1,
+      "dependencies": ["QC"],
+      "resources": ["R8"],
+      "notes": "Final reception of drugs into inventory."
+    }
+  ],
+  "resources": [
+    { "id": "R1", "name": "Forecast Analyst", "type": "Personnel" },
+    { "id": "R2", "name": "Consolidation Manager", "type": "Personnel" },
+    { "id": "R3", "name": "Finance Manager", "type": "Personnel" },
+    { "id": "R4", "name": "Inventory Manager", "type": "Personnel" },
+    { "id": "R5", "name": "Procurement Officer", "type": "Personnel" },
+    { "id": "R6", "name": "Supplier Liaison", "type": "Personnel" },
+    { "id": "R7", "name": "Quality Assurance", "type": "Personnel" },
+    { "id": "R8", "name": "Warehouse Supervisor", "type": "Personnel" }
+  ]
+}
