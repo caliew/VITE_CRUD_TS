@@ -202,7 +202,6 @@ const CPAPage = () => {
       dependencies: task.dependencies,
       isCritical: result1.criticalPath.includes(task.id),
     }));
-    setScheduleJSON1(scheduleJSON1);
     //
     const scheduleJSON2 = result2.tasks.map((task) => ({
       id: task.id,
@@ -217,6 +216,7 @@ const CPAPage = () => {
       isCritical: result2.criticalPath.includes(task.id),
     }));
     // -----------------------------
+    console.log(scheduleJSON1);
     setScheduleJSON1(scheduleJSON1);
     setScheduleJSON2(scheduleJSON2);
   }, [dataCPA1]);
@@ -239,13 +239,8 @@ const CPAPage = () => {
   };
 
   const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
-    const handleRowClick = (e) => {
-      debugger;
-      console.log("handleRowClick was called");
-      console.log(e);
-    };
     return (
-      <tr key={activity.id} onClick={handleRowClick}>
+      <tr key={activity.id}>
         <td>{activity.id}</td>
         <td>{activity.name}</td>
         <td className="text-center">{activity.duration}</td>
@@ -266,9 +261,12 @@ const CPAPage = () => {
         title="CRITICAL PATH ANALYSIS"
       />
 
+      <img className={GridClasses} src={grid} alt="Grid" />
       <div className={PageContainClasses}>
         <div>
-          <img className={GridClasses} src={grid} alt="Grid" />
+          <div className="font-Roboto text-3xl font-extralight">
+            {dataCPA1?.title}
+          </div>
           <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
             <TableCPAHeaders className="font-extralight border-b-2" />
             <tbody className="items-center justify-center">
@@ -285,9 +283,12 @@ const CPAPage = () => {
           <GanttChart tasks={scheduleJSON1} />
         </div>
       </div>
+
       <div className={PageContainClasses}>
         <div>
-          <img className={GridClasses} src={grid} alt="Grid" />
+          <div className="font-Roboto text-3xl font-extralight">
+            {dataCPA2?.title}
+          </div>
           <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
             <TableCPAHeaders className="font-extralight border-b-2" />
             <tbody className="items-center justify-center">

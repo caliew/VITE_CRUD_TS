@@ -1,4 +1,5 @@
 {
+  "title": "Surgical Operation Workflow",
   "activity": [
     {
       "id": "A",
@@ -24,7 +25,7 @@
     {
       "id": "C2",
       "name": "ECG",
-      "duration": 1,
+      "duration": 2,
       "dependencies": ["B"],
       "resources": ["R4"]
     },
