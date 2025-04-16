@@ -110,7 +110,7 @@
     {
       "id": "OD_A",
       "name": "Order Drug A",
-      "duration": 1,
+      "duration": 2,
       "dependencies": ["IC_A"],
       "resources": ["R5"],
       "drug": "Drug A",
@@ -128,7 +128,7 @@
     {
       "id": "OD_C",
       "name": "Order Drug C",
-      "duration": 1,
+      "duration": 2,
       "dependencies": ["IC_C"],
       "resources": ["R5"],
       "drug": "Drug C",

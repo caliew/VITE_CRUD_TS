@@ -1,75 +1,60 @@
-interface Node {
-  id: string;
-  name: string;
-  duration: number;
-  dependencies: string[];
-  predecessors: string[];
-  successors: string[];
-}
+import { Graph } from "@dagrejs/graphlib";
 
-// Define the CPA class
-export default class CPA {
-  private graph: { [id: string]: Node };
-  private criticalPath: Node[];
-
-  constructor() {
-    this.graph = {};
-    this.criticalPath = [];
-  }
-
-  testFunction() {
-    console.log("..INTO CRITICAL PATH ANALYSIS...");
-  }
-
-  // Add a node to the graph
-  addNode(node: Node) {
-    this.graph[node.id] = node;
-  }
-
-  // Add a dependency between two nodes
-  addDependency(from: string, to: string) {
-    const fromNode = this.graph[from];
-    const toNode = this.graph[to];
-
-    if (fromNode && toNode) {
-      fromNode.successors.push(to);
-      toNode.predecessors.push(from);
-    }
-  }
-
-  // Perform critical path analysis
-  analyze() {
-    const visited: { [id: string]: boolean } = {};
-    const stack: Node[] = [];
-
-    // Perform DFS to find critical path
-    Object.keys(this.graph).forEach((id) => {
-      const node = this.graph[id];
-      if (!visited[node.id]) {
-        this.dfs(node, visited, stack);
+export const printTasks = (tasks: any[]) => {
+  console.log("\n📊 Task Schedule:");
+  tasks.forEach((task) => {
+    console.log(
+      `- ${task.name} [${task.id}]: ${task.start}h → ${task.end}h | Critical: ${
+        task.isCritical ? "Yes" : "No"
+      } | Slack: ${task.slack}`
+    );
+  });
+};
+export const printGantt = (tasks: any[]) => {
+  console.log("\n🗂 Gantt Timeline (Hours)");
+  tasks.forEach((task) => {
+    const bar = "=".repeat(task.duration);
+    const prefix = " ".repeat(task.start);
+    console.log(`${task.id}: ${prefix}${bar} (${task.name})`);
+  });
+};
+export const printExecutionOrder = (
+  executionOrder: any[],
+  complexGraph: Graph
+) => {
+  console.log("Execution Order:");
+  executionOrder.forEach((nodeId, index) => {
+    console.log(`${index + 1}. ${nodeId} -`, complexGraph.node(nodeId).name);
+  });
+};
+export const printTaskDetails = (
+  executionOrder: any[],
+  complexGraph: Graph
+) => {
+  console.log("\nTask Details for Optimization Analysis:");
+  executionOrder.forEach((nodeId) => {
+    const node = complexGraph.node(nodeId);
+    // For demonstration, show basic info:
+    console.log(
+      `Task: ${node.name}, Duration: ${
+        node.duration
+      } unit(s), Resources: ${node.resources.join(", ")}`
+    );
+  });
+};
+export const printOptimizationAnalysis = (tasks: any[]) => {
+  console.log("\nOptimization Insights (Forecast Shortfalls):");
+  tasks
+    .filter((node) => node.name.startsWith("Forecast"))
+    .forEach((node) => {
+      const deviation =
+        node.forecast.expectedUsage -
+        (node.inventory ? node.inventory.current : 0);
+      console.log(node);
+      if (deviation > 0) {
+        console.log(
+          `${node.name} for ${node.drug}: Shortfall of ${deviation} units.`
+        );
       }
     });
-
-    // Extract critical path from stack
-    this.criticalPath = stack.reverse();
-  }
-
-  // Depth-first search to find critical path
-  private dfs(node: Node, visited: { [id: string]: boolean }, stack: Node[]) {
-    visited[node.id] = true;
-
-    node.successors.forEach((successorId) => {
-      const successorNode = this.graph[successorId];
-      if (!visited[successorId]) {
-        this.dfs(successorNode, visited, stack);
-      }
-    });
-
-    stack.push(node);
-  }
-
-  // Get the critical path
-  getCriticalPath() {
-    return this.criticalPath;
-  }
-}
+};

@@ -9,14 +9,16 @@ type Task = {
   isCritical: boolean;
 };
 
-export const GanttChart: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
+export const GanttChart: React.FC<{ tasks: Task[] }> = ({ title, tasks }) => {
   const scale = 20; // 1 unit = 20px
   const maxEnd = Math.max(...tasks.map((t) => t.end));
 
   return (
     <div className="w-full p-4 overflow-x-auto text-black font-Tahoma text-LG">
-      <div className="text-sm mb-2 font-medium">
-        Gantt Chart (CRITICAL PATH ANALYSIS)
+      <div className="text-lg mb-2 font-medium">
+        {title}
+        <br />
+        (CRITICAL PATH ANALYSIS)
       </div>
 
       {/* Time Axis */}

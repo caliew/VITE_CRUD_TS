@@ -6,6 +6,5 @@ import {
 
 import * as LED from "./led";
 import * as SENSOR from "./sensor";
-import CPA from "./CPA";
 
-export { GetJWTToken, SetJWTToken, RemoveJWTToken, LED, SENSOR, CPA };
+export { GetJWTToken, SetJWTToken, RemoveJWTToken, LED, SENSOR };
