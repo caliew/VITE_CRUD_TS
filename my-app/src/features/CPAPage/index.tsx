@@ -15,6 +15,8 @@ import {
 
 import dataCPA1 from "./cpa-data1.json";
 import dataCPA2 from "./cpa-data2.json";
+import dataCPA3 from "./cpa-data3.json";
+import { title } from "process";
 import { data } from "react-router-dom";
 
 interface Node {
@@ -132,7 +134,7 @@ class GraphCPA {
   }
 }
 
-const printTasks = (tasks) => {
+const printTasks = (tasks: any[]) => {
   console.log("\n📊 Task Schedule:");
   tasks.forEach((task) => {
     console.log(
@@ -142,7 +144,7 @@ const printTasks = (tasks) => {
     );
   });
 };
-const printGantt = (tasks) => {
+const printGantt = (tasks: any[]) => {
   console.log("\n🗂 Gantt Timeline (Hours)");
   tasks.forEach((task) => {
     const bar = "=".repeat(task.duration);
@@ -150,76 +152,60 @@ const printGantt = (tasks) => {
     console.log(`${task.id}: ${prefix}${bar} (${task.name})`);
   });
 };
+const processCPAData = ({ title, data }) => {
+  const graphCPA = new GraphCPA();
+  data.forEach((node: any) => {
+    graphCPA.addNode(node);
+    node.dependencies.forEach((dependency) => {
+      if (data.find((n) => n.id === dependency)) {
+        graphCPA.addDependency(dependency, node.id);
+      }
+    });
+  });
+  const result = graphCPA.analyze();
+  const criticalPath = result.criticalPath;
+  const scheduleJSON = result.tasks.map((task) => ({
+    id: task.id,
+    name: task.name,
+    start: task.start,
+    end: task.end,
+    duration: task.duration,
+    critical: task.isCritical,
+    slack: task.slack,
+    resources: task.resources,
+    dependencies: task.dependencies,
+    isCritical: criticalPath.includes(task.id),
+  }));
+  return { graphCPA, scheduleJSON, criticalPath };
+};
 
 const CPAPage = () => {
   const [scheduleJSON1, setScheduleJSON1] = useState<any>([]);
   const [scheduleJSON2, setScheduleJSON2] = useState<any>([]);
+  const [scheduleJSON3, setScheduleJSON3] = useState<any>([]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const GraphNode = {};
-    const graphCPA1 = new GraphCPA();
-    const graphCPA2 = new GraphCPA();
     const data1 = dataCPA1["activity"];
     const data2 = dataCPA2["activity"];
-    // Add nodes to the graph
-    data1.forEach((node) => {
-      graphCPA1.addNode(node);
-      node.dependencies.forEach((dependency) => {
-        if (data1.find((n) => n.id === dependency)) {
-          graphCPA1.addDependency(dependency, node.id);
-        }
-      });
-      GraphNode[node.id] = node;
-    });
-    // Add nodes to the graph
-    data2.forEach((node) => {
-      graphCPA2.addNode(node);
-      node.dependencies.forEach((dependency) => {
-        if (data2.find((n) => n.id === dependency)) {
-          graphCPA2.addDependency(dependency, node.id);
-        }
-      });
-      GraphNode[node.id] = node;
-    });
-    const result1 = graphCPA1.analyze();
-    const result2 = graphCPA2.analyze();
-    // console.log("Total Duration = ", result1.totalDuration);
-    // printTasks(result1.tasks);
-    // printGantt(result1.tasks);
-    const scheduleJSON1 = result1.tasks.map((task) => ({
-      id: task.id,
-      name: task.name,
-      start: task.start,
-      end: task.end,
-      duration: task.duration,
-      critical: task.isCritical,
-      slack: task.slack,
-      resources: task.resources,
-      dependencies: task.dependencies,
-      isCritical: result1.criticalPath.includes(task.id),
-    }));
-    //
-    const scheduleJSON2 = result2.tasks.map((task) => ({
-      id: task.id,
-      name: task.name,
-      start: task.start,
-      end: task.end,
-      duration: task.duration,
-      critical: task.isCritical,
-      slack: task.slack,
-      resources: task.resources,
-      dependencies: task.dependencies,
-      isCritical: result2.criticalPath.includes(task.id),
-    }));
+    const data3 = dataCPA3["activity"];
+    const { graphCPA: graphCPA1, scheduleJSON: scheduleJSON1 } = processCPAData(
+      { title: data1?.title ?? "", data: data1 }
+    );
+    const { graphCPA: graphCPA2, scheduleJSON: scheduleJSON2 } = processCPAData(
+      { title: data2?.title ?? "", data: data2 }
+    );
+    const { graphCPA: graphCPA3, scheduleJSON: scheduleJSON3 } = processCPAData(
+      { title: data3?.title ?? "", data: data3 }
+    );
     // -----------------------------
-    console.log(scheduleJSON1);
     setScheduleJSON1(scheduleJSON1);
     setScheduleJSON2(scheduleJSON2);
-  }, [dataCPA1]);
+    setScheduleJSON3(scheduleJSON3);
+  }, [dataCPA1, dataCPA2, dataCPA3]);
 
   const TableCPAHeaders = ({ className }: any) => {
     return (
@@ -253,6 +239,26 @@ const CPAPage = () => {
     );
   };
 
+  const TableCPA = ({ title, scheduleJSON }: any) => (
+    <div className={PageContainClasses}>
+      <div>
+        <div className="font-Roboto text-3xl font-extralight py-5">{title}</div>
+        <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
+          <TableCPAHeaders className="font-extralight border-b-2" />
+          <tbody className="items-center justify-center">
+            {scheduleJSON &&
+              scheduleJSON.map((schdeule, index) => {
+                return <TableRowCPAComponent key={index} activity={schdeule} />;
+              })}
+          </tbody>
+        </table>
+      </div>
+      <div className="p-6 bg-gray-50">
+        <GanttChart tasks={scheduleJSON} />
+      </div>
+    </div>
+  );
+
   return (
     <div className={PageClasses}>
       <HeaderTitle
@@ -262,50 +268,9 @@ const CPAPage = () => {
       />
 
       <img className={GridClasses} src={grid} alt="Grid" />
-      <div className={PageContainClasses}>
-        <div>
-          <div className="font-Roboto text-3xl font-extralight">
-            {dataCPA1?.title}
-          </div>
-          <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
-            <TableCPAHeaders className="font-extralight border-b-2" />
-            <tbody className="items-center justify-center">
-              {scheduleJSON1 &&
-                scheduleJSON1.map((schdeule, index) => {
-                  return (
-                    <TableRowCPAComponent key={index} activity={schdeule} />
-                  );
-                })}
-            </tbody>
-          </table>
-        </div>
-        <div className="p-6 bg-gray-50">
-          <GanttChart tasks={scheduleJSON1} />
-        </div>
-      </div>
-
-      <div className={PageContainClasses}>
-        <div>
-          <div className="font-Roboto text-3xl font-extralight">
-            {dataCPA2?.title}
-          </div>
-          <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
-            <TableCPAHeaders className="font-extralight border-b-2" />
-            <tbody className="items-center justify-center">
-              {scheduleJSON2 &&
-                scheduleJSON2.map((schdeule, index) => {
-                  return (
-                    <TableRowCPAComponent key={index} activity={schdeule} />
-                  );
-                })}
-            </tbody>
-          </table>
-        </div>
-        <div className="p-6 bg-gray-50">
-          <GanttChart tasks={scheduleJSON2} />
-        </div>
-      </div>
-
+      {TableCPA({ title: dataCPA1?.title, scheduleJSON: scheduleJSON1 })}
+      {TableCPA({ title: dataCPA2?.title, scheduleJSON: scheduleJSON2 })}
+      {TableCPA({ title: dataCPA3?.title, scheduleJSON: scheduleJSON3 })}
       <PageAction />
     </div>
   );

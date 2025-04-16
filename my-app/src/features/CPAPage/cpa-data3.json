@@ -1,0 +1,78 @@
+{
+  "title": "Medication Supply Chain Management",
+  "activity": [
+    {
+      "id": "A",
+      "name": "Forecast Demand",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"],
+      "forecast": {
+        "expectedUsage": 500,
+        "confidence": 0.9
+      }
+    },
+    {
+      "id": "B",
+      "name": "Budget Approval",
+      "duration": 1,
+      "dependencies": ["A"],
+      "resources": ["R2"],
+      "budget": {
+        "allocated": 10000
+      }
+    },
+    {
+      "id": "C",
+      "name": "Inventory Check",
+      "duration": 1,
+      "dependencies": ["B"],
+      "resources": ["R3"],
+      "inventory": {
+        "current": 200,
+        "safetyStock": 100
+      }
+    },
+    {
+      "id": "D",
+      "name": "Place Order",
+      "duration": 1,
+      "dependencies": ["C"],
+      "resources": ["R4"],
+      "order": {
+        "minOrder": 300,
+        "maxOrder": 800,
+        "orderCost": 50
+      }
+    },
+    {
+      "id": "E",
+      "name": "Supplier Lead Time",
+      "duration": 3,
+      "dependencies": ["D"],
+      "resources": ["R5"],
+      "supplier": {
+        "leadTime": 3,
+        "reliability": 0.95
+      }
+    },
+    {
+      "id": "F",
+      "name": "Receive Order",
+      "duration": 1,
+      "dependencies": ["E"],
+      "resources": ["R6"],
+      "inventoryUpdate": {
+        "received": 600
+      }
+    }
+  ],
+  "resources": [
+    { "id": "R1", "name": "Demand Analyst", "type": "Personnel" },
+    { "id": "R2", "name": "Finance Manager", "type": "Personnel" },
+    { "id": "R3", "name": "Inventory Manager", "type": "Personnel" },
+    { "id": "R4", "name": "Procurement Officer", "type": "Personnel" },
+    { "id": "R5", "name": "Supplier Representative", "type": "Vendor" },
+    { "id": "R6", "name": "Warehouse Supervisor", "type": "Personnel" }
+  ]
+}
