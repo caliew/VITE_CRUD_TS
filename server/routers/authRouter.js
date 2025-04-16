@@ -11,8 +11,8 @@ router.use(cors({ origin: "*" }));
 router.post("/login", (req, res) => {
   const { accessCode } = req.body;
   console.log(accessCode);
-  if (accessCode === "admin") {
-    const user = { id: 1, username: "admin" };
+  if (accessCode === "@dmin") {
+    const user = { id: 1, username: "@dmin" };
     const token = generateToken(user);
     res.json({ token, accessCode });
   } else {
