@@ -41,6 +41,7 @@ interface TaskSchedule {
   slack: number;
   resources: string[];
   dependencies: string[];
+  status: "pending" | "inProgress" | "completed";
 }
 class GraphCPA {
   private graph: Graph;
@@ -156,7 +157,18 @@ const processCPAData = ({ data }) => {
   const totalDuration = result.totalDuration;
   const criticalPath = result.criticalPath;
   const projectProgress = Math.floor(Math.random() * 101);
+  const progressRatio = projectProgress / 100;
+  const currentTime = progressRatio * totalDuration;
+
   const scheduleJSON = result.tasks.map((task) => {
+    let status;
+    if (currentTime >= task.end) {
+      status = "complete";
+    } else if (currentTime >= task.start) {
+      status = "in progress";
+    } else {
+      status = "pending";
+    }
     return {
       id: task.id,
       name: task.name,
@@ -168,6 +180,7 @@ const processCPAData = ({ data }) => {
       resources: task.resources,
       dependencies: task.dependencies,
       isCritical: criticalPath.includes(task.id),
+      status,
     };
   });
   return {
@@ -192,9 +205,20 @@ const TableCPAHeaders = ({ className }: any) => {
         <th className={className}>END</th>
         <th className={className}>SLACK</th>
         <th className={className}>DEP</th>
+        <th className={className}>STATUS</th>
       </tr>
     </thead>
   );
+};
+const getStatusColor = (status) => {
+  switch (status) {
+    case "pending":
+      return "bg-red-500";
+    case "in progress":
+      return "bg-green-500";
+    case "complete":
+      return "bg-black-500";
+  }
 };
 
 const TableRowCPAComponent = ({ activity, handleRowClick }) => {
@@ -211,6 +235,16 @@ const TableRowCPAComponent = ({ activity, handleRowClick }) => {
       <td className="text-center">{activity.end}</td>
       <td className="text-center">{activity.slack}</td>
       <td className="text-center">{activity.dependencies.join("-")}</td>
+      <td className="text-center font-Roboto text-lg">
+        {" "}
+        <span
+          className={`px-2 py-1 rounded-full text-white ${getStatusColor(
+            activity.status
+          )}`}
+        >
+          {activity.status}
+        </span>
+      </td>
     </tr>
   );
 };
