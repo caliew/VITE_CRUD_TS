@@ -1,7 +1,7 @@
 // my-app/src/components/WorkerPage.tsx
 import { Key, useEffect, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
-import { CPAGanttChart, GanttChart } from "@shared/components";
+import { Button, CPAGanttChart, GanttChart } from "@shared/components";
 
 import { grid } from "@assets/index";
 import { HeaderTitle, PageAction } from "@shared/components";
@@ -11,12 +11,15 @@ import {
   PageHeaderClasses,
   PageContainClasses,
   GridClasses,
+  ButtonLINKClasses,
 } from "@shared/utils/classname";
 
 import dataCPA1 from "./data/cpa-data1.json";
 import dataCPA2 from "./data/cpa-data2.json";
 import dataCPA3 from "./data/cpa-data3.json";
 import dataCPA4 from "./data/cpa-data4.json";
+import { title } from "process";
+
 const fileNames = [
   "./data/cpa-data1.json",
   "./data/cpa-data2.json",
@@ -163,9 +166,9 @@ const processCPAData = ({ data }) => {
   const scheduleJSON = result.tasks.map((task) => {
     let status;
     if (currentTime >= task.end) {
-      status = "complete";
+      status = "completed";
     } else if (currentTime >= task.start) {
-      status = "in progress";
+      status = "inProgress";
     } else {
       status = "pending";
     }
@@ -214,9 +217,9 @@ const getStatusColor = (status) => {
   switch (status) {
     case "pending":
       return "bg-red-500";
-    case "in progress":
+    case "inProgress":
       return "bg-green-500";
-    case "complete":
+    case "completed":
       return "bg-black-500";
   }
 };
@@ -234,11 +237,11 @@ const TableRowCPAComponent = ({ activity, handleRowClick }) => {
       <td className="text-center">{activity.start}</td>
       <td className="text-center">{activity.end}</td>
       <td className="text-center">{activity.slack}</td>
-      <td className="text-center">{activity.dependencies.join("-")}</td>
+      <td className="text-center">{activity.dependencies.join(",")}</td>
       <td className="text-center font-Roboto text-lg">
         {" "}
         <span
-          className={`px-2 py-1 rounded-full text-white ${getStatusColor(
+          className={`px-2 py-1 rounded-none text-white ${getStatusColor(
             activity.status
           )}`}
         >
@@ -293,6 +296,7 @@ const TableCPA = ({
 };
 
 const CPAPage = () => {
+  const [cpaData, setCPAData] = useState<any>([]);
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
@@ -302,42 +306,46 @@ const CPAPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCPAResult((prevResults) => {
-        const updatedResults = { ...prevResults };
-        for (const title in updatedResults) {
-          let newProgress = updatedResults[title].projectProgress + 1;
-          newProgress = newProgress > 100 ? 0 : newProgress;
-          if (newProgress > 100) newProgress = 100;
+        const updatedResults = {};
+        const updatedTitles = [];
+        for (const title in prevResults) {
+          let newProgress = prevResults[title].projectProgress + 1;
+          newProgress = Math.min(newProgress, 100);
           const progressRatio = newProgress / 100;
-          const currentTime =
-            progressRatio * updatedResults[title].totalDuration;
-          const updatedSchedule = updatedResults[title].scheduleJSON.map(
+          const currentTime = progressRatio * prevResults[title].totalDuration;
+          const updatedSchedule = prevResults[title].scheduleJSON.map(
             (task) => {
               let status;
               if (currentTime >= task.end) {
-                status = "complete";
+                status = "completed";
               } else if (currentTime >= task.start) {
-                status = "in progress";
+                status = "inProgress";
               } else {
                 status = "pending";
               }
               return { ...task, status };
             }
           );
-          updatedResults[title] = {
-            ...updatedResults[title],
-            projectProgress: newProgress,
-            scheduleJSON: updatedSchedule,
-          };
+          if (newProgress < 100) {
+            updatedResults[title] = {
+              ...prevResults[title],
+              projectProgress: newProgress,
+              scheduleJSON: updatedSchedule,
+            };
+            updatedTitles.push(title);
+          }
         }
+        setTitles(updatedTitles);
         return updatedResults;
       });
     }, 1000); // Update every second
-
     return () => clearInterval(interval);
   }, []);
+
   useEffect(() => {
     const processData = (data: any) => {
       const {
@@ -360,11 +368,22 @@ const CPAPage = () => {
           projectProgress,
         },
       }));
+      setCPAData((prevResults) => ({
+        ...prevResults,
+        [data?.title]: {
+          graphCPA,
+          scheduleJSON,
+          criticalPath,
+          executionOrder,
+          totalDuration,
+          projectProgress,
+        },
+      }));
     };
     processData(dataCPA1);
     processData(dataCPA2);
-    processData(dataCPA3);
-    processData(dataCPA4);
+    // processData(dataCPA3);
+    // processData(dataCPA4);
     // -------------------
   }, []);
 
@@ -485,6 +504,186 @@ const CPAPage = () => {
       </div>
     );
   };
+  const disruptSchedule = () => {
+    setCPAResult((prevResults) => {
+      const updatedResults = { ...prevResults };
+      for (const title in updatedResults) {
+        const workflow = updatedResults[title];
+        const disruptedActivities = workflow.scheduleJSON.map((task) => {
+          if (task.status !== "complete") {
+            return {
+              ...task,
+              duration: Math.ceil(task.duration * 1.5),
+            };
+          }
+          return task;
+        });
+
+        const updatedData = {
+          activity: disruptedActivities.map(
+            ({ id, name, duration, dependencies, resources }) => ({
+              id,
+              name,
+              duration,
+              dependencies,
+              resources,
+            })
+          ),
+          title,
+        };
+
+        const {
+          graphCPA,
+          scheduleJSON,
+          criticalPath,
+          executionOrder,
+          totalDuration,
+          projectProgress,
+        } = processCPAData({ data: updatedData.activity });
+
+        updatedResults[title] = {
+          graphCPA,
+          scheduleJSON,
+          criticalPath,
+          executionOrder,
+          totalDuration,
+          projectProgress,
+        };
+      }
+      return updatedResults;
+    });
+  };
+  const simulateDisruption = (title: string) => {
+    setCPAResult((prevResults) => {
+      const updatedResults = { ...prevResults };
+      const workflow = updatedResults[title];
+      const currentTime =
+        (workflow.projectProgress / 100) * workflow.totalDuration;
+
+      // Identify the current task
+      const currentTask = workflow.scheduleJSON.find(
+        (task) => task.start <= currentTime && task.end > currentTime
+      );
+
+      if (!currentTask) return prevResults;
+
+      // Increase the duration by 50%
+      const updatedActivities = workflow.scheduleJSON.map((task) => {
+        if (task.id === currentTask.id) {
+          return {
+            ...task,
+            duration: Math.ceil(task.duration * 1.5),
+          };
+        }
+        return task;
+      });
+
+      // Reconstruct the data for processing
+      const updatedData = {
+        activity: updatedActivities.map(
+          ({ id, name, duration, dependencies, resources }) => ({
+            id,
+            name,
+            duration,
+            dependencies,
+            resources,
+          })
+        ),
+        title,
+      };
+
+      // Reprocess the CPA data
+      const {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      } = processCPAData({ data: updatedData.activity });
+
+      updatedResults[title] = {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      };
+
+      return updatedResults;
+    });
+  };
+  const disruptCurrentTask = () => {
+    setCPAResult((prevResults) => {
+      const updatedResults = { ...prevResults };
+      for (const title in updatedResults) {
+        const workflow = updatedResults[title];
+        const currentTime =
+          (workflow.projectProgress / 100) * workflow.totalDuration;
+        const disruptedSchedule = workflow.scheduleJSON.map((task) => {
+          if (task.start <= currentTime && task.end > currentTime) {
+            const newDuration = Math.ceil(task.duration * 1.5);
+            const updatedTask = {
+              ...task,
+              duration: newDuration,
+              end: task.start + newDuration,
+            };
+            return updatedTask;
+          }
+          return task;
+        });
+        const updatedData = {
+          activity: disruptedSchedule.map(
+            ({ id, name, duration, dependencies, resources }) => ({
+              id,
+              name,
+              duration,
+              dependencies,
+              resources,
+            })
+          ),
+          title,
+        };
+        const {
+          graphCPA,
+          scheduleJSON,
+          criticalPath,
+          executionOrder,
+          totalDuration,
+          projectProgress,
+        } = processCPAData({ data: updatedData.activity });
+        updatedResults[title] = {
+          graphCPA,
+          scheduleJSON,
+          criticalPath,
+          executionOrder,
+          totalDuration,
+          projectProgress,
+        };
+      }
+      return updatedResults;
+    });
+  };
+  const initiateRandomTask = () => {
+    if (cpaData.length === 0) return;
+    const titles = Object.keys(cpaData);
+    const randomIndex = Math.floor(Math.random() * titles.length);
+    const selTitle = titles[randomIndex];
+    const selectedTask = cpaData[selTitle];
+    console.log(selTitle, selectedTask);
+    setCPAResult((prevResults) => {
+      if (prevResults[selTitle]) return prevResults; // Avoid duplicates
+      return {
+        ...prevResults,
+        [selTitle]: {
+          ...selectedTask,
+          projectProgress: 0,
+        },
+      };
+    });
+    setTitles((prevTitles) => [...prevTitles, selTitle]);
+  };
 
   return (
     <div className={PageClasses}>
@@ -493,6 +692,13 @@ const CPAPage = () => {
         className={PageHeaderClasses}
         title="CRITICAL PATH ANALYSIS"
       />
+      <Button
+        Icon={GetIcon("home")}
+        className={ButtonLINKClasses}
+        onClick={initiateRandomTask}
+      >
+        INITIATE TASKS
+      </Button>
 
       <img className={GridClasses} src={grid} alt="Grid" />
       {titles.map((title: string, index: number) => (
@@ -505,6 +711,9 @@ const CPAPage = () => {
             projectProgress={cpaResult[title].projectProgress}
             handleRowClick={handleRowClick}
           />
+          <button onClick={() => simulateDisruption(title)}>
+            Disrupt Schedule
+          </button>
           {showModal && selectedTitle === title && EditForm()}
         </div>
       ))}
