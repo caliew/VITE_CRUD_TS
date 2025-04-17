@@ -302,7 +302,41 @@ const CPAPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCPAResult((prevResults) => {
+        const updatedResults = { ...prevResults };
+        for (const title in updatedResults) {
+          let newProgress = updatedResults[title].projectProgress + 1;
+          if (newProgress > 100) newProgress = 100;
+          const progressRatio = newProgress / 100;
+          const currentTime =
+            progressRatio * updatedResults[title].totalDuration;
+          const updatedSchedule = updatedResults[title].scheduleJSON.map(
+            (task) => {
+              let status;
+              if (currentTime >= task.end) {
+                status = "complete";
+              } else if (currentTime >= task.start) {
+                status = "in progress";
+              } else {
+                status = "pending";
+              }
+              return { ...task, status };
+            }
+          );
+          updatedResults[title] = {
+            ...updatedResults[title],
+            projectProgress: newProgress,
+            scheduleJSON: updatedSchedule,
+          };
+        }
+        return updatedResults;
+      });
+    }, 1000); // Update every second
 
+    return () => clearInterval(interval);
+  }, []);
   useEffect(() => {
     const processData = (data: any) => {
       const {
@@ -332,6 +366,54 @@ const CPAPage = () => {
     processData(dataCPA4);
     // -------------------
   }, []);
+
+  const handleUpdate = (newDuration, newResources, newDependencies) => {
+    setCPAResult((prevResults) => {
+      const updatedResults = { ...prevResults };
+      const workflow = updatedResults[selectedTitle];
+      const updatedActivities = workflow.scheduleJSON.map((task) => {
+        if (task.id === selectedActivity.id) {
+          return {
+            ...task,
+            duration: newDuration,
+            resources: newResources,
+            dependencies: newDependencies,
+          };
+        }
+        return task;
+      });
+      const updatedData = {
+        activity: updatedActivities.map(
+          ({ id, name, duration, dependencies, resources }) => ({
+            id,
+            name,
+            duration,
+            dependencies,
+            resources,
+          })
+        ),
+        title: selectedTitle,
+      };
+      const {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      } = processCPAData({ data: updatedData.activity });
+      updatedResults[selectedTitle] = {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      };
+      return updatedResults;
+    });
+    setShowModal(false);
+  };
   const handleRowClick = (title, activity) => {
     console.log(activity);
     setSelTitle(title);
@@ -339,11 +421,6 @@ const CPAPage = () => {
     setShowModal(true);
   };
   const handleModalClose = () => {
-    setShowModal(false);
-  };
-  const handleUpdate = (newDuration, newResources, newDependencies) => {
-    console.log(newDuration, newResources, newDependencies);
-    // Update the data here
     setShowModal(false);
   };
   const EditForm = () => {

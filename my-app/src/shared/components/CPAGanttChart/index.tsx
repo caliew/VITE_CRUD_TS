@@ -16,7 +16,7 @@ export const CPAGanttChart: React.FC<{
   projectProgress: number; // in same units as start/end
 }> = ({ title, tasks, projectProgress }) => {
   const scale = 20; // px per time unit
-  const labelWidthPx = 160; // your name‐column width
+  const labelWidthPx = 180; // your name‐column width
   const maxEnd = Math.max(...tasks.map((t) => t.end));
   const timelinePx = maxEnd * scale; // total chart width
   const progressPx = (projectProgress / 100) * timelinePx;
@@ -33,8 +33,8 @@ export const CPAGanttChart: React.FC<{
 
       {/* Vertical progress marker */}
       <div
-        className="absolute w-px bg-orange-500 pointer-events-none z-10"
-        style={{ top: "3rem", bottom: "1rem", left: `${leftPx}px` }}
+        className="absolute w-1 bg-orange-500 pointer-events-none z-10"
+        style={{ top: "5rem", bottom: "1rem", left: `${leftPx}px` }}
       />
 
       {/* Time Axis */}
