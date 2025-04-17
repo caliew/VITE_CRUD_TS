@@ -16,7 +16,7 @@ export const CPAGanttChart: React.FC<{
   projectProgress: number; // in same units as start/end
 }> = ({ title, tasks, projectProgress }) => {
   const scale = 20; // px per time unit
-  const labelWidthPx = 180; // your name‐column width
+  const labelWidthPx = 175; // your name‐column width
   const maxEnd = Math.max(...tasks.map((t) => t.end));
   const timelinePx = maxEnd * scale; // total chart width
   const progressPx = (projectProgress / 100) * timelinePx;

@@ -308,6 +308,7 @@ const CPAPage = () => {
         const updatedResults = { ...prevResults };
         for (const title in updatedResults) {
           let newProgress = updatedResults[title].projectProgress + 1;
+          newProgress = newProgress > 100 ? 0 : newProgress;
           if (newProgress > 100) newProgress = 100;
           const progressRatio = newProgress / 100;
           const currentTime =
