@@ -10,7 +10,7 @@ type Task = {
   isCritical: boolean;
 };
 
-export const GanttChart: React.FC<{
+export const CPAGanttChart: React.FC<{
   title: string;
   tasks: Task[];
   projectProgress: number; // in same units as start/end

@@ -1,7 +1,7 @@
 // my-app/src/components/WorkerPage.tsx
-import { useEffect, useState } from "react";
+import { Key, useEffect, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
-import { GanttChart } from "@shared/components";
+import { CPAGanttChart, GanttChart } from "@shared/components";
 
 import { grid } from "@assets/index";
 import { HeaderTitle, PageAction } from "@shared/components";
@@ -17,6 +17,12 @@ import dataCPA1 from "./data/cpa-data1.json";
 import dataCPA2 from "./data/cpa-data2.json";
 import dataCPA3 from "./data/cpa-data3.json";
 import dataCPA4 from "./data/cpa-data4.json";
+const fileNames = [
+  "./data/cpa-data1.json",
+  "./data/cpa-data2.json",
+  "./data/cpa-data3.json",
+  "./data/cpa-data4.json",
+];
 
 interface Node {
   id: string;
@@ -135,7 +141,7 @@ class GraphCPA {
   }
 }
 
-const processCPAData = ({ data: data }) => {
+const processCPAData = ({ data }) => {
   const graphCPA = new GraphCPA();
   data.forEach((node: any) => {
     graphCPA.addNode(node);
@@ -191,9 +197,12 @@ const TableCPAHeaders = ({ className }: any) => {
   );
 };
 
-const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
+const TableRowCPAComponent = ({ activity, handleRowClick }) => {
+  const onRowClick = (activity) => {
+    handleRowClick(activity);
+  };
   return (
-    <tr key={activity.id}>
+    <tr key={activity.id} onClick={() => onRowClick(activity)}>
       <td>{activity.id}</td>
       <td>{activity.name}</td>
       <td className="text-center">{activity.duration}</td>
@@ -206,33 +215,55 @@ const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
   );
 };
 
-const TableCPA = ({ title, scheduleJSON, projectProgress }: any) => (
-  <div className={PageContainClasses}>
-    <div>
-      <div className="font-Roboto text-3xl font-extralight py-5">{title}</div>
-      <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
-        <TableCPAHeaders className="font-extralight border-b-2" />
-        <tbody className="items-center justify-center">
-          {scheduleJSON &&
-            scheduleJSON.map((schdeule, index) => {
-              return <TableRowCPAComponent key={index} activity={schdeule} />;
-            })}
-        </tbody>
-      </table>
+const TableCPA = ({
+  title,
+  scheduleJSON,
+  projectProgress,
+  handleRowClick,
+}: any) => {
+  const onRowClick = (activity) => {
+    handleRowClick(title, activity);
+  };
+
+  return (
+    <div className={PageContainClasses}>
+      <div>
+        <div className="font-Roboto text-3xl font-extralight py-5">{title}</div>
+        <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
+          <TableCPAHeaders className="font-extralight border-b-2" />
+          <tbody className="items-center justify-center">
+            {scheduleJSON &&
+              scheduleJSON.map(
+                (schdeule: Node, index: Key | null | undefined) => {
+                  return (
+                    <TableRowCPAComponent
+                      key={index}
+                      activity={schdeule}
+                      handleRowClick={onRowClick}
+                    />
+                  );
+                }
+              )}
+          </tbody>
+        </table>
+      </div>
+      <div className="p-6 bg-gray-50">
+        <CPAGanttChart
+          title={title}
+          tasks={scheduleJSON}
+          projectProgress={projectProgress}
+        />
+      </div>
     </div>
-    <div className="p-6 bg-gray-50">
-      <GanttChart
-        title={title}
-        tasks={scheduleJSON}
-        projectProgress={projectProgress}
-      />
-    </div>
-  </div>
-);
+  );
+};
 
 const CPAPage = () => {
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTitle, setSelTitle] = useState(null);
+  const [selectedActivity, setSelActivity] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -267,7 +298,81 @@ const CPAPage = () => {
     processData(dataCPA4);
     // -------------------
   }, []);
-  console.log(cpaResult);
+  const handleRowClick = (title, activity) => {
+    console.log(activity);
+    setSelTitle(title);
+    setSelActivity(activity);
+    setShowModal(true);
+  };
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+  const handleUpdate = (newDuration, newResources, newDependencies) => {
+    console.log(newDuration, newResources, newDependencies);
+    // Update the data here
+    setShowModal(false);
+  };
+  const EditForm = () => {
+    return (
+      <div className="modal">
+        <div className="modal-content">
+          <h2>Edit Data</h2>
+          <form>
+            <label>Duration:</label>
+            <input
+              type="number"
+              value={selectedActivity.duration}
+              onChange={(e) =>
+                handleUpdate(
+                  parseInt(e.target.value),
+                  selectedActivity.resources,
+                  selectedActivity.dependencies
+                )
+              }
+            />
+            <br />
+            <label>Resources:</label>
+            <input
+              type="text"
+              value={selectedActivity.resources.join(",")}
+              onChange={(e) =>
+                handleUpdate(
+                  selectedActivity.duration,
+                  e.target.value.split(","),
+                  selectedActivity.dependencies
+                )
+              }
+            />
+            <br />
+            <label>Dependencies:</label>
+            <input
+              type="text"
+              value={selectedActivity.dependencies.join(",")}
+              onChange={(e) =>
+                handleUpdate(
+                  selectedActivity.duration,
+                  selectedActivity.resources,
+                  e.target.value.split(",")
+                )
+              }
+            />
+            <br />
+            <button
+              onClick={() =>
+                handleUpdate(
+                  selectedActivity.duration,
+                  selectedActivity.resources,
+                  selectedActivity.dependencies
+                )
+              }
+            >
+              Update
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className={PageClasses}>
@@ -278,13 +383,18 @@ const CPAPage = () => {
       />
 
       <img className={GridClasses} src={grid} alt="Grid" />
-      {titles.map((title, index) => (
-        <TableCPA
-          key={index}
-          title={title}
-          scheduleJSON={cpaResult[title].scheduleJSON}
-          projectProgress={cpaResult[title].projectProgress}
-        />
+      {titles.map((title: string, index: number) => (
+        <div>
+          <TableCPA
+            className="position-relative z-index-0"
+            key={index}
+            title={title}
+            scheduleJSON={cpaResult[title].scheduleJSON}
+            projectProgress={cpaResult[title].projectProgress}
+            handleRowClick={handleRowClick}
+          />
+          {showModal && selectedTitle === title && EditForm()}
+        </div>
       ))}
       <PageAction />
     </div>

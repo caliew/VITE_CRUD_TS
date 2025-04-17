@@ -17,4 +17,5 @@ export * from "./UpdateFormSuccess";
 export * from "./WholePageLoading";
 
 export * from "./PageAction";
-export * from "./GanttChart";
+export * from "./CPAGanttChart";
+// export * from "./CPATable";
