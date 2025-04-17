@@ -12,23 +12,13 @@ import {
   PageContainClasses,
   GridClasses,
 } from "@shared/utils/classname";
-import {
-  printTasks,
-  printGantt,
-  printExecutionOrder,
-  printTaskDetails,
-  printOptimizationAnalysis,
-} from "@shared/utils/CPA";
 
-import dataCPA1 from "./cpa-data1.json";
-import dataCPA2 from "./cpa-data2.json";
-import dataCPA3 from "./cpa-data3.json";
-import dataCPA4 from "./cpa-data4.json";
+import dataCPA1 from "./data/cpa-data1.json";
+import dataCPA2 from "./data/cpa-data2.json";
+import dataCPA3 from "./data/cpa-data3.json";
+import dataCPA4 from "./data/cpa-data4.json";
 
 interface Node {
-  start: ReactI18NextChildren | Iterable<ReactI18NextChildren>;
-  end: ReactI18NextChildren | Iterable<ReactI18NextChildren>;
-  slack: ReactI18NextChildren | Iterable<ReactI18NextChildren>;
   id: string;
   name: string;
   duration: number;
@@ -159,24 +149,28 @@ const processCPAData = ({ data: data }) => {
   const executionOrder = result.executionOrder;
   const totalDuration = result.totalDuration;
   const criticalPath = result.criticalPath;
-  const scheduleJSON = result.tasks.map((task) => ({
-    id: task.id,
-    name: task.name,
-    start: task.start,
-    end: task.end,
-    duration: task.duration,
-    critical: task.isCritical,
-    slack: task.slack,
-    resources: task.resources,
-    dependencies: task.dependencies,
-    isCritical: criticalPath.includes(task.id),
-  }));
+  const projectProgress = Math.floor(Math.random() * 101);
+  const scheduleJSON = result.tasks.map((task) => {
+    return {
+      id: task.id,
+      name: task.name,
+      start: task.start,
+      end: task.end,
+      duration: task.duration,
+      critical: task.isCritical,
+      slack: task.slack,
+      resources: task.resources,
+      dependencies: task.dependencies,
+      isCritical: criticalPath.includes(task.id),
+    };
+  });
   return {
     graphCPA,
     scheduleJSON,
     criticalPath,
     executionOrder,
     totalDuration,
+    projectProgress,
   };
 };
 
@@ -212,7 +206,7 @@ const TableRowCPAComponent = ({ activity }: { activity: Node }) => {
   );
 };
 
-const TableCPA = ({ title, scheduleJSON }: any) => (
+const TableCPA = ({ title, scheduleJSON, projectProgress }: any) => (
   <div className={PageContainClasses}>
     <div>
       <div className="font-Roboto text-3xl font-extralight py-5">{title}</div>
@@ -227,7 +221,11 @@ const TableCPA = ({ title, scheduleJSON }: any) => (
       </table>
     </div>
     <div className="p-6 bg-gray-50">
-      <GanttChart title={title} tasks={scheduleJSON} />
+      <GanttChart
+        title={title}
+        tasks={scheduleJSON}
+        projectProgress={projectProgress}
+      />
     </div>
   </div>
 );
@@ -248,6 +246,7 @@ const CPAPage = () => {
         criticalPath,
         executionOrder,
         totalDuration,
+        projectProgress,
       } = processCPAData({ data: data?.activity });
       setTitles((prevTitles) => [...prevTitles, data?.title]);
       setCPAResult((prevResults) => ({
@@ -258,6 +257,7 @@ const CPAPage = () => {
           criticalPath,
           executionOrder,
           totalDuration,
+          projectProgress,
         },
       }));
     };
@@ -267,6 +267,7 @@ const CPAPage = () => {
     processData(dataCPA4);
     // -------------------
   }, []);
+  console.log(cpaResult);
 
   return (
     <div className={PageClasses}>
@@ -282,6 +283,7 @@ const CPAPage = () => {
           key={index}
           title={title}
           scheduleJSON={cpaResult[title].scheduleJSON}
+          projectProgress={cpaResult[title].projectProgress}
         />
       ))}
       <PageAction />

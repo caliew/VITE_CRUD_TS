@@ -1,4 +1,5 @@
 import React from "react";
+import "./index.css";
 
 type Task = {
   id: string;
@@ -9,17 +10,32 @@ type Task = {
   isCritical: boolean;
 };
 
-export const GanttChart: React.FC<{ tasks: Task[] }> = ({ title, tasks }) => {
-  const scale = 20; // 1 unit = 20px
+export const GanttChart: React.FC<{
+  title: string;
+  tasks: Task[];
+  projectProgress: number; // in same units as start/end
+}> = ({ title, tasks, projectProgress }) => {
+  const scale = 20; // px per time unit
+  const labelWidthPx = 160; // your name‐column width
   const maxEnd = Math.max(...tasks.map((t) => t.end));
+  const timelinePx = maxEnd * scale; // total chart width
+  const progressPx = (projectProgress / 100) * timelinePx;
+  const leftPx = labelWidthPx + progressPx;
 
   return (
-    <div className="w-full p-4 overflow-x-auto text-black font-Tahoma text-LG">
+    <div className="gantt-container w-full p-4 overflow-x-auto text-black font-Tahoma text-lg">
+      {/* Title */}
       <div className="text-lg mb-2 font-medium">
-        {title}
+        {title} [{projectProgress}%]
         <br />
         (CRITICAL PATH ANALYSIS)
       </div>
+
+      {/* Vertical progress marker */}
+      <div
+        className="absolute w-px bg-orange-500 pointer-events-none z-10"
+        style={{ top: "3rem", bottom: "1rem", left: `${leftPx}px` }}
+      />
 
       {/* Time Axis */}
       <div

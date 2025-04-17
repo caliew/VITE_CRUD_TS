@@ -1,0 +1,15 @@
+.gantt-container {
+    position: relative;
+}
+
+.progress-line {
+    position: absolute;
+    top: 3rem;
+    /* tweak to clear the header height */
+    bottom: 1rem;
+    /* tweak to clear any bottom padding */
+    width: 1px;
+    background: #ff6600;
+    z-index: 10;
+    pointer-events: none;
+}
