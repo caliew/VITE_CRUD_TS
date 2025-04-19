@@ -46,7 +46,7 @@ interface TaskSchedule {
   dependencies: string[];
   status: "pending" | "inProgress" | "completed";
 }
-class GraphCPA {
+export class GraphCPA {
   private graph: Graph;
 
   constructor() {
@@ -145,7 +145,7 @@ class GraphCPA {
   }
 }
 
-const processCPAData = ({ data }) => {
+const processCPAData = ({ data, projectstatus = null }) => {
   const graphCPA = new GraphCPA();
   data.forEach((node: any) => {
     graphCPA.addNode(node);
@@ -159,7 +159,7 @@ const processCPAData = ({ data }) => {
   const executionOrder = result.executionOrder;
   const totalDuration = result.totalDuration;
   const criticalPath = result.criticalPath;
-  const projectProgress = Math.floor(Math.random() * 101);
+  const projectProgress = projectstatus ?? Math.floor(Math.random() * 101);
   const progressRatio = projectProgress / 100;
   const currentTime = progressRatio * totalDuration;
 
@@ -220,7 +220,7 @@ const getStatusColor = (status) => {
     case "inProgress":
       return "bg-green-500";
     case "completed":
-      return "bg-black-500";
+      return "bg-gray-800";
   }
 };
 
@@ -559,14 +559,11 @@ const CPAPage = () => {
       const workflow = updatedResults[title];
       const currentTime =
         (workflow.projectProgress / 100) * workflow.totalDuration;
-
       // Identify the current task
       const currentTask = workflow.scheduleJSON.find(
         (task) => task.start <= currentTime && task.end > currentTime
       );
-
       if (!currentTask) return prevResults;
-
       // Increase the duration by 50%
       const updatedActivities = workflow.scheduleJSON.map((task) => {
         if (task.id === currentTask.id) {
@@ -577,7 +574,6 @@ const CPAPage = () => {
         }
         return task;
       });
-
       // Reconstruct the data for processing
       const updatedData = {
         activity: updatedActivities.map(
@@ -591,7 +587,8 @@ const CPAPage = () => {
         ),
         title,
       };
-
+      const currentTaskTitle = updatedData?.title ?? "";
+      const ProjectProgress = prevResults[currentTaskTitle]?.projectProgress;
       // Reprocess the CPA data
       const {
         graphCPA,
@@ -600,8 +597,10 @@ const CPAPage = () => {
         executionOrder,
         totalDuration,
         projectProgress,
-      } = processCPAData({ data: updatedData.activity });
-
+      } = processCPAData({
+        data: updatedData.activity,
+        projectstatus: ProjectProgress,
+      });
       updatedResults[title] = {
         graphCPA,
         scheduleJSON,
@@ -610,7 +609,6 @@ const CPAPage = () => {
         totalDuration,
         projectProgress,
       };
-
       return updatedResults;
     });
   };
@@ -671,7 +669,6 @@ const CPAPage = () => {
     const randomIndex = Math.floor(Math.random() * titles.length);
     const selTitle = titles[randomIndex];
     const selectedTask = cpaData[selTitle];
-    console.log(selTitle, selectedTask);
     setCPAResult((prevResults) => {
       if (prevResults[selTitle]) return prevResults; // Avoid duplicates
       return {
@@ -692,13 +689,21 @@ const CPAPage = () => {
         className={PageHeaderClasses}
         title="CRITICAL PATH ANALYSIS"
       />
-      <Button
-        Icon={GetIcon("home")}
-        className={ButtonLINKClasses}
-        onClick={initiateRandomTask}
-      >
-        INITIATE TASKS
-      </Button>
+      <div>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={initiateRandomTask}
+        >
+          INITIATE RANDOM TASKS
+        </Button>
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses}>
+          COMPLETED TASKS
+        </Button>
+        <Button Icon={GetIcon("home")} className={ButtonLINKClasses}>
+          PENDING TASKS
+        </Button>
+      </div>
 
       <img className={GridClasses} src={grid} alt="Grid" />
       {titles.map((title: string, index: number) => (
