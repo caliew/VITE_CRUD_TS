@@ -1,0 +1,123 @@
+{
+  "mockProjects": [
+    {
+      "WBS": "1.1.1",
+      "ProjectName": "ERP System Implementation",
+      "PrimaryPM": "Sarah Johnson",
+      "CharterStartDate": "2025-01-15",
+      "CharterFinishDate": "2025-06-30",
+
+      "%Clocked": 45,
+      "Status": "On Track",
+      "NextAction": "Finalize Vendor Contracts",
+
+      "CriticalPath": ["1.1.1", "1.1.2", "1.1.3"],
+      "Slack": 2,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false
+    },
+    {
+      "WBS": "1.2.3",
+      "ProjectName": "Mobile App Development",
+      "PrimaryPM": "Michael Chen",
+      "CharterStartDate": "2025-02-01",
+      "CharterFinishDate": "2025-05-15",
+
+      "%Clocked": 68,
+      "Status": "At Risk",
+      "NextAction": "Resolve App Store Compliance Issues",
+
+      "CriticalPath": ["1.2.3", "1.2.4"],
+      "Slack": 0,
+      "TotalPlannedMDs": 420,
+      "ActualWork": 285,
+      "TotalITBudget": 750000,
+      "BudgetVariance": 12000,
+
+      "PMRemark": "Unexpected compliance requirements emerged",
+      "RiskLevel": "High",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": true,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false
+    },
+    {
+      "WBS": "2.1.5",
+      "ProjectName": "Cloud Migration",
+      "PrimaryPM": "Emma Wilson",
+      "CharterStartDate": "2025-03-10",
+      "CharterFinishDate": "2025-09-01",
+      "%Clocked": 22,
+      "Status": "Delayed",
+      "NextAction": "Secure Cloud Provider Approval",
+      "CriticalPath": ["2.1.5", "2.1.6"],
+      "Slack": 5,
+      "TotalPlannedMDs": 1200,
+      "ActualWork": 264,
+      "TotalITBudget": 2000000,
+      "BudgetVariance": -45000,
+      "PMRemark": "Waiting on security clearance",
+      "RiskLevel": "Critical",
+      "ReqSignoffDoc": false,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false
+    },
+    {
+      "WBS": "3.3.2",
+      "ProjectName": "CRM System Upgrade",
+      "PrimaryPM": "David Miller",
+      "CharterStartDate": "2025-01-01",
+      "CharterFinishDate": "2025-04-30",
+      "%Clocked": 92,
+      "Status": "Completed",
+      "NextAction": "Post-Implementation Review",
+      "CriticalPath": ["3.3.2"],
+      "Slack": 0,
+      "TotalPlannedMDs": 300,
+      "ActualWork": 276,
+      "TotalITBudget": 500000,
+      "BudgetVariance": 25000,
+      "PMRemark": "Completed ahead of schedule",
+      "RiskLevel": "Low",
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": true,
+      "GoLiveDoc": true,
+      "PostLiveDoc": true
+    },
+    {
+      "WBS": "4.5.1",
+      "ProjectName": "Data Analytics Platform",
+      "PrimaryPM": "Lisa Rodriguez",
+      "CharterStartDate": "2025-04-01",
+      "CharterFinishDate": "2025-08-15",
+      "%Clocked": 33,
+      "Status": "On Hold",
+      "NextAction": "Procure Additional Storage",
+      "CriticalPath": ["4.5.1", "4.5.2"],
+      "Slack": 3,
+      "TotalPlannedMDs": 600,
+      "ActualWork": 198,
+      "TotalITBudget": 950000,
+      "BudgetVariance": -30000,
+      "PMRemark": "Budget freeze impacting hardware purchases",
+      "RiskLevel": "High",
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false
+    }
+  ]
+}

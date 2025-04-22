@@ -1,5 +1,5 @@
 // my-app/src/components/WorkerPage.tsx
-import { Key, useEffect, useState } from "react";
+import { Key, useEffect, useMemo, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
 import { Button, CPAGanttChart, GanttChart } from "@shared/components";
 
@@ -14,19 +14,25 @@ import {
   ButtonLINKClasses,
 } from "@shared/utils/classname";
 
+import mockProjects from "./data/projectMockData.json";
 import dataCPA1 from "./data/cpa-data1.json";
 import dataCPA2 from "./data/cpa-data2.json";
 import dataCPA3 from "./data/cpa-data3.json";
 import dataCPA4 from "./data/cpa-data4.json";
 import { title } from "process";
 
-const fileNames = [
-  "./data/cpa-data1.json",
-  "./data/cpa-data2.json",
-  "./data/cpa-data3.json",
-  "./data/cpa-data4.json",
-];
-
+interface Project {
+  WBS: string;
+  CriticalPath: string[];
+  Slack: number;
+  Duration: number; // Calculate from dates
+}
+interface Project {
+  WBS: string;
+  CriticalPath: string[];
+  Slack: number;
+  Duration: number;
+}
 interface Node {
   id: string;
   name: string;
@@ -46,6 +52,186 @@ interface TaskSchedule {
   dependencies: string[];
   status: "pending" | "inProgress" | "completed";
 }
+
+const Mode = {
+  Dashboard: "Dashboard",
+  CPAAnalysis: "CPAAnalysis",
+};
+const View = {
+  ProjectView: "Project",
+  TimelineView: "Timeline",
+  EffortView: "Effort",
+  StatusView: "Status",
+  DocumentationView: "Documentation",
+};
+const ProjectView = [
+  "WBS",
+  "ProjectName",
+  "PrimaryPM",
+  "%Clocked",
+  "Status",
+  "NextAction",
+];
+const TimelineView = [
+  "WBS",
+  "ProjectName",
+  "StartDate",
+  "EndDate",
+  "CriticalPath",
+  "Slack",
+];
+const EffortView = [
+  "WBS",
+  "PlannedMD",
+  "ActualWork",
+  "%Clocked",
+  "Budget",
+  "Variance",
+];
+const StatusView = ["WBS", "Status", "NextAction", "PMRemark", "RiskLevel"];
+const DocumentationView = [
+  "WBS",
+  "ReqSignOffDoc",
+  "BuildCompleteDoc",
+  "GoLiveDoc",
+  "PostLiveDoc",
+];
+
+function calculateDays(project) {
+  const start = new Date(project.CharterStartDate);
+  const finish = new Date(project.CharterFinishDate);
+  const today = new Date();
+
+  const daysTotal = Math.ceil((finish - start) / (1000 * 60 * 60 * 24));
+  const daysElapsed = Math.max(
+    0,
+    Math.ceil((today - start) / (1000 * 60 * 60 * 24))
+  );
+  const daysRemaining = Math.max(0, daysTotal - daysElapsed);
+  const daysUntil = Math.max(
+    0,
+    Math.ceil((start - today) / (1000 * 60 * 60 * 24))
+  );
+
+  return {
+    daysTotal,
+    daysElapsed,
+    daysRemaining,
+    daysUntil,
+  };
+}
+const totalDays = (project) => {};
+const calculateProgramCriticalPath = (projects: Project[]) => {
+  const graph = new Graph({ directed: true });
+
+  // Add nodes with duration
+  projects.forEach((project) => {
+    console.log(project);
+    graph.setNode(project.WBS, {
+      duration: project.Duration,
+      slack: project.Slack,
+    });
+  });
+
+  // Add dependencies (you'll need to define these)
+  projects.forEach((project) => {
+    project.CriticalPath.forEach((dep) => {
+      if (projects.some((p) => p.WBS === dep)) {
+        graph.setEdge(dep, project.WBS);
+      }
+    });
+  });
+  console.log(graph);
+
+  // Perform CPA calculations
+  const results = {
+    criticalPath: alg.topsort(graph),
+    totalDuration: calculateTotalDuration(graph),
+  };
+
+  return projects.filter(
+    (p) => results.criticalPath.includes(p.WBS) || p.Slack === 0
+  );
+};
+const detectHighRiskProjects = (projects: any[]) => {
+  return projects.filter((project) => {
+    const { daysTotal, daysElapsed, daysRemaining, daysUntil } =
+      calculateDays(project);
+
+    const progressRatio = project["%Clocked"] / 100;
+    const timeRatio = daysElapsed / daysTotal;
+
+    return (
+      project.RiskLevel === "Critical" ||
+      project.BudgetVariance < -project.TotalITBudget * 0.1 ||
+      (progressRatio < 0.8 && timeRatio > 0.5) ||
+      !project.ReqSignoffDoc
+    );
+  });
+};
+const checkDocumentationCompliance = (projects: any[]) => {
+  return projects.map((project) => ({
+    WBS: project.WBS,
+    MissingDocs: [
+      ...(!project.ReqSignoffDoc ? ["Requirements"] : []),
+      ...(!project.BuildCompleteDoc ? ["Build"] : []),
+      ...(!project.GoLiveDoc ? ["GoLive"] : []),
+      ...(!project.PostLiveDoc ? ["PostLive"] : []),
+    ],
+    ComplianceStatus:
+      project.ReqSignoffDoc &&
+      project.BuildCompleteDoc &&
+      project.GoLiveDoc &&
+      project.PostLiveDoc
+        ? "Fully Compliant"
+        : "Partial",
+  }));
+};
+const analyzeBudgetHealth = (projects: any[]) => {
+  return projects.map((project) => {
+    const burnRate = project.ActualWork / project.TotalPlannedMDs;
+    const budgetHealth = project.BudgetVariance / project.TotalITBudget;
+
+    return {
+      WBS: project.WBS,
+      BurnRateStatus: burnRate > 1.1 ? "Overburning" : "Normal",
+      BudgetHealth:
+        budgetHealth < -0.15
+          ? "Critical"
+          : budgetHealth < -0.05
+          ? "Warning"
+          : "Healthy",
+    };
+  });
+};
+const generateRecommendations = (project: any) => {
+  const recommendations = [];
+  const { daysTotal, daysElapsed, daysRemaining, daysUntil } =
+    calculateDays(project);
+  if (project.Slack <= 2 && project.Slack > 0) {
+    recommendations.push({
+      WBS: project.WBS,
+      recommendation: "Consider resource reallocation to prevent delays",
+    });
+  }
+
+  if (project.BudgetVariance < -project.TotalITBudget * 0.1) {
+    recommendations.push({
+      WBS: project.WBS,
+      recommendation: "Immediate cost review required",
+    });
+  }
+
+  if (!project.ReqSignoffDoc && daysUntil < 14) {
+    recommendations.push({
+      WBS: project.WBS,
+      recommendation: "Urgent requirement signoff needed",
+    });
+  }
+
+  return recommendations;
+};
+
 export class GraphCPA {
   private graph: Graph;
 
@@ -144,6 +330,17 @@ export class GraphCPA {
     return this.graph;
   }
 }
+
+const getViewParams = (view: string) => {
+  const views = {
+    [View.ProjectView]: ProjectView,
+    [View.TimelineView]: TimelineView,
+    [View.EffortView]: EffortView,
+    [View.StatusView]: StatusView,
+    [View.DocumentationView]: DocumentationView,
+  };
+  return views[view];
+};
 
 const processCPAData = ({ data, projectstatus = null }) => {
   const graphCPA = new GraphCPA();
@@ -294,6 +491,85 @@ const TableCPA = ({
     </div>
   );
 };
+const TableDashboard = ({ view, viewData }) => {
+  if (view === null) return;
+  const params = useMemo(() => getViewParams(view), [view]);
+  useEffect(() => {}, [view]);
+  const renderRow = (data: any) => {
+    switch (view) {
+      case View.ProjectView:
+        return (
+          <tr>
+            <td>{data.WBS}</td>
+            <td>{data.ProjectName}</td>
+            <td>{data.PrimaryPM}</td>
+            <td>{data["%Clocked"]}</td>
+            <td>{data.Status}</td>
+            <td>{data.NextAction}</td>
+          </tr>
+        );
+      case View.TimelineView:
+        return (
+          <tr>
+            <td>{data.WBS}</td>
+            <td>{data.ProjectName}</td>
+            <td>{data.StartDate}</td>
+            <td>{data.EndDate}</td>
+            <td>{data.CriticalPath}</td>
+            <td>{data.Slack}</td>
+          </tr>
+        );
+      case View.EffortView:
+        return (
+          <tr>
+            <td>{data.WBS}</td>
+            <td>{data.PlannedMD}</td>
+            <td>{data.ActualWork}</td>
+            <td>{data["%Clocked"]}</td>
+            <td>{data.Budget}</td>
+            <td>{data.Variance}</td>
+          </tr>
+        );
+      case View.StatusView:
+        return (
+          <tr>
+            <td>{data.WBS}</td>
+            <td>{data.Status}</td>
+            <td>{data.NextAction}</td>
+            <td>{data.PMRemark}</td>
+            <td>{data.RiskLevel}</td>
+          </tr>
+        );
+      case View.DocumentationView:
+        return (
+          <tr>
+            <td>{data.WBS}</td>
+            <td>{data.ReqSignoffDoc ? "YES" : "NO"}</td>
+            <td>{data.BuildCompleteDoc ? "YES" : "NO"}</td>
+            <td>{data.GoLiveDoc ? "YES" : "NO"}</td>
+            <td>{data.PostLiveDoc ? "YES" : "NO"}</td>
+          </tr>
+        );
+    }
+  };
+  return (
+    <div>
+      <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
+        <thead className="">
+          <tr className="text-center font-Tahoma font-extralight text-2xl">
+            {params &&
+              params.map((key) => (
+                <th className="font-normal decoration-underline border-b-2">
+                  {key}
+                </th>
+              ))}
+          </tr>
+        </thead>
+        <tbody>{viewData && viewData.map((data) => renderRow(data))}</tbody>
+      </table>
+    </div>
+  );
+};
 
 const CPAPage = () => {
   const [cpaData, setCPAData] = useState<any>([]);
@@ -302,10 +578,79 @@ const CPAPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTitle, setSelTitle] = useState(null);
   const [selectedActivity, setSelActivity] = useState(null);
+  const [mode, setMode] = useState<Mode>(null);
+  const [view, setView] = useState(null);
+  const [projectViewData, setProjectViewData] = useState(null);
+  const [timelineViewData, setTimelineViewData] = useState(null);
+  const [effortViewData, setEffortViewData] = useState(null);
+  const [statusViewData, setStatusViewData] = useState(null);
+  const [documentationViewData, setDocumentationViewData] = useState(null);
+  const [recommendations, setRecommendations] = useState(null);
+  const [highRiskProjects, setHighRiskProjects] = useState(null);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    const MockProjects = mockProjects["mockProjects"];
+    const projectViewData = MockProjects.map((proj) => ({
+      WBS: proj.WBS,
+      ProjectName: proj.ProjectName,
+      PrimaryPM: proj.PrimaryPM,
+      "%Clocked": `${proj["%Clocked"]}%`,
+      Status: proj.Status,
+      NextAction: proj.NextAction,
+    }));
+    const timelineViewData = MockProjects.map((proj) => ({
+      WBS: proj.WBS,
+      ProjectName: proj.ProjectName,
+      StartDate: proj.CharterStartDate,
+      EndDate: proj.CharterFinishDate,
+      CriticalPath: proj.CriticalPath.join(" → "),
+      Slack: `${proj.Slack} days`,
+    }));
+    const effortViewData = MockProjects.map((proj) => ({
+      WBS: proj.WBS,
+      PlannedMD: proj.TotalPlannedMDs,
+      ActualWork: proj.ActualWork,
+      "%Clocked": proj["%Clocked"],
+      Budget: proj.TotalITBudget,
+      Variance: proj.BudgetVariance,
+    }));
+    const statusViewData = MockProjects.map((proj) => ({
+      WBS: proj.WBS,
+      Status: proj.Status,
+      NextAction: proj.NextAction,
+      PMRemark: proj.PMRemark,
+      RiskLevel: proj.RiskLevel,
+    }));
+    const documentationViewData = MockProjects.map((proj) => ({
+      WBS: proj.WBS,
+      ReqSignoffDoc: proj.ReqSignoffDoc,
+      BuildCompleteDoc: proj.BuildCompleteDoc,
+      GoLiveDoc: proj.GoLiveDoc,
+      PostLiveDoc: proj.PostLiveDoc,
+    }));
+    setProjectViewData(projectViewData);
+    setTimelineViewData(timelineViewData);
+    setEffortViewData(effortViewData);
+    setStatusViewData(statusViewData);
+    setDocumentationViewData(documentationViewData);
+    //
+    const HighRiskProjects = detectHighRiskProjects(
+      mockProjects["mockProjects"]
+    );
+    const BudgetHealth = analyzeBudgetHealth(mockProjects["mockProjects"]);
+
+    const Recommendations = MockProjects.map((project) =>
+      generateRecommendations(project)
+    );
+
+    setHighRiskProjects(HighRiskProjects);
+    setRecommendations(Recommendations);
+    console.log(Recommendations);
+  }, [mockProjects]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -440,9 +785,6 @@ const CPAPage = () => {
     setSelActivity(activity);
     setShowModal(true);
   };
-  const handleModalClose = () => {
-    setShowModal(false);
-  };
   const EditForm = () => {
     return (
       <div className="modal">
@@ -504,55 +846,6 @@ const CPAPage = () => {
       </div>
     );
   };
-  const disruptSchedule = () => {
-    setCPAResult((prevResults) => {
-      const updatedResults = { ...prevResults };
-      for (const title in updatedResults) {
-        const workflow = updatedResults[title];
-        const disruptedActivities = workflow.scheduleJSON.map((task) => {
-          if (task.status !== "complete") {
-            return {
-              ...task,
-              duration: Math.ceil(task.duration * 1.5),
-            };
-          }
-          return task;
-        });
-
-        const updatedData = {
-          activity: disruptedActivities.map(
-            ({ id, name, duration, dependencies, resources }) => ({
-              id,
-              name,
-              duration,
-              dependencies,
-              resources,
-            })
-          ),
-          title,
-        };
-
-        const {
-          graphCPA,
-          scheduleJSON,
-          criticalPath,
-          executionOrder,
-          totalDuration,
-          projectProgress,
-        } = processCPAData({ data: updatedData.activity });
-
-        updatedResults[title] = {
-          graphCPA,
-          scheduleJSON,
-          criticalPath,
-          executionOrder,
-          totalDuration,
-          projectProgress,
-        };
-      }
-      return updatedResults;
-    });
-  };
   const simulateDisruption = (title: string) => {
     setCPAResult((prevResults) => {
       const updatedResults = { ...prevResults };
@@ -612,57 +905,6 @@ const CPAPage = () => {
       return updatedResults;
     });
   };
-  const disruptCurrentTask = () => {
-    setCPAResult((prevResults) => {
-      const updatedResults = { ...prevResults };
-      for (const title in updatedResults) {
-        const workflow = updatedResults[title];
-        const currentTime =
-          (workflow.projectProgress / 100) * workflow.totalDuration;
-        const disruptedSchedule = workflow.scheduleJSON.map((task) => {
-          if (task.start <= currentTime && task.end > currentTime) {
-            const newDuration = Math.ceil(task.duration * 1.5);
-            const updatedTask = {
-              ...task,
-              duration: newDuration,
-              end: task.start + newDuration,
-            };
-            return updatedTask;
-          }
-          return task;
-        });
-        const updatedData = {
-          activity: disruptedSchedule.map(
-            ({ id, name, duration, dependencies, resources }) => ({
-              id,
-              name,
-              duration,
-              dependencies,
-              resources,
-            })
-          ),
-          title,
-        };
-        const {
-          graphCPA,
-          scheduleJSON,
-          criticalPath,
-          executionOrder,
-          totalDuration,
-          projectProgress,
-        } = processCPAData({ data: updatedData.activity });
-        updatedResults[title] = {
-          graphCPA,
-          scheduleJSON,
-          criticalPath,
-          executionOrder,
-          totalDuration,
-          projectProgress,
-        };
-      }
-      return updatedResults;
-    });
-  };
   const initiateRandomTask = () => {
     if (cpaData.length === 0) return;
     const titles = Object.keys(cpaData);
@@ -682,13 +924,50 @@ const CPAPage = () => {
     setTitles((prevTitles) => [...prevTitles, selTitle]);
   };
 
-  return (
-    <div className={PageClasses}>
-      <HeaderTitle
-        Icon={GetIcon("Scheduler")}
-        className={PageHeaderClasses}
-        title="CRITICAL PATH ANALYSIS"
-      />
+  const getDashboardFeatures = useMemo(
+    () => (
+      <div>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setView(View.ProjectView)}
+        >
+          PROJECT
+        </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setView(View.TimelineView)}
+        >
+          TIMELINE
+        </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setView(View.EffortView)}
+        >
+          EFFORT
+        </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setView(View.StatusView)}
+        >
+          STATUS
+        </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setView(View.DocumentationView)}
+        >
+          DOCUMENTATION
+        </Button>
+      </div>
+    ),
+    [mode]
+  );
+  const getCPAnalysisFeatures = useMemo(
+    () => (
       <div>
         <Button
           Icon={GetIcon("home")}
@@ -704,24 +983,89 @@ const CPAPage = () => {
           PENDING TASKS
         </Button>
       </div>
+    ),
+    [mode]
+  );
+  const dataToRender = () => {
+    switch (view) {
+      case View.ProjectView:
+        return projectViewData;
+      case View.TimelineView:
+        return timelineViewData;
+      case View.EffortView:
+        return effortViewData;
+      case View.StatusView:
+        return statusViewData;
+      case View.DocumentationView:
+        return documentationViewData;
+      default:
+        return null;
+    }
+  };
 
-      <img className={GridClasses} src={grid} alt="Grid" />
-      {titles.map((title: string, index: number) => (
-        <div>
-          <TableCPA
-            className="position-relative z-index-0"
-            key={index}
-            title={title}
-            scheduleJSON={cpaResult[title].scheduleJSON}
-            projectProgress={cpaResult[title].projectProgress}
-            handleRowClick={handleRowClick}
-          />
-          <button onClick={() => simulateDisruption(title)}>
-            Disrupt Schedule
-          </button>
-          {showModal && selectedTitle === title && EditForm()}
-        </div>
-      ))}
+  return (
+    <div className={PageClasses}>
+      <HeaderTitle
+        Icon={GetIcon("Scheduler")}
+        className={PageHeaderClasses}
+        title="CRITICAL PATH ANALYSIS"
+      />
+      <div>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setMode(Mode.Dashboard)}
+        >
+          DASHBOARD
+        </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setMode(Mode.CPAAnalysis)}
+        >
+          CPANALYSIS
+        </Button>
+      </div>
+
+      {mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
+      {mode === Mode.Dashboard && getDashboardFeatures}
+
+      {mode === Mode.CPAAnalysis && (
+        <>
+          <img className={GridClasses} src={grid} alt="Grid" />
+          {titles.map((title: string, index: number) => (
+            <div>
+              <TableCPA
+                className="position-relative z-index-0"
+                key={index}
+                title={title}
+                scheduleJSON={cpaResult[title].scheduleJSON}
+                projectProgress={cpaResult[title].projectProgress}
+                handleRowClick={handleRowClick}
+              />
+              <button onClick={() => simulateDisruption(title)}>
+                Disrupt Schedule
+              </button>
+              {showModal && selectedTitle === title && EditForm()}
+            </div>
+          ))}
+        </>
+      )}
+      {mode === Mode.Dashboard && (
+        <>
+          {recommendations &&
+            recommendations.map((recommendation, index) => {
+              if (recommendation.length === 0) return null;
+              return (
+                <div className="font-Tahoma text-2xl align-left">
+                  {recommendation[0].WBS} {recommendation[0].recommendation}
+                </div>
+              );
+            })}
+          <img className={GridClasses} src={grid} alt="Grid" />
+          <TableDashboard view={view} viewData={dataToRender()} />
+        </>
+      )}
       <PageAction />
     </div>
   );
