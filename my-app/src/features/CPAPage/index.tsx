@@ -570,6 +570,23 @@ const TableDashboard = ({ view, viewData }) => {
     </div>
   );
 };
+const Recommendations = ({ recommendations }) => {
+  return (
+    <div className="border m-5 p-5 text-Tahoma text-2xl">
+      RECOMMENDATIONS
+      {recommendations &&
+        recommendations.map((recommendation, index) => {
+          if (recommendation.length === 0) return null;
+          return (
+            <div className="font-Tahoma text-2xl align-left">
+              {recommendation[0].WBS} {recommendation[0].recommendation}
+            </div>
+          );
+        })}
+      <img className={GridClasses} src={grid} alt="Grid" />
+    </div>
+  );
+};
 
 const CPAPage = () => {
   const [cpaData, setCPAData] = useState<any>([]);
@@ -924,6 +941,24 @@ const CPAPage = () => {
     setTitles((prevTitles) => [...prevTitles, selTitle]);
   };
 
+  const getRecommendations = useMemo(
+    () => (
+      <div className="border m-5 p-5 text-Tahoma text-2xl">
+        IMPORTANT NOTE
+        {recommendations &&
+          recommendations.map((recommendation, index) => {
+            if (recommendation.length === 0) return null;
+            return (
+              <div className="font-Tahoma text-2xl align-left">
+                {recommendation[0].WBS} {recommendation[0].recommendation}
+              </div>
+            );
+          })}
+        <img className={GridClasses} src={grid} alt="Grid" />
+      </div>
+    ),
+    [mode]
+  );
   const getDashboardFeatures = useMemo(
     () => (
       <div>
@@ -1008,8 +1043,10 @@ const CPAPage = () => {
       <HeaderTitle
         Icon={GetIcon("Scheduler")}
         className={PageHeaderClasses}
-        title="CRITICAL PATH ANALYSIS"
+        title="CRITICAL PATH ANALYSIS & CONSTRAINT MODELING"
       />
+      <Recommendations recommendations={recommendations} />
+
       <div>
         <Button
           Icon={GetIcon("home")}
@@ -1052,22 +1089,7 @@ const CPAPage = () => {
         </>
       )}
       {mode === Mode.Dashboard && (
-        <>
-          <div className="border m-5 p-5 text-Tahoma text-2xl">
-            IMPORTANT NOTE
-            {recommendations &&
-              recommendations.map((recommendation, index) => {
-                if (recommendation.length === 0) return null;
-                return (
-                  <div className="font-Tahoma text-2xl align-left">
-                    {recommendation[0].WBS} {recommendation[0].recommendation}
-                  </div>
-                );
-              })}
-            <img className={GridClasses} src={grid} alt="Grid" />
-          </div>
-          <TableDashboard view={view} viewData={dataToRender()} />
-        </>
+        <TableDashboard view={view} viewData={dataToRender()} />
       )}
       <PageAction />
     </div>

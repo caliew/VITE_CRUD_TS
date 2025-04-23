@@ -13,7 +13,8 @@ const PageContainClasses =
   "flex flex-row flex-wrap items-center justify-center p-5 bg-n-8 rounded-[2.4375rem] overflow-hidden shadow-xl shadow-cyan-500/50 gap-15";
 const GridClasses =
   "absolute top-0 left-0 w-full pointer-events-none z-index-[-1]";
-const PageHeaderClasses = "inline-flex size-24 mb-5 mt-5 stroke-[0.75]";
+const PageHeaderClasses =
+  "inline-flex size-24 font-Tahoma font-extralight mb-5 mt-5 stroke-[0.75]";
 
 const SidebarClasses =
   "fixed top-20 left-5 w-64 bg-red p-4 z-20 font-Roboto font-extralight text-2xl rounded-[1.5rem] shadow-2xl shadow-indigo-500/50";
