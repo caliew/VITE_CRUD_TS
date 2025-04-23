@@ -1052,20 +1052,22 @@ const CPAPage = () => {
         </>
       )}
       {mode === Mode.Dashboard && (
-        <div className="border m-5 p-5 text-Tahoma text-2xl">
-          IMPORTANT NOTE
-          {recommendations &&
-            recommendations.map((recommendation, index) => {
-              if (recommendation.length === 0) return null;
-              return (
-                <div className="font-Tahoma text-2xl align-left">
-                  {recommendation[0].WBS} {recommendation[0].recommendation}
-                </div>
-              );
-            })}
-          <img className={GridClasses} src={grid} alt="Grid" />
+        <>
+          <div className="border m-5 p-5 text-Tahoma text-2xl">
+            IMPORTANT NOTE
+            {recommendations &&
+              recommendations.map((recommendation, index) => {
+                if (recommendation.length === 0) return null;
+                return (
+                  <div className="font-Tahoma text-2xl align-left">
+                    {recommendation[0].WBS} {recommendation[0].recommendation}
+                  </div>
+                );
+              })}
+            <img className={GridClasses} src={grid} alt="Grid" />
+          </div>
           <TableDashboard view={view} viewData={dataToRender()} />
-        </div>
+        </>
       )}
       <PageAction />
     </div>
