@@ -14,7 +14,7 @@ import {
   ButtonLINKClasses,
 } from "@shared/utils/classname";
 
-import mockProjects from "./data/projectMockData.json";
+import mockProjectsData from "./data/projectMockData.json";
 import dataCPA1 from "./data/cpa-data1.json";
 import dataCPA2 from "./data/cpa-data2.json";
 import dataCPA3 from "./data/cpa-data3.json";
@@ -421,9 +421,9 @@ const getStatusColor = (status) => {
   }
 };
 
-const TableRowCPAComponent = ({ activity, handleRowClick }) => {
+const TableRowCPAComponent = ({ activity, handleCPARowClick }) => {
   const onRowClick = (activity) => {
-    handleRowClick(activity);
+    handleCPARowClick(activity);
   };
   return (
     <tr key={activity.id} onClick={() => onRowClick(activity)}>
@@ -453,10 +453,10 @@ const TableCPA = ({
   title,
   scheduleJSON,
   projectProgress,
-  handleRowClick,
+  handleCPARowClick,
 }: any) => {
   const onRowClick = (activity) => {
-    handleRowClick(title, activity);
+    handleCPARowClick(title, activity);
   };
 
   return (
@@ -473,7 +473,7 @@ const TableCPA = ({
                     <TableRowCPAComponent
                       key={index}
                       activity={schdeule}
-                      handleRowClick={onRowClick}
+                      handleCPARowClick={onRowClick}
                     />
                   );
                 }
@@ -595,8 +595,8 @@ const CPAPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedTitle, setSelTitle] = useState(null);
   const [selectedActivity, setSelActivity] = useState(null);
-  const [mode, setMode] = useState<Mode>(null);
-  const [view, setView] = useState(null);
+  const [mode, setMode] = useState<Mode>(Mode.Dashboard);
+  const [view, setView] = useState<View>(View.ProjectView);
   const [projectViewData, setProjectViewData] = useState(null);
   const [timelineViewData, setTimelineViewData] = useState(null);
   const [effortViewData, setEffortViewData] = useState(null);
@@ -604,13 +604,16 @@ const CPAPage = () => {
   const [documentationViewData, setDocumentationViewData] = useState(null);
   const [recommendations, setRecommendations] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState(null);
+  const [intervalId, setIntervalId] = useState(null);
+
+  const MockProjects = mockProjectsData["MockProjects"];
+  console.log(cpaData);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
-    const MockProjects = mockProjects["mockProjects"];
     const projectViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
       ProjectName: proj.ProjectName,
@@ -654,20 +657,14 @@ const CPAPage = () => {
     setEffortViewData(effortViewData);
     setStatusViewData(statusViewData);
     setDocumentationViewData(documentationViewData);
-    //
-    const HighRiskProjects = detectHighRiskProjects(
-      mockProjects["mockProjects"]
-    );
-    const BudgetHealth = analyzeBudgetHealth(mockProjects["mockProjects"]);
-
+    const HighRiskProjects = detectHighRiskProjects(MockProjects);
+    const BudgetHealth = analyzeBudgetHealth(MockProjects);
     const Recommendations = MockProjects.map((project) =>
       generateRecommendations(project)
     );
-
     setHighRiskProjects(HighRiskProjects);
     setRecommendations(Recommendations);
-    console.log(Recommendations);
-  }, [mockProjects]);
+  }, [MockProjects]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -705,11 +702,12 @@ const CPAPage = () => {
         return updatedResults;
       });
     }, 1000); // Update every second
+    setIntervalId(interval);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    const processData = (data: any) => {
+    const processData = ({ data, projectstatus }) => {
       const {
         graphCPA,
         scheduleJSON,
@@ -717,7 +715,7 @@ const CPAPage = () => {
         executionOrder,
         totalDuration,
         projectProgress,
-      } = processCPAData({ data: data?.activity });
+      } = processCPAData({ data: data?.activity, projectstatus });
       setTitles((prevTitles) => [...prevTitles, data?.title]);
       setCPAResult((prevResults) => ({
         ...prevResults,
@@ -742,12 +740,25 @@ const CPAPage = () => {
         },
       }));
     };
-    processData(dataCPA1);
-    processData(dataCPA2);
-    // processData(dataCPA3);
-    // processData(dataCPA4);
     // -------------------
-  }, []);
+    MockProjects.map((proj) => {
+      console.log(proj);
+      const projStatus = proj["%Clocked"];
+      const ObjData = {
+        title: proj.ProjectName,
+        activity: proj.activity,
+        resources: proj.resources,
+      };
+      processData({ data: ObjData, projectstatus: projStatus });
+    });
+    // -------------------
+  }, [MockProjects]);
+
+  const stopTimer = () => {
+    clearInterval(intervalId);
+  };
+
+  stopTimer();
 
   const handleUpdate = (newDuration, newResources, newDependencies) => {
     setCPAResult((prevResults) => {
@@ -796,7 +807,7 @@ const CPAPage = () => {
     });
     setShowModal(false);
   };
-  const handleRowClick = (title, activity) => {
+  const handleCPARowClick = (title, activity) => {
     console.log(activity);
     setSelTitle(title);
     setSelActivity(activity);
@@ -941,24 +952,6 @@ const CPAPage = () => {
     setTitles((prevTitles) => [...prevTitles, selTitle]);
   };
 
-  const getRecommendations = useMemo(
-    () => (
-      <div className="border m-5 p-5 text-Tahoma text-2xl">
-        IMPORTANT NOTE
-        {recommendations &&
-          recommendations.map((recommendation, index) => {
-            if (recommendation.length === 0) return null;
-            return (
-              <div className="font-Tahoma text-2xl align-left">
-                {recommendation[0].WBS} {recommendation[0].recommendation}
-              </div>
-            );
-          })}
-        <img className={GridClasses} src={grid} alt="Grid" />
-      </div>
-    ),
-    [mode]
-  );
   const getDashboardFeatures = useMemo(
     () => (
       <div>
@@ -1078,7 +1071,7 @@ const CPAPage = () => {
                 title={title}
                 scheduleJSON={cpaResult[title].scheduleJSON}
                 projectProgress={cpaResult[title].projectProgress}
-                handleRowClick={handleRowClick}
+                handleCPARowClick={handleCPARowClick}
               />
               <button onClick={() => simulateDisruption(title)}>
                 Disrupt Schedule

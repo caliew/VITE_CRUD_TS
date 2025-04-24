@@ -72,3 +72,8 @@ npm install echarts-for-react
 // IMAGE TILT
 // ----------
 npm install react-parallax-tilt
+
+// -------------
+// STATIC SERVER
+// -------------
+npx vite --host 202.59.9.164 --port 3001

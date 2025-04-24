@@ -1,5 +1,5 @@
 {
-  "mockProjects": [
+  "MockProjects": [
     {
       "WBS": "1.1.1",
       "ProjectName": "ERP System Implementation",
@@ -25,7 +25,174 @@
       "ReqSignoffDoc": true,
       "BuildCompleteDoc": false,
       "GoLiveDoc": false,
-      "PostLiveDoc": false
+      "PostLiveDoc": false,
+
+      "activity": [
+        {
+          "id": "1.1",
+          "name": "Manpower Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.2",
+          "name": "Hardware Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.3",
+          "name": "Software Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.4",
+          "name": "Other Procurement",
+          "duration": 2,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "2.1",
+          "name": "Draw a Context Diagram",
+          "duration": 2,
+          "dependencies": ["1.1", "1.2"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.2",
+          "name": "Develop Prototype",
+          "duration": 5,
+          "dependencies": ["2.1", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.3",
+          "name": "Model Requirement",
+          "duration": 4,
+          "dependencies": ["2.2", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.4",
+          "name": "Finalize Requirement",
+          "duration": 3,
+          "dependencies": ["2.3", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "3.1",
+          "name": "System Architecture Design",
+          "duration": 3,
+          "dependencies": ["2.4", "1.1"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.2",
+          "name": "UI/UX Design",
+          "duration": 3,
+          "dependencies": ["3.1", "1.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.3",
+          "name": "Database Design",
+          "duration": 3,
+          "dependencies": ["3.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "4.1",
+          "name": "Coding",
+          "duration": 5,
+          "dependencies": ["3.3", "1.1", "1.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.2",
+          "name": "Build",
+          "duration": 1,
+          "dependencies": ["4.1"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.3",
+          "name": "Module Integration",
+          "duration": 1,
+          "dependencies": ["4.2"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.4",
+          "name": "Version Control",
+          "duration": 1,
+          "dependencies": ["4.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.5",
+          "name": "Code Review",
+          "duration": 2,
+          "dependencies": ["4.4"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "5.1",
+          "name": "Regression Test",
+          "duration": 1,
+          "dependencies": ["4.5"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "5.2",
+          "name": "Load Test",
+          "duration": 1,
+          "dependencies": ["5.1"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "6.1",
+          "name": "Department A User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "6.2",
+          "name": "Department B User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "7.1",
+          "name": "Go Live",
+          "duration": 1,
+          "dependencies": ["6.2"],
+          "resources": ["R7"]
+        },
+        {
+          "id": "8.1",
+          "name": "Post Live Support",
+          "duration": 1,
+          "dependencies": ["7.1"],
+          "resources": ["R8"]
+        }
+      ],
+      "resources": [
+        { "id": "R1", "name": "Purchaser", "type": "Personnel" },
+        { "id": "R2", "name": "BA Analyst", "type": "Personnel" },
+        { "id": "R3", "name": "UI/UX Designer", "type": "Personnel" },
+        { "id": "R4", "name": "Developer", "type": "Personnel" },
+        { "id": "R5", "name": "Tester", "type": "Personnel" },
+        { "id": "R6", "name": "User Tester", "type": "Personnel" },
+        { "id": "R7", "name": "DevOps", "type": "Personnel" },
+        { "id": "R8", "name": "Technical Support", "type": "Personnel" }
+      ]
     },
     {
       "WBS": "1.2.3",
@@ -51,7 +218,174 @@
       "ReqSignoffDoc": true,
       "BuildCompleteDoc": true,
       "GoLiveDoc": false,
-      "PostLiveDoc": false
+      "PostLiveDoc": false,
+
+      "activity": [
+        {
+          "id": "1.1",
+          "name": "Manpower Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.2",
+          "name": "Hardware Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.3",
+          "name": "Software Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.4",
+          "name": "Other Procurement",
+          "duration": 2,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "2.1",
+          "name": "Draw a Context Diagram",
+          "duration": 2,
+          "dependencies": ["1.1", "1.2"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.2",
+          "name": "Develop Prototype",
+          "duration": 5,
+          "dependencies": ["2.1", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.3",
+          "name": "Model Requirement",
+          "duration": 4,
+          "dependencies": ["2.2", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.4",
+          "name": "Finalize Requirement",
+          "duration": 3,
+          "dependencies": ["2.3", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "3.1",
+          "name": "System Architecture Design",
+          "duration": 3,
+          "dependencies": ["2.4", "1.1"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.2",
+          "name": "UI/UX Design",
+          "duration": 3,
+          "dependencies": ["3.1", "1.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.3",
+          "name": "Database Design",
+          "duration": 3,
+          "dependencies": ["3.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "4.1",
+          "name": "Coding",
+          "duration": 5,
+          "dependencies": ["3.3", "1.1", "1.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.2",
+          "name": "Build",
+          "duration": 1,
+          "dependencies": ["4.1"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.3",
+          "name": "Module Integration",
+          "duration": 1,
+          "dependencies": ["4.2"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.4",
+          "name": "Version Control",
+          "duration": 1,
+          "dependencies": ["4.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.5",
+          "name": "Code Review",
+          "duration": 2,
+          "dependencies": ["4.4"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "5.1",
+          "name": "Regression Test",
+          "duration": 1,
+          "dependencies": ["4.5"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "5.2",
+          "name": "Load Test",
+          "duration": 1,
+          "dependencies": ["5.1"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "6.1",
+          "name": "Department A User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "6.2",
+          "name": "Department B User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "7.1",
+          "name": "Go Live",
+          "duration": 1,
+          "dependencies": ["6.2"],
+          "resources": ["R7"]
+        },
+        {
+          "id": "8.1",
+          "name": "Post Live Support",
+          "duration": 1,
+          "dependencies": ["7.1"],
+          "resources": ["R8"]
+        }
+      ],
+      "resources": [
+        { "id": "R1", "name": "Purchaser", "type": "Personnel" },
+        { "id": "R2", "name": "BA Analyst", "type": "Personnel" },
+        { "id": "R3", "name": "UI/UX Designer", "type": "Personnel" },
+        { "id": "R4", "name": "Developer", "type": "Personnel" },
+        { "id": "R5", "name": "Tester", "type": "Personnel" },
+        { "id": "R6", "name": "User Tester", "type": "Personnel" },
+        { "id": "R7", "name": "DevOps", "type": "Personnel" },
+        { "id": "R8", "name": "Technical Support", "type": "Personnel" }
+      ]
     },
     {
       "WBS": "2.1.5",
@@ -59,21 +393,192 @@
       "PrimaryPM": "Emma Wilson",
       "CharterStartDate": "2025-03-10",
       "CharterFinishDate": "2025-09-01",
+
       "%Clocked": 22,
       "Status": "Delayed",
       "NextAction": "Secure Cloud Provider Approval",
+
       "CriticalPath": ["2.1.5", "2.1.6"],
       "Slack": 5,
       "TotalPlannedMDs": 1200,
       "ActualWork": 264,
       "TotalITBudget": 2000000,
       "BudgetVariance": -45000,
+
       "PMRemark": "Waiting on security clearance",
       "RiskLevel": "Critical",
+
       "ReqSignoffDoc": false,
       "BuildCompleteDoc": false,
       "GoLiveDoc": false,
-      "PostLiveDoc": false
+      "PostLiveDoc": false,
+
+      "activity": [
+        {
+          "id": "1.1",
+          "name": "Manpower Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.2",
+          "name": "Hardware Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.3",
+          "name": "Software Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.4",
+          "name": "Other Procurement",
+          "duration": 2,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "2.1",
+          "name": "Draw a Context Diagram",
+          "duration": 2,
+          "dependencies": ["1.1", "1.2"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.2",
+          "name": "Develop Prototype",
+          "duration": 5,
+          "dependencies": ["2.1", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.3",
+          "name": "Model Requirement",
+          "duration": 4,
+          "dependencies": ["2.2", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.4",
+          "name": "Finalize Requirement",
+          "duration": 3,
+          "dependencies": ["2.3", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "3.1",
+          "name": "System Architecture Design",
+          "duration": 3,
+          "dependencies": ["2.4", "1.1"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.2",
+          "name": "UI/UX Design",
+          "duration": 3,
+          "dependencies": ["3.1", "1.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.3",
+          "name": "Database Design",
+          "duration": 3,
+          "dependencies": ["3.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "4.1",
+          "name": "Coding",
+          "duration": 5,
+          "dependencies": ["3.3", "1.1", "1.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.2",
+          "name": "Build",
+          "duration": 1,
+          "dependencies": ["4.1"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.3",
+          "name": "Module Integration",
+          "duration": 1,
+          "dependencies": ["4.2"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.4",
+          "name": "Version Control",
+          "duration": 1,
+          "dependencies": ["4.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.5",
+          "name": "Code Review",
+          "duration": 2,
+          "dependencies": ["4.4"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "5.1",
+          "name": "Regression Test",
+          "duration": 1,
+          "dependencies": ["4.5"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "5.2",
+          "name": "Load Test",
+          "duration": 1,
+          "dependencies": ["5.1"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "6.1",
+          "name": "Department A User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "6.2",
+          "name": "Department B User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "7.1",
+          "name": "Go Live",
+          "duration": 1,
+          "dependencies": ["6.2"],
+          "resources": ["R7"]
+        },
+        {
+          "id": "8.1",
+          "name": "Post Live Support",
+          "duration": 1,
+          "dependencies": ["7.1"],
+          "resources": ["R8"]
+        }
+      ],
+      "resources": [
+        { "id": "R1", "name": "Purchaser", "type": "Personnel" },
+        { "id": "R2", "name": "BA Analyst", "type": "Personnel" },
+        { "id": "R3", "name": "UI/UX Designer", "type": "Personnel" },
+        { "id": "R4", "name": "Developer", "type": "Personnel" },
+        { "id": "R5", "name": "Tester", "type": "Personnel" },
+        { "id": "R6", "name": "User Tester", "type": "Personnel" },
+        { "id": "R7", "name": "DevOps", "type": "Personnel" },
+        { "id": "R8", "name": "Technical Support", "type": "Personnel" }
+      ]
     },
     {
       "WBS": "3.3.2",
@@ -81,21 +586,192 @@
       "PrimaryPM": "David Miller",
       "CharterStartDate": "2025-01-01",
       "CharterFinishDate": "2025-04-30",
+
       "%Clocked": 92,
       "Status": "Completed",
       "NextAction": "Post-Implementation Review",
+
       "CriticalPath": ["3.3.2"],
       "Slack": 0,
       "TotalPlannedMDs": 300,
       "ActualWork": 276,
       "TotalITBudget": 500000,
       "BudgetVariance": 25000,
+
       "PMRemark": "Completed ahead of schedule",
       "RiskLevel": "Low",
+
       "ReqSignoffDoc": true,
       "BuildCompleteDoc": true,
       "GoLiveDoc": true,
-      "PostLiveDoc": true
+      "PostLiveDoc": true,
+
+      "activity": [
+        {
+          "id": "1.1",
+          "name": "Manpower Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.2",
+          "name": "Hardware Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.3",
+          "name": "Software Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.4",
+          "name": "Other Procurement",
+          "duration": 2,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "2.1",
+          "name": "Draw a Context Diagram",
+          "duration": 2,
+          "dependencies": ["1.1", "1.2"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.2",
+          "name": "Develop Prototype",
+          "duration": 5,
+          "dependencies": ["2.1", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.3",
+          "name": "Model Requirement",
+          "duration": 4,
+          "dependencies": ["2.2", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.4",
+          "name": "Finalize Requirement",
+          "duration": 3,
+          "dependencies": ["2.3", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "3.1",
+          "name": "System Architecture Design",
+          "duration": 3,
+          "dependencies": ["2.4", "1.1"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.2",
+          "name": "UI/UX Design",
+          "duration": 3,
+          "dependencies": ["3.1", "1.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.3",
+          "name": "Database Design",
+          "duration": 3,
+          "dependencies": ["3.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "4.1",
+          "name": "Coding",
+          "duration": 5,
+          "dependencies": ["3.3", "1.1", "1.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.2",
+          "name": "Build",
+          "duration": 1,
+          "dependencies": ["4.1"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.3",
+          "name": "Module Integration",
+          "duration": 1,
+          "dependencies": ["4.2"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.4",
+          "name": "Version Control",
+          "duration": 1,
+          "dependencies": ["4.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.5",
+          "name": "Code Review",
+          "duration": 2,
+          "dependencies": ["4.4"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "5.1",
+          "name": "Regression Test",
+          "duration": 1,
+          "dependencies": ["4.5"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "5.2",
+          "name": "Load Test",
+          "duration": 1,
+          "dependencies": ["5.1"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "6.1",
+          "name": "Department A User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "6.2",
+          "name": "Department B User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "7.1",
+          "name": "Go Live",
+          "duration": 1,
+          "dependencies": ["6.2"],
+          "resources": ["R7"]
+        },
+        {
+          "id": "8.1",
+          "name": "Post Live Support",
+          "duration": 1,
+          "dependencies": ["7.1"],
+          "resources": ["R8"]
+        }
+      ],
+      "resources": [
+        { "id": "R1", "name": "Purchaser", "type": "Personnel" },
+        { "id": "R2", "name": "BA Analyst", "type": "Personnel" },
+        { "id": "R3", "name": "UI/UX Designer", "type": "Personnel" },
+        { "id": "R4", "name": "Developer", "type": "Personnel" },
+        { "id": "R5", "name": "Tester", "type": "Personnel" },
+        { "id": "R6", "name": "User Tester", "type": "Personnel" },
+        { "id": "R7", "name": "DevOps", "type": "Personnel" },
+        { "id": "R8", "name": "Technical Support", "type": "Personnel" }
+      ]
     },
     {
       "WBS": "4.5.1",
@@ -103,21 +779,192 @@
       "PrimaryPM": "Lisa Rodriguez",
       "CharterStartDate": "2025-04-01",
       "CharterFinishDate": "2025-08-15",
+
       "%Clocked": 33,
       "Status": "On Hold",
       "NextAction": "Procure Additional Storage",
+
       "CriticalPath": ["4.5.1", "4.5.2"],
       "Slack": 3,
       "TotalPlannedMDs": 600,
       "ActualWork": 198,
       "TotalITBudget": 950000,
       "BudgetVariance": -30000,
+
       "PMRemark": "Budget freeze impacting hardware purchases",
       "RiskLevel": "High",
+
       "ReqSignoffDoc": true,
       "BuildCompleteDoc": false,
       "GoLiveDoc": false,
-      "PostLiveDoc": false
+      "PostLiveDoc": false,
+
+      "activity": [
+        {
+          "id": "1.1",
+          "name": "Manpower Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.2",
+          "name": "Hardware Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.3",
+          "name": "Software Procurement",
+          "duration": 1,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "1.4",
+          "name": "Other Procurement",
+          "duration": 2,
+          "dependencies": [],
+          "resources": ["R1"]
+        },
+        {
+          "id": "2.1",
+          "name": "Draw a Context Diagram",
+          "duration": 2,
+          "dependencies": ["1.1", "1.2"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.2",
+          "name": "Develop Prototype",
+          "duration": 5,
+          "dependencies": ["2.1", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.3",
+          "name": "Model Requirement",
+          "duration": 4,
+          "dependencies": ["2.2", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "2.4",
+          "name": "Finalize Requirement",
+          "duration": 3,
+          "dependencies": ["2.3", "1.1"],
+          "resources": ["R2"]
+        },
+        {
+          "id": "3.1",
+          "name": "System Architecture Design",
+          "duration": 3,
+          "dependencies": ["2.4", "1.1"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.2",
+          "name": "UI/UX Design",
+          "duration": 3,
+          "dependencies": ["3.1", "1.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "3.3",
+          "name": "Database Design",
+          "duration": 3,
+          "dependencies": ["3.2"],
+          "resources": ["R3"]
+        },
+        {
+          "id": "4.1",
+          "name": "Coding",
+          "duration": 5,
+          "dependencies": ["3.3", "1.1", "1.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.2",
+          "name": "Build",
+          "duration": 1,
+          "dependencies": ["4.1"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.3",
+          "name": "Module Integration",
+          "duration": 1,
+          "dependencies": ["4.2"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.4",
+          "name": "Version Control",
+          "duration": 1,
+          "dependencies": ["4.3"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "4.5",
+          "name": "Code Review",
+          "duration": 2,
+          "dependencies": ["4.4"],
+          "resources": ["R4"]
+        },
+        {
+          "id": "5.1",
+          "name": "Regression Test",
+          "duration": 1,
+          "dependencies": ["4.5"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "5.2",
+          "name": "Load Test",
+          "duration": 1,
+          "dependencies": ["5.1"],
+          "resources": ["R5"]
+        },
+        {
+          "id": "6.1",
+          "name": "Department A User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "6.2",
+          "name": "Department B User Test",
+          "duration": 1,
+          "dependencies": ["5.2"],
+          "resources": ["R6"]
+        },
+        {
+          "id": "7.1",
+          "name": "Go Live",
+          "duration": 1,
+          "dependencies": ["6.2"],
+          "resources": ["R7"]
+        },
+        {
+          "id": "8.1",
+          "name": "Post Live Support",
+          "duration": 1,
+          "dependencies": ["7.1"],
+          "resources": ["R8"]
+        }
+      ],
+      "resources": [
+        { "id": "R1", "name": "Purchaser", "type": "Personnel" },
+        { "id": "R2", "name": "BA Analyst", "type": "Personnel" },
+        { "id": "R3", "name": "UI/UX Designer", "type": "Personnel" },
+        { "id": "R4", "name": "Developer", "type": "Personnel" },
+        { "id": "R5", "name": "Tester", "type": "Personnel" },
+        { "id": "R6", "name": "User Tester", "type": "Personnel" },
+        { "id": "R7", "name": "DevOps", "type": "Personnel" },
+        { "id": "R8", "name": "Technical Support", "type": "Personnel" }
+      ]
     }
   ]
 }

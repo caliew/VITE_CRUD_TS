@@ -1,0 +1,71 @@
+{
+  "title": "Patient Care Workflow",
+  "activity": [
+    {
+      "id": "A",
+      "name": "Patient Admission",
+      "duration": 2,
+      "dependencies": [],
+      "resources": ["R1"]
+    },
+    {
+      "id": "B",
+      "name": "Initial Assessment",
+      "duration": 1,
+      "dependencies": ["A"],
+      "resources": ["R2"]
+    },
+    {
+      "id": "C1",
+      "name": "Blood Test",
+      "duration": 3,
+      "dependencies": ["B"],
+      "resources": ["R3"]
+    },
+    {
+      "id": "C2",
+      "name": "X-Ray",
+      "duration": 2,
+      "dependencies": ["B"],
+      "resources": ["R4"]
+    },
+    {
+      "id": "C3",
+      "name": "ECG",
+      "duration": 1,
+      "dependencies": ["B"],
+      "resources": ["R5"]
+    },
+    {
+      "id": "D",
+      "name": "Diagnosis",
+      "duration": 2,
+      "dependencies": ["C1", "C2", "C3"],
+      "resources": ["R6"]
+    },
+    {
+      "id": "E",
+      "name": "Treatment Plan",
+      "duration": 2,
+      "dependencies": ["D"],
+      "resources": ["R7"]
+    },
+    {
+      "id": "F",
+      "name": "Follow-up",
+      "duration": 1,
+      "dependencies": ["E"],
+      "resources": ["R8"]
+    }
+  ],
+  "resources": [
+    { "id": "R1", "name": "Admissions Clerk", "type": "Personnel" },
+    { "id": "R2", "name": "Doctor", "type": "Personnel" },
+    { "id": "R3", "name": "Lab Technician", "type": "Personnel" },
+    { "id": "R4", "name": "Radiologist", "type": "Personnel" },
+    { "id": "R5", "name": "Cardiologist", "type": "Personnel" },
+    { "id": "R6", "name": "Senior Doctor", "type": "Personnel" },
+    { "id": "R7", "name": "Nurse Practitioner", "type": "Personnel" },
+    { "id": "R8", "name": "Follow-up Nurse", "type": "Personnel" }
+  ]
+}

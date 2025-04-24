@@ -8,6 +8,7 @@ type Task = {
   end: number;
   duration: number;
   isCritical: boolean;
+  status: "pending" | "inProgress" | "completed";
 };
 
 export const CPAGanttChart: React.FC<{
@@ -49,35 +50,41 @@ export const CPAGanttChart: React.FC<{
       </div>
 
       {/* Task Bars */}
-      {tasks.map((task) => (
-        <div
-          key={task.id}
-          className="grid items-center mb-1"
-          style={{ gridTemplateColumns: `160px repeat(${maxEnd}, ${scale}px)` }}
-        >
-          <div className="text-sm pr-2">{task.name}</div>
-          {Array.from({ length: maxEnd }).map((_, i) => {
-            const inRange = i >= task.start && i < task.end;
-            return (
-              <div
-                key={i}
-                className={`h-6 ${
-                  inRange
-                    ? task.isCritical
-                      ? "bg-red-500"
-                      : "bg-blue-400"
-                    : ""
-                }`}
-                title={
-                  inRange
-                    ? `Task ${task.name} — Start: ${task.start}, End: ${task.end}`
-                    : undefined
-                }
-              />
-            );
-          })}
-        </div>
-      ))}
+      {tasks.map((task) => {
+        return (
+          <div
+            key={task.id}
+            className="grid items-center mb-1"
+            style={{
+              gridTemplateColumns: `160px repeat(${maxEnd}, ${scale}px)`,
+            }}
+          >
+            <div className="text-sm pr-2">{task.name}</div>
+            {Array.from({ length: maxEnd }).map((_, i) => {
+              const inRange = i >= task.start && i < task.end;
+              return (
+                <div
+                  key={i}
+                  className={`h-6 ${
+                    inRange
+                      ? task.status === "completed"
+                        ? "bg-gray-500"
+                        : task.isCritical
+                        ? "bg-red-500"
+                        : "bg-blue-400"
+                      : ""
+                  }`}
+                  title={
+                    inRange
+                      ? `Task ${task.name} — Start: ${task.start}, End: ${task.end}`
+                      : undefined
+                  }
+                />
+              );
+            })}
+          </div>
+        );
+      })}
     </div>
   );
 };
