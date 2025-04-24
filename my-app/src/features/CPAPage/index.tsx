@@ -1166,7 +1166,20 @@ const CPAPage = () => {
         className={PageHeaderClasses}
         title="CRITICAL PATH ANALYSIS & CONSTRAINT MODELING"
       />
-      <Recommendations recommendations={recommendations} />
+      <div className="flex">
+        <div>
+          <BubbleChart
+            className=""
+            title="Line Plot (MERGE)"
+            dataX={DataX}
+            dataY={DataY}
+            merge={true}
+            seriesLabels={SeriesLabels}
+            legendsLabels={LegendsLabels}
+          />
+        </div>
+        <Recommendations recommendations={recommendations} />
+      </div>
 
       <div>
         <Button
@@ -1220,7 +1233,6 @@ const CPAPage = () => {
         </div>
       )}
 
-      {getBubbleChart}
       {selectedProject && (
         <div className="border-2 p-4">
           <Button
