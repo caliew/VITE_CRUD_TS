@@ -1,10 +1,15 @@
 // my-app/src/components/WorkerPage.tsx
 import { Key, useEffect, useMemo, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
-import { Button, CPAGanttChart } from "@shared/components";
+import {
+  HeaderTitle,
+  BubbleChart,
+  PageAction,
+  Button,
+  CPAGanttChart,
+} from "@shared/components";
 
 import { grid } from "@assets/index";
-import { HeaderTitle, PageAction } from "@shared/components";
 import { GetIcon } from "@utils/icon";
 import {
   PageClasses,
@@ -13,7 +18,6 @@ import {
   GridClasses,
   ButtonLINKClasses,
 } from "@shared/utils/classname";
-
 import mockProjectsData from "./data/projectMockData.json";
 import { Typography } from "antd";
 import "./index.css";
@@ -73,6 +77,7 @@ const ProjectView = [
   "%Clocked",
   "Status",
   "NextAction",
+  "ProjEffort",
 ];
 const TimelineView = [
   "WBS",
@@ -523,6 +528,7 @@ const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
             <td>{data["%Clocked"]}</td>
             <td>{data.Status}</td>
             <td>{data.NextAction}</td>
+            <td>{data.ProjEffort.toFixed(2)}</td>
           </tr>
         );
       case View.TimelineView:
@@ -607,6 +613,26 @@ const Recommendations = ({ recommendations }) => {
     </div>
   );
 };
+const LegendsLabels = ["Evaporation", "Rainfall"];
+const SeriesLabels = ["Evaporation(m³/s)", "Rainfall(mm)"];
+const DataX = [
+  "2009/6/12 2:00",
+  "2009/6/12 3:00",
+  "2009/6/12 4:00",
+  "2009/6/12 5:00",
+  "2009/6/12 6:00",
+  "2009/6/12 7:00",
+  "2009/6/12 8:00",
+  "2009/6/12 9:00",
+  "2009/6/12 10:00",
+  "2009/6/12 11:00",
+  "2009/6/12 12:00",
+  "2009/6/12 13:00",
+];
+const DataY = [
+  [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
+  [3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7],
+];
 
 const CPAPage = () => {
   const [file, setFile] = useState(null);
@@ -639,14 +665,21 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
-    const projectViewData = MockProjects.map((proj) => ({
-      WBS: proj.WBS,
-      ProjectName: proj.ProjectName,
-      PrimaryPM: proj.PrimaryPM,
-      "%Clocked": `${proj["%Clocked"]}%`,
-      Status: proj.Status,
-      NextAction: proj.NextAction,
-    }));
+    const projectViewData = MockProjects.map((proj) => {
+      const startDate = new Date(proj.CharterStartDate);
+      const finishDate = new Date(proj.CharterFinishDate);
+      const totalProjectPeriod = finishDate.getTime() - startDate.getTime();
+      const days = Math.floor(totalProjectPeriod / (1000 * 60 * 60 * 24));
+      return {
+        WBS: proj.WBS,
+        ProjectName: proj.ProjectName,
+        PrimaryPM: proj.PrimaryPM,
+        "%Clocked": `${proj["%Clocked"]}%`,
+        Status: proj.Status,
+        NextAction: proj.NextAction,
+        ProjEffort: proj.TotalPlannedMDs / days,
+      };
+    });
     const timelineViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
       ProjectName: proj.ProjectName,
@@ -1083,6 +1116,21 @@ const CPAPage = () => {
     ),
     [mode]
   );
+  const getBubbleChart = useMemo(() => {
+    return (
+      <div>
+        <BubbleChart
+          className=""
+          title="Line Plot (MERGE)"
+          dataX={DataX}
+          dataY={DataY}
+          merge={true}
+          seriesLabels={SeriesLabels}
+          legendsLabels={LegendsLabels}
+        />
+      </div>
+    );
+  }, []);
   const dataToRender = () => {
     switch (view) {
       case View.ProjectView:
@@ -1172,6 +1220,7 @@ const CPAPage = () => {
         </div>
       )}
 
+      {getBubbleChart}
       {selectedProject && (
         <div className="border-2 p-4">
           <Button
