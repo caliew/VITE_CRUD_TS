@@ -1,7 +1,7 @@
 // my-app/src/components/WorkerPage.tsx
 import { Key, useEffect, useMemo, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
-import { Button, CPAGanttChart, GanttChart } from "@shared/components";
+import { Button, CPAGanttChart } from "@shared/components";
 
 import { grid } from "@assets/index";
 import { HeaderTitle, PageAction } from "@shared/components";
@@ -15,11 +15,11 @@ import {
 } from "@shared/utils/classname";
 
 import mockProjectsData from "./data/projectMockData.json";
-import dataCPA1 from "./data/cpa-data1.json";
-import dataCPA2 from "./data/cpa-data2.json";
-import dataCPA3 from "./data/cpa-data3.json";
-import dataCPA4 from "./data/cpa-data4.json";
-import { title } from "process";
+// import dataCPA1 from "./data/cpa-data1.json";
+// import dataCPA2 from "./data/cpa-data2.json";
+// import dataCPA3 from "./data/cpa-data3.json";
+// import dataCPA4 from "./data/cpa-data4.json";
+// import { title } from "process";
 
 interface Project {
   WBS: string;
@@ -589,6 +589,9 @@ const Recommendations = ({ recommendations }) => {
 };
 
 const CPAPage = () => {
+  const [file, setFile] = useState(null);
+  const [data, setData] = useState(null);
+  const [MockProjects, setMockProjects] = useState<any>([]);
   const [cpaData, setCPAData] = useState<any>([]);
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
@@ -606,14 +609,17 @@ const CPAPage = () => {
   const [highRiskProjects, setHighRiskProjects] = useState(null);
   const [intervalId, setIntervalId] = useState(null);
 
-  const MockProjects = mockProjectsData["MockProjects"];
-  console.log(cpaData);
+  useEffect(() => {
+    const MockProjects = mockProjectsData["MockProjects"];
+    setMockProjects(MockProjects);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useEffect(() => {
+    console.log(MockProjects);
     const projectViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
       ProjectName: proj.ProjectName,
@@ -707,6 +713,7 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
+    console.log("PROCESS DATA..");
     const processData = ({ data, projectstatus }) => {
       const {
         graphCPA,
@@ -742,7 +749,6 @@ const CPAPage = () => {
     };
     // -------------------
     MockProjects.map((proj) => {
-      console.log(proj);
       const projStatus = proj["%Clocked"];
       const ObjData = {
         title: proj.ProjectName,
@@ -1030,6 +1036,17 @@ const CPAPage = () => {
         return null;
     }
   };
+  const handleFileImport = (event: any) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = JSON.parse(reader.result as string);
+      setMockProjects(data["MockProjects"]);
+      setTitles([]);
+      // do something with the imported data
+    };
+    reader.readAsText(file);
+  };
 
   return (
     <div className={PageClasses}>
@@ -1055,6 +1072,7 @@ const CPAPage = () => {
         >
           CPANALYSIS
         </Button>
+        <input type="file" accept=".json" onChange={handleFileImport} />
       </div>
 
       {mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
