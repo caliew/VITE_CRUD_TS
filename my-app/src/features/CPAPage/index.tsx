@@ -15,6 +15,8 @@ import {
 } from "@shared/utils/classname";
 
 import mockProjectsData from "./data/projectMockData.json";
+import { Typography } from "antd";
+import "./index.css";
 // import dataCPA1 from "./data/cpa-data1.json";
 // import dataCPA2 from "./data/cpa-data2.json";
 // import dataCPA3 from "./data/cpa-data3.json";
@@ -82,15 +84,24 @@ const TimelineView = [
 ];
 const EffortView = [
   "WBS",
+  "ProjectName",
   "PlannedMD",
   "ActualWork",
   "%Clocked",
   "Budget",
   "Variance",
 ];
-const StatusView = ["WBS", "Status", "NextAction", "PMRemark", "RiskLevel"];
+const StatusView = [
+  "WBS",
+  "ProjectName",
+  "Status",
+  "NextAction",
+  "PMRemark",
+  "RiskLevel",
+];
 const DocumentationView = [
   "WBS",
+  "ProjectName",
   "ReqSignOffDoc",
   "BuildCompleteDoc",
   "GoLiveDoc",
@@ -462,7 +473,9 @@ const TableCPA = ({
   return (
     <div className={PageContainClasses}>
       <div>
-        <div className="font-Roboto text-3xl font-extralight py-5">{title}</div>
+        <div className="font-Roboto text-3xl font-extralight py-5 text-center text-orange-600">
+          {title} - {projectProgress}%
+        </div>
         <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
           <TableCPAHeaders className="font-extralight border-b-2" />
           <tbody className="items-center justify-center">
@@ -486,20 +499,24 @@ const TableCPA = ({
           title={title}
           tasks={scheduleJSON}
           projectProgress={projectProgress}
+          handleCPARowClick={onRowClick}
         />
       </div>
     </div>
   );
 };
-const TableDashboard = ({ view, viewData }) => {
+const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
   if (view === null) return;
   const params = useMemo(() => getViewParams(view), [view]);
+  const onRowClick = (data) => {
+    handleProjectRowClick(data.ProjectName);
+  };
   useEffect(() => {}, [view]);
   const renderRow = (data: any) => {
     switch (view) {
       case View.ProjectView:
         return (
-          <tr>
+          <tr onClick={() => onRowClick(data)}>
             <td>{data.WBS}</td>
             <td>{data.ProjectName}</td>
             <td>{data.PrimaryPM}</td>
@@ -510,7 +527,7 @@ const TableDashboard = ({ view, viewData }) => {
         );
       case View.TimelineView:
         return (
-          <tr>
+          <tr onClick={() => onRowClick(data)}>
             <td>{data.WBS}</td>
             <td>{data.ProjectName}</td>
             <td>{data.StartDate}</td>
@@ -521,8 +538,9 @@ const TableDashboard = ({ view, viewData }) => {
         );
       case View.EffortView:
         return (
-          <tr>
+          <tr onClick={() => onRowClick(data)}>
             <td>{data.WBS}</td>
+            <td>{data.ProjectName}</td>
             <td>{data.PlannedMD}</td>
             <td>{data.ActualWork}</td>
             <td>{data["%Clocked"]}</td>
@@ -532,8 +550,9 @@ const TableDashboard = ({ view, viewData }) => {
         );
       case View.StatusView:
         return (
-          <tr>
+          <tr onClick={() => onRowClick(data)}>
             <td>{data.WBS}</td>
+            <td>{data.ProjectName}</td>
             <td>{data.Status}</td>
             <td>{data.NextAction}</td>
             <td>{data.PMRemark}</td>
@@ -542,8 +561,9 @@ const TableDashboard = ({ view, viewData }) => {
         );
       case View.DocumentationView:
         return (
-          <tr>
+          <tr onClick={() => onRowClick(data)}>
             <td>{data.WBS}</td>
+            <td>{data.ProjectName}</td>
             <td>{data.ReqSignoffDoc ? "YES" : "NO"}</td>
             <td>{data.BuildCompleteDoc ? "YES" : "NO"}</td>
             <td>{data.GoLiveDoc ? "YES" : "NO"}</td>
@@ -592,12 +612,12 @@ const CPAPage = () => {
   const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
   const [MockProjects, setMockProjects] = useState<any>([]);
-  const [cpaData, setCPAData] = useState<any>([]);
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTitle, setSelTitle] = useState(null);
   const [selectedActivity, setSelActivity] = useState(null);
+  const [selectedProject, setSelectedProject] = useState<string>(null);
   const [mode, setMode] = useState<Mode>(Mode.Dashboard);
   const [view, setView] = useState<View>(View.ProjectView);
   const [projectViewData, setProjectViewData] = useState(null);
@@ -619,7 +639,6 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(MockProjects);
     const projectViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
       ProjectName: proj.ProjectName,
@@ -638,6 +657,7 @@ const CPAPage = () => {
     }));
     const effortViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
+      ProjectName: proj.ProjectName,
       PlannedMD: proj.TotalPlannedMDs,
       ActualWork: proj.ActualWork,
       "%Clocked": proj["%Clocked"],
@@ -646,6 +666,7 @@ const CPAPage = () => {
     }));
     const statusViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
+      ProjectName: proj.ProjectName,
       Status: proj.Status,
       NextAction: proj.NextAction,
       PMRemark: proj.PMRemark,
@@ -653,6 +674,7 @@ const CPAPage = () => {
     }));
     const documentationViewData = MockProjects.map((proj) => ({
       WBS: proj.WBS,
+      ProjectName: proj.ProjectName,
       ReqSignoffDoc: proj.ReqSignoffDoc,
       BuildCompleteDoc: proj.BuildCompleteDoc,
       GoLiveDoc: proj.GoLiveDoc,
@@ -713,7 +735,6 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("PROCESS DATA..");
     const processData = ({ data, projectstatus }) => {
       const {
         graphCPA,
@@ -725,17 +746,6 @@ const CPAPage = () => {
       } = processCPAData({ data: data?.activity, projectstatus });
       setTitles((prevTitles) => [...prevTitles, data?.title]);
       setCPAResult((prevResults) => ({
-        ...prevResults,
-        [data?.title]: {
-          graphCPA,
-          scheduleJSON,
-          criticalPath,
-          executionOrder,
-          totalDuration,
-          projectProgress,
-        },
-      }));
-      setCPAData((prevResults) => ({
         ...prevResults,
         [data?.title]: {
           graphCPA,
@@ -814,10 +824,63 @@ const CPAPage = () => {
     setShowModal(false);
   };
   const handleCPARowClick = (title, activity) => {
-    console.log(activity);
     setSelTitle(title);
     setSelActivity(activity);
     setShowModal(true);
+    // ----------------------
+    setCPAResult((prevResults) => {
+      const updatedResults = { ...prevResults };
+      const workflow = updatedResults[title];
+      // Increase the duration by 50%
+      const updatedActivities = workflow.scheduleJSON.map((task) => {
+        if (task.id === activity.id) {
+          return {
+            ...task,
+            duration: Math.ceil(task.duration * 1.5),
+          };
+        }
+        return task;
+      });
+      // Reconstruct the data for processing
+      const updatedData = {
+        activity: updatedActivities.map(
+          ({ id, name, duration, dependencies, resources }) => ({
+            id,
+            name,
+            duration,
+            dependencies,
+            resources,
+          })
+        ),
+        title,
+      };
+      const currentTaskTitle = updatedData?.title ?? "";
+      const ProjectProgress = prevResults[currentTaskTitle]?.projectProgress;
+      // Reprocess the CPA data
+      const {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      } = processCPAData({
+        data: updatedData.activity,
+        projectstatus: ProjectProgress,
+      });
+      updatedResults[title] = {
+        graphCPA,
+        scheduleJSON,
+        criticalPath,
+        executionOrder,
+        totalDuration,
+        projectProgress,
+      };
+      return updatedResults;
+    });
+  };
+  const handleProjectRowClick = (title) => {
+    setSelectedProject(title);
   };
   const EditForm = () => {
     return (
@@ -940,11 +1003,11 @@ const CPAPage = () => {
     });
   };
   const initiateRandomTask = () => {
-    if (cpaData.length === 0) return;
-    const titles = Object.keys(cpaData);
+    if (cpaResult.length === 0) return;
+    const titles = Object.keys(cpaResult);
     const randomIndex = Math.floor(Math.random() * titles.length);
     const selTitle = titles[randomIndex];
-    const selectedTask = cpaData[selTitle];
+    const selectedTask = cpaResult[selTitle];
     setCPAResult((prevResults) => {
       if (prevResults[selTitle]) return prevResults; // Avoid duplicates
       return {
@@ -1094,14 +1157,40 @@ const CPAPage = () => {
               <button onClick={() => simulateDisruption(title)}>
                 Disrupt Schedule
               </button>
-              {showModal && selectedTitle === title && EditForm()}
+              {false && showModal && selectedTitle === title && EditForm()}
             </div>
           ))}
         </>
       )}
       {mode === Mode.Dashboard && (
-        <TableDashboard view={view} viewData={dataToRender()} />
+        <div className="border-2 p-4">
+          <TableDashboard
+            view={view}
+            viewData={dataToRender()}
+            handleProjectRowClick={handleProjectRowClick}
+          />
+        </div>
       )}
+
+      {selectedProject && (
+        <div className="border-2 p-4">
+          <Button
+            Icon={GetIcon("home")}
+            className={ButtonLINKClasses}
+            onClick={() => setSelectedProject(null)}
+          >
+            CLEAR SELECTION
+          </Button>
+          <TableCPA
+            className="position-relative z-index-0"
+            title={selectedProject}
+            scheduleJSON={cpaResult[selectedProject].scheduleJSON}
+            projectProgress={cpaResult[selectedProject].projectProgress}
+            handleCPARowClick={handleCPARowClick}
+          />
+        </div>
+      )}
+
       <PageAction />
     </div>
   );

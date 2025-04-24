@@ -15,14 +15,17 @@ export const CPAGanttChart: React.FC<{
   title: string;
   tasks: Task[];
   projectProgress: number; // in same units as start/end
-}> = ({ title, tasks, projectProgress }) => {
+  handleCPARowClick: (task: Task) => void;
+}> = ({ title, tasks, projectProgress, handleCPARowClick }) => {
   const scale = 20; // px per time unit
   const labelWidthPx = 175; // your name‐column width
   const maxEnd = Math.max(...tasks.map((t) => t.end));
   const timelinePx = maxEnd * scale; // total chart width
   const progressPx = (projectProgress / 100) * timelinePx;
   const leftPx = labelWidthPx + progressPx;
-
+  const onRowClick = (task) => {
+    handleCPARowClick(task);
+  };
   return (
     <div className="gantt-container w-full p-4 overflow-x-auto text-black font-Tahoma text-lg">
       {/* Title */}
@@ -58,6 +61,7 @@ export const CPAGanttChart: React.FC<{
             style={{
               gridTemplateColumns: `160px repeat(${maxEnd}, ${scale}px)`,
             }}
+            onClick={() => onRowClick(task)}
           >
             <div className="text-sm pr-2">{task.name}</div>
             {Array.from({ length: maxEnd }).map((_, i) => {
