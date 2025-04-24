@@ -1075,7 +1075,7 @@ const CPAPage = () => {
         <input type="file" accept=".json" onChange={handleFileImport} />
       </div>
 
-      {mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
+      {false && mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
       {mode === Mode.Dashboard && getDashboardFeatures}
 
       {mode === Mode.CPAAnalysis && (
