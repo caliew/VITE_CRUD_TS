@@ -1,5 +1,5 @@
 // my-app/src/components/WorkerPage.tsx
-import { Key, useEffect, useMemo, useState } from "react";
+import { Key, SetStateAction, useEffect, useMemo, useState } from "react";
 import { alg, Graph } from "@dagrejs/graphlib";
 import {
   HeaderTitle,
@@ -19,8 +19,8 @@ import {
   ButtonLINKClasses,
 } from "@shared/utils/classname";
 import mockProjectsData from "./data/projectMockData.json";
-import { Typography } from "antd";
 import "./index.css";
+
 // import dataCPA1 from "./data/cpa-data1.json";
 // import dataCPA2 from "./data/cpa-data2.json";
 // import dataCPA3 from "./data/cpa-data3.json";
@@ -113,7 +113,10 @@ const DocumentationView = [
   "PostLiveDoc",
 ];
 
-function calculateDays(project) {
+function calculateDays(project: {
+  CharterStartDate: string | number | Date;
+  CharterFinishDate: string | number | Date;
+}) {
   const start = new Date(project.CharterStartDate);
   const finish = new Date(project.CharterFinishDate);
   const today = new Date();
@@ -136,7 +139,7 @@ function calculateDays(project) {
     daysUntil,
   };
 }
-const totalDays = (project) => {};
+
 const calculateProgramCriticalPath = (projects: Project[]) => {
   const graph = new Graph({ directed: true });
 
@@ -362,8 +365,8 @@ const processCPAData = ({ data, projectstatus = null }) => {
   const graphCPA = new GraphCPA();
   data.forEach((node: any) => {
     graphCPA.addNode(node);
-    node.dependencies.forEach((dependency) => {
-      if (data.find((n) => n.id === dependency)) {
+    node.dependencies.forEach((dependency: string) => {
+      if (data.find((n: { id: any }) => n.id === dependency)) {
         graphCPA.addDependency(dependency, node.id);
       }
     });
@@ -426,7 +429,7 @@ const TableCPAHeaders = ({ className }: any) => {
     </thead>
   );
 };
-const getStatusColor = (status) => {
+const getStatusColor = (status: any) => {
   switch (status) {
     case "pending":
       return "bg-red-500";
@@ -438,7 +441,7 @@ const getStatusColor = (status) => {
 };
 
 const TableRowCPAComponent = ({ activity, handleCPARowClick }) => {
-  const onRowClick = (activity) => {
+  const onRowClick = (activity: any) => {
     handleCPARowClick(activity);
   };
   return (
@@ -471,7 +474,7 @@ const TableCPA = ({
   projectProgress,
   handleCPARowClick,
 }: any) => {
-  const onRowClick = (activity) => {
+  const onRowClick = (activity: any) => {
     handleCPARowClick(title, activity);
   };
 
@@ -513,7 +516,7 @@ const TableCPA = ({
 const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
   if (view === null) return;
   const params = useMemo(() => getViewParams(view), [view]);
-  const onRowClick = (data) => {
+  const onRowClick = (data: { ProjectName: any }) => {
     handleProjectRowClick(data.ProjectName);
   };
   useEffect(() => {}, [view]);
@@ -591,7 +594,9 @@ const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
               ))}
           </tr>
         </thead>
-        <tbody>{viewData && viewData.map((data) => renderRow(data))}</tbody>
+        <tbody>
+          {viewData && viewData.map((data: any) => renderRow(data))}
+        </tbody>
       </table>
     </div>
   );
@@ -601,7 +606,7 @@ const Recommendations = ({ recommendations }) => {
     <div className="border m-5 p-5 text-Tahoma text-2xl">
       RECOMMENDATIONS
       {recommendations &&
-        recommendations.map((recommendation, index) => {
+        recommendations.map((recommendation: string | any[], index: any) => {
           if (recommendation.length === 0) return null;
           return (
             <div className="font-Tahoma text-2xl align-left">
@@ -613,30 +618,11 @@ const Recommendations = ({ recommendations }) => {
     </div>
   );
 };
-const LegendsLabels = ["Evaporation", "Rainfall"];
-const SeriesLabels = ["Evaporation(m³/s)", "Rainfall(mm)"];
-const DataX = [
-  "2009/6/12 2:00",
-  "2009/6/12 3:00",
-  "2009/6/12 4:00",
-  "2009/6/12 5:00",
-  "2009/6/12 6:00",
-  "2009/6/12 7:00",
-  "2009/6/12 8:00",
-  "2009/6/12 9:00",
-  "2009/6/12 10:00",
-  "2009/6/12 11:00",
-  "2009/6/12 12:00",
-  "2009/6/12 13:00",
-];
-const DataY = [
-  [2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3],
-  [3.9, 5.9, 11.1, 18.7, 48.3, 69.2, 231.6, 46.6, 55.4, 18.4, 10.3, 0.7],
-];
 
 const CPAPage = () => {
   const [file, setFile] = useState(null);
   const [data, setData] = useState(null);
+  const [BubbleChartData, setBubbleChartData] = useState(null);
   const [MockProjects, setMockProjects] = useState<any>([]);
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
@@ -665,62 +651,127 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
-    const projectViewData = MockProjects.map((proj) => {
+    const projectViewData = MockProjects.map(
+      (proj: {
+        [x: string]: any;
+        CharterStartDate: string | number | Date;
+        CharterFinishDate: string | number | Date;
+        WBS: any;
+        ProjectName: any;
+        PrimaryPM: any;
+        Status: any;
+        NextAction: any;
+        TotalPlannedMDs: number;
+      }) => {
+        const startDate = new Date(proj.CharterStartDate);
+        const finishDate = new Date(proj.CharterFinishDate);
+        const totalProjectPeriod = finishDate.getTime() - startDate.getTime();
+        const days = Math.floor(totalProjectPeriod / (1000 * 60 * 60 * 24));
+        return {
+          WBS: proj.WBS,
+          ProjectName: proj.ProjectName,
+          PrimaryPM: proj.PrimaryPM,
+          "%Clocked": `${proj["%Clocked"]}%`,
+          Status: proj.Status,
+          NextAction: proj.NextAction,
+          ProjEffort: proj.TotalPlannedMDs / days,
+        };
+      }
+    );
+    const timelineViewData = MockProjects.map(
+      (proj: {
+        WBS: any;
+        ProjectName: any;
+        CharterStartDate: any;
+        CharterFinishDate: any;
+        CriticalPath: any[];
+        Slack: any;
+      }) => ({
+        WBS: proj.WBS,
+        ProjectName: proj.ProjectName,
+        StartDate: proj.CharterStartDate,
+        EndDate: proj.CharterFinishDate,
+        CriticalPath: proj.CriticalPath.join(" → "),
+        Slack: `${proj.Slack} days`,
+      })
+    );
+    const effortViewData = MockProjects.map(
+      (proj: {
+        [x: string]: any;
+        WBS: any;
+        ProjectName: any;
+        TotalPlannedMDs: any;
+        ActualWork: any;
+        TotalITBudget: any;
+        BudgetVariance: any;
+      }) => ({
+        WBS: proj.WBS,
+        ProjectName: proj.ProjectName,
+        PlannedMD: proj.TotalPlannedMDs,
+        ActualWork: proj.ActualWork,
+        "%Clocked": proj["%Clocked"],
+        Budget: proj.TotalITBudget,
+        Variance: proj.BudgetVariance,
+      })
+    );
+    const statusViewData = MockProjects.map(
+      (proj: {
+        WBS: any;
+        ProjectName: any;
+        Status: any;
+        NextAction: any;
+        PMRemark: any;
+        RiskLevel: any;
+      }) => ({
+        WBS: proj.WBS,
+        ProjectName: proj.ProjectName,
+        Status: proj.Status,
+        NextAction: proj.NextAction,
+        PMRemark: proj.PMRemark,
+        RiskLevel: proj.RiskLevel,
+      })
+    );
+    const documentationViewData = MockProjects.map(
+      (proj: {
+        WBS: any;
+        ProjectName: any;
+        ReqSignoffDoc: any;
+        BuildCompleteDoc: any;
+        GoLiveDoc: any;
+        PostLiveDoc: any;
+      }) => ({
+        WBS: proj.WBS,
+        ProjectName: proj.ProjectName,
+        ReqSignoffDoc: proj.ReqSignoffDoc,
+        BuildCompleteDoc: proj.BuildCompleteDoc,
+        GoLiveDoc: proj.GoLiveDoc,
+        PostLiveDoc: proj.PostLiveDoc,
+      })
+    );
+    const bubbleChartData = MockProjects.map((proj: any) => {
       const startDate = new Date(proj.CharterStartDate);
       const finishDate = new Date(proj.CharterFinishDate);
       const totalProjectPeriod = finishDate.getTime() - startDate.getTime();
       const days = Math.floor(totalProjectPeriod / (1000 * 60 * 60 * 24));
-      return {
-        WBS: proj.WBS,
-        ProjectName: proj.ProjectName,
-        PrimaryPM: proj.PrimaryPM,
-        "%Clocked": `${proj["%Clocked"]}%`,
-        Status: proj.Status,
-        NextAction: proj.NextAction,
-        ProjEffort: proj.TotalPlannedMDs / days,
-      };
+      return [
+        proj["%Clocked"],
+        Number(Number(proj.TotalPlannedMDs / days).toFixed(2)),
+        proj.TotalPlannedMDs,
+        proj.ProjectName,
+        proj.Status.toUpperCase(),
+      ];
     });
-    const timelineViewData = MockProjects.map((proj) => ({
-      WBS: proj.WBS,
-      ProjectName: proj.ProjectName,
-      StartDate: proj.CharterStartDate,
-      EndDate: proj.CharterFinishDate,
-      CriticalPath: proj.CriticalPath.join(" → "),
-      Slack: `${proj.Slack} days`,
-    }));
-    const effortViewData = MockProjects.map((proj) => ({
-      WBS: proj.WBS,
-      ProjectName: proj.ProjectName,
-      PlannedMD: proj.TotalPlannedMDs,
-      ActualWork: proj.ActualWork,
-      "%Clocked": proj["%Clocked"],
-      Budget: proj.TotalITBudget,
-      Variance: proj.BudgetVariance,
-    }));
-    const statusViewData = MockProjects.map((proj) => ({
-      WBS: proj.WBS,
-      ProjectName: proj.ProjectName,
-      Status: proj.Status,
-      NextAction: proj.NextAction,
-      PMRemark: proj.PMRemark,
-      RiskLevel: proj.RiskLevel,
-    }));
-    const documentationViewData = MockProjects.map((proj) => ({
-      WBS: proj.WBS,
-      ProjectName: proj.ProjectName,
-      ReqSignoffDoc: proj.ReqSignoffDoc,
-      BuildCompleteDoc: proj.BuildCompleteDoc,
-      GoLiveDoc: proj.GoLiveDoc,
-      PostLiveDoc: proj.PostLiveDoc,
-    }));
+
     setProjectViewData(projectViewData);
     setTimelineViewData(timelineViewData);
     setEffortViewData(effortViewData);
     setStatusViewData(statusViewData);
     setDocumentationViewData(documentationViewData);
+    setBubbleChartData(bubbleChartData);
+
     const HighRiskProjects = detectHighRiskProjects(MockProjects);
     const BudgetHealth = analyzeBudgetHealth(MockProjects);
-    const Recommendations = MockProjects.map((project) =>
+    const Recommendations = MockProjects.map((project: any) =>
       generateRecommendations(project)
     );
     setHighRiskProjects(HighRiskProjects);
@@ -729,7 +780,7 @@ const CPAPage = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCPAResult((prevResults) => {
+      setCPAResult((prevResults: { [x: string]: any }) => {
         const updatedResults = {};
         const updatedTitles = [];
         for (const title in prevResults) {
@@ -738,7 +789,7 @@ const CPAPage = () => {
           const progressRatio = newProgress / 100;
           const currentTime = progressRatio * prevResults[title].totalDuration;
           const updatedSchedule = prevResults[title].scheduleJSON.map(
-            (task) => {
+            (task: { end: number; start: number }) => {
               let status;
               if (currentTime >= task.end) {
                 status = "completed";
@@ -777,8 +828,8 @@ const CPAPage = () => {
         totalDuration,
         projectProgress,
       } = processCPAData({ data: data?.activity, projectstatus });
-      setTitles((prevTitles) => [...prevTitles, data?.title]);
-      setCPAResult((prevResults) => ({
+      setTitles((prevTitles: any) => [...prevTitles, data?.title]);
+      setCPAResult((prevResults: any) => ({
         ...prevResults,
         [data?.title]: {
           graphCPA,
@@ -791,15 +842,22 @@ const CPAPage = () => {
       }));
     };
     // -------------------
-    MockProjects.map((proj) => {
-      const projStatus = proj["%Clocked"];
-      const ObjData = {
-        title: proj.ProjectName,
-        activity: proj.activity,
-        resources: proj.resources,
-      };
-      processData({ data: ObjData, projectstatus: projStatus });
-    });
+    MockProjects.map(
+      (proj: {
+        [x: string]: any;
+        ProjectName: any;
+        activity: any;
+        resources: any;
+      }) => {
+        const projStatus = proj["%Clocked"];
+        const ObjData = {
+          title: proj.ProjectName,
+          activity: proj.activity,
+          resources: proj.resources,
+        };
+        processData({ data: ObjData, projectstatus: projStatus });
+      }
+    );
     // -------------------
   }, [MockProjects]);
 
@@ -809,21 +867,27 @@ const CPAPage = () => {
 
   stopTimer();
 
-  const handleUpdate = (newDuration, newResources, newDependencies) => {
-    setCPAResult((prevResults) => {
+  const handleUpdate = (
+    newDuration: number,
+    newResources: string[],
+    newDependencies: string[]
+  ) => {
+    setCPAResult((prevResults: any) => {
       const updatedResults = { ...prevResults };
       const workflow = updatedResults[selectedTitle];
-      const updatedActivities = workflow.scheduleJSON.map((task) => {
-        if (task.id === selectedActivity.id) {
-          return {
-            ...task,
-            duration: newDuration,
-            resources: newResources,
-            dependencies: newDependencies,
-          };
+      const updatedActivities = workflow.scheduleJSON.map(
+        (task: { id: any }) => {
+          if (task.id === selectedActivity.id) {
+            return {
+              ...task,
+              duration: newDuration,
+              resources: newResources,
+              dependencies: newDependencies,
+            };
+          }
+          return task;
         }
-        return task;
-      });
+      );
       const updatedData = {
         activity: updatedActivities.map(
           ({ id, name, duration, dependencies, resources }) => ({
@@ -856,24 +920,29 @@ const CPAPage = () => {
     });
     setShowModal(false);
   };
-  const handleCPARowClick = (title, activity) => {
+  const handleCPARowClick = (
+    title: string | number | SetStateAction<null>,
+    activity: SetStateAction<null>
+  ) => {
     setSelTitle(title);
     setSelActivity(activity);
     setShowModal(true);
     // ----------------------
-    setCPAResult((prevResults) => {
+    setCPAResult((prevResults: { [x: string]: { projectProgress: any } }) => {
       const updatedResults = { ...prevResults };
       const workflow = updatedResults[title];
       // Increase the duration by 50%
-      const updatedActivities = workflow.scheduleJSON.map((task) => {
-        if (task.id === activity.id) {
-          return {
-            ...task,
-            duration: Math.ceil(task.duration * 1.5),
-          };
+      const updatedActivities = workflow.scheduleJSON.map(
+        (task: { id: any; duration: number }) => {
+          if (task.id === activity.id) {
+            return {
+              ...task,
+              duration: Math.ceil(task.duration * 1.5),
+            };
+          }
+          return task;
         }
-        return task;
-      });
+      );
       // Reconstruct the data for processing
       const updatedData = {
         activity: updatedActivities.map(
@@ -912,7 +981,7 @@ const CPAPage = () => {
       return updatedResults;
     });
   };
-  const handleProjectRowClick = (title) => {
+  const handleProjectRowClick = (title: SetStateAction<string>) => {
     setSelectedProject(title);
   };
   const EditForm = () => {
@@ -977,26 +1046,29 @@ const CPAPage = () => {
     );
   };
   const simulateDisruption = (title: string) => {
-    setCPAResult((prevResults) => {
+    setCPAResult((prevResults: { [x: string]: { projectProgress: any } }) => {
       const updatedResults = { ...prevResults };
       const workflow = updatedResults[title];
       const currentTime =
         (workflow.projectProgress / 100) * workflow.totalDuration;
       // Identify the current task
       const currentTask = workflow.scheduleJSON.find(
-        (task) => task.start <= currentTime && task.end > currentTime
+        (task: { start: number; end: number }) =>
+          task.start <= currentTime && task.end > currentTime
       );
       if (!currentTask) return prevResults;
       // Increase the duration by 50%
-      const updatedActivities = workflow.scheduleJSON.map((task) => {
-        if (task.id === currentTask.id) {
-          return {
-            ...task,
-            duration: Math.ceil(task.duration * 1.5),
-          };
+      const updatedActivities = workflow.scheduleJSON.map(
+        (task: { id: any; duration: number }) => {
+          if (task.id === currentTask.id) {
+            return {
+              ...task,
+              duration: Math.ceil(task.duration * 1.5),
+            };
+          }
+          return task;
         }
-        return task;
-      });
+      );
       // Reconstruct the data for processing
       const updatedData = {
         activity: updatedActivities.map(
@@ -1041,7 +1113,7 @@ const CPAPage = () => {
     const randomIndex = Math.floor(Math.random() * titles.length);
     const selTitle = titles[randomIndex];
     const selectedTask = cpaResult[selTitle];
-    setCPAResult((prevResults) => {
+    setCPAResult((prevResults: { [x: string]: any }) => {
       if (prevResults[selTitle]) return prevResults; // Avoid duplicates
       return {
         ...prevResults,
@@ -1051,7 +1123,7 @@ const CPAPage = () => {
         },
       };
     });
-    setTitles((prevTitles) => [...prevTitles, selTitle]);
+    setTitles((prevTitles: any) => [...prevTitles, selTitle]);
   };
 
   const getDashboardFeatures = useMemo(
@@ -1116,21 +1188,7 @@ const CPAPage = () => {
     ),
     [mode]
   );
-  const getBubbleChart = useMemo(() => {
-    return (
-      <div>
-        <BubbleChart
-          className=""
-          title="Line Plot (MERGE)"
-          dataX={DataX}
-          dataY={DataY}
-          merge={true}
-          seriesLabels={SeriesLabels}
-          legendsLabels={LegendsLabels}
-        />
-      </div>
-    );
-  }, []);
+
   const dataToRender = () => {
     switch (view) {
       case View.ProjectView:
@@ -1168,15 +1226,13 @@ const CPAPage = () => {
       />
       <div className="flex">
         <div>
-          <BubbleChart
-            className=""
-            title="Line Plot (MERGE)"
-            dataX={DataX}
-            dataY={DataY}
-            merge={true}
-            seriesLabels={SeriesLabels}
-            legendsLabels={LegendsLabels}
-          />
+          {BubbleChartData && (
+            <BubbleChart
+              className=""
+              title="PROJECT EFFORT VS PROGRESS"
+              data={BubbleChartData}
+            />
+          )}
         </div>
         <Recommendations recommendations={recommendations} />
       </div>
