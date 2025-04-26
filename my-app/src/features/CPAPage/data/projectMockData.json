@@ -233,7 +233,7 @@
           "name": "Hardware Procurement",
           "duration": 1,
           "dependencies": [],
-          "resources": ["R1"]
+          "resources": ["R1", "R2"]
         },
         {
           "id": "1.3",
@@ -247,7 +247,7 @@
           "name": "Other Procurement",
           "duration": 2,
           "dependencies": [],
-          "resources": ["R1"]
+          "resources": ["R1", "R3"]
         },
         {
           "id": "2.1",
@@ -261,7 +261,7 @@
           "name": "Develop Prototype",
           "duration": 5,
           "dependencies": ["2.1", "1.1"],
-          "resources": ["R2"]
+          "resources": ["R2", "R3"]
         },
         {
           "id": "2.3",
@@ -296,7 +296,7 @@
           "name": "Database Design",
           "duration": 3,
           "dependencies": ["3.2"],
-          "resources": ["R3"]
+          "resources": ["R3", "R3"]
         },
         {
           "id": "4.1",
@@ -310,7 +310,7 @@
           "name": "Build",
           "duration": 1,
           "dependencies": ["4.1"],
-          "resources": ["R4"]
+          "resources": ["R4", "R4"]
         },
         {
           "id": "4.3",
@@ -391,7 +391,7 @@
       "WBS": "2.1.5",
       "ProjectName": "Cloud Migration",
       "PrimaryPM": "Emma Wilson",
-      "CharterStartDate": "2025-02-04",
+      "CharterStartDate": "2025-01-14",
       "CharterFinishDate": "2025-09-01",
 
       "%Clocked": 22,
@@ -433,7 +433,7 @@
           "name": "Software Procurement",
           "duration": 1,
           "dependencies": [],
-          "resources": ["R1"]
+          "resources": ["R1", "R2"]
         },
         {
           "id": "1.4",
@@ -468,7 +468,7 @@
           "name": "Finalize Requirement",
           "duration": 3,
           "dependencies": ["2.3", "1.1"],
-          "resources": ["R2"]
+          "resources": ["R2", "R3"]
         },
         {
           "id": "3.1",
@@ -482,7 +482,7 @@
           "name": "UI/UX Design",
           "duration": 3,
           "dependencies": ["3.1", "1.2"],
-          "resources": ["R3"]
+          "resources": ["R3", "R3", "R4"]
         },
         {
           "id": "3.3",
@@ -584,7 +584,7 @@
       "WBS": "3.3.2",
       "ProjectName": "CRM System Upgrade",
       "PrimaryPM": "David Miller",
-      "CharterStartDate": "2025-01-30",
+      "CharterStartDate": "2025-01-16",
       "CharterFinishDate": "2025-04-30",
 
       "%Clocked": 92,
@@ -777,7 +777,7 @@
       "WBS": "4.5.1",
       "ProjectName": "Data Analytics Platform",
       "PrimaryPM": "Lisa Rodriguez",
-      "CharterStartDate": "2025-03-10",
+      "CharterStartDate": "2025-01-20",
       "CharterFinishDate": "2025-08-15",
 
       "%Clocked": 33,
