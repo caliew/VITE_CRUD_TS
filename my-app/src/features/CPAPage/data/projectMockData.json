@@ -198,7 +198,7 @@
       "WBS": "1.2.3",
       "ProjectName": "Mobile App Development",
       "PrimaryPM": "Michael Chen",
-      "CharterStartDate": "2025-02-01",
+      "CharterStartDate": "2025-01-17",
       "CharterFinishDate": "2025-05-15",
 
       "%Clocked": 68,
@@ -391,7 +391,7 @@
       "WBS": "2.1.5",
       "ProjectName": "Cloud Migration",
       "PrimaryPM": "Emma Wilson",
-      "CharterStartDate": "2025-03-10",
+      "CharterStartDate": "2025-02-04",
       "CharterFinishDate": "2025-09-01",
 
       "%Clocked": 22,
@@ -584,7 +584,7 @@
       "WBS": "3.3.2",
       "ProjectName": "CRM System Upgrade",
       "PrimaryPM": "David Miller",
-      "CharterStartDate": "2025-01-01",
+      "CharterStartDate": "2025-01-30",
       "CharterFinishDate": "2025-04-30",
 
       "%Clocked": 92,
@@ -777,7 +777,7 @@
       "WBS": "4.5.1",
       "ProjectName": "Data Analytics Platform",
       "PrimaryPM": "Lisa Rodriguez",
-      "CharterStartDate": "2025-04-01",
+      "CharterStartDate": "2025-03-10",
       "CharterFinishDate": "2025-08-15",
 
       "%Clocked": 33,

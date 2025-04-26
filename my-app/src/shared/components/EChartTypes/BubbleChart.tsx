@@ -14,10 +14,8 @@ interface BubbleChartProp {
 const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
   const chartRef = useRef(null);
   const [option, setOption] = useState({});
-  console.log("BUBBLE CHART COMPONENT=", data);
 
   useEffect(() => {
-    console.log("USE EFFECT=", data);
     const _option = {
       backgroundColor: new echarts.graphic.RadialGradient(0.3, 0.3, 0.8, [
         {
@@ -31,8 +29,9 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
       ]),
       title: {
         text: title,
-        left: "55%",
-        top: "3%",
+        left: "50%",
+        right: "5%",
+        top: "10%",
       },
       legend: {
         right: "10%",
@@ -40,13 +39,13 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
         data: ["1990", "2015"],
       },
       grid: {
-        left: "15%",
+        left: "10%",
         top: "15%",
       },
       xAxis: {
         splitLine: {
           lineStyle: {
-            type: "dashed",
+            type: "solid",
           },
         },
       },
@@ -71,9 +70,10 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
             formatter: function (params: any) {
               return params.data[3];
             },
-            position: "middle",
-            fontSize: 12,
-            fontWeight: "bold",
+            position: "left",
+            fontSize: 13,
+            wrap: true,
+            fontWeight: "normal",
             color: "black",
           },
           emphasis: {
@@ -85,7 +85,7 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
               },
               position: "top",
               fontSize: 12,
-              fontWeight: "bold",
+              fontWeight: "normal",
               color: "black",
             },
           },
@@ -135,7 +135,7 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
         onChartReady={onChartReadyCallback}
         onEvents={onEvents}
         opts={{ renderer: "svg" }}
-        style={{ width: "450px", height: "450px" }}
+        style={{ width: "650px", height: "450px" }}
       />
     </div>
   );

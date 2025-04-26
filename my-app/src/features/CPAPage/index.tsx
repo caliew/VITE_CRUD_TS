@@ -4,6 +4,7 @@ import { alg, Graph } from "@dagrejs/graphlib";
 import {
   HeaderTitle,
   BubbleChart,
+  HeatmapChart,
   PageAction,
   Button,
   CPAGanttChart,
@@ -20,12 +21,7 @@ import {
 } from "@shared/utils/classname";
 import mockProjectsData from "./data/projectMockData.json";
 import "./index.css";
-
-// import dataCPA1 from "./data/cpa-data1.json";
-// import dataCPA2 from "./data/cpa-data2.json";
-// import dataCPA3 from "./data/cpa-data3.json";
-// import dataCPA4 from "./data/cpa-data4.json";
-// import { title } from "process";
+import { get } from "http";
 
 interface Project {
   WBS: string;
@@ -84,6 +80,7 @@ const TimelineView = [
   "ProjectName",
   "StartDate",
   "EndDate",
+  "Duration",
   "CriticalPath",
   "Slack",
 ];
@@ -138,6 +135,15 @@ function calculateDays(project: {
     daysRemaining,
     daysUntil,
   };
+}
+function getDayOfYear(date) {
+  const start = new Date(date.getFullYear(), 0, 0);
+  const diff =
+    date -
+    start +
+    (start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000;
+  const oneDay = 1000 * 60 * 60 * 24;
+  return Math.floor(diff / oneDay);
 }
 
 const calculateProgramCriticalPath = (projects: Project[]) => {
@@ -519,7 +525,6 @@ const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
   const onRowClick = (data: { ProjectName: any }) => {
     handleProjectRowClick(data.ProjectName);
   };
-  useEffect(() => {}, [view]);
   const renderRow = (data: any) => {
     switch (view) {
       case View.ProjectView:
@@ -541,6 +546,7 @@ const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
             <td>{data.ProjectName}</td>
             <td>{data.StartDate}</td>
             <td>{data.EndDate}</td>
+            <td>{data.Duration}</td>
             <td>{data.CriticalPath}</td>
             <td>{data.Slack}</td>
           </tr>
@@ -581,11 +587,15 @@ const TableDashboard = ({ view, viewData, handleProjectRowClick }) => {
         );
     }
   };
+
   return (
     <div>
       <table className="table-auto border-separate border-spacing-x-15 font-Roboto font-extralight text-2xl ">
         <thead className="">
-          <tr className="text-center font-Tahoma font-extralight text-2xl">
+          <tr
+            key="Dashboard"
+            className="text-center font-Tahoma font-extralight text-2xl"
+          >
             {params &&
               params.map((key) => (
                 <th className="font-normal decoration-underline border-b-2">
@@ -609,7 +619,7 @@ const Recommendations = ({ recommendations }) => {
         recommendations.map((recommendation: string | any[], index: any) => {
           if (recommendation.length === 0) return null;
           return (
-            <div className="font-Tahoma text-2xl align-left">
+            <div key={index} className="font-Tahoma text-2xl align-left">
               {recommendation[0].WBS} {recommendation[0].recommendation}
             </div>
           );
@@ -624,6 +634,7 @@ const CPAPage = () => {
   const [data, setData] = useState(null);
   const [BubbleChartData, setBubbleChartData] = useState(null);
   const [MockProjects, setMockProjects] = useState<any>([]);
+  const [ResourceCalender, setResourceCalender] = useState<any>(null);
   const [cpaResult, setCPAResult] = useState<any>({});
   const [titles, setTitles] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
@@ -686,14 +697,21 @@ const CPAPage = () => {
         CharterFinishDate: any;
         CriticalPath: any[];
         Slack: any;
-      }) => ({
-        WBS: proj.WBS,
-        ProjectName: proj.ProjectName,
-        StartDate: proj.CharterStartDate,
-        EndDate: proj.CharterFinishDate,
-        CriticalPath: proj.CriticalPath.join(" → "),
-        Slack: `${proj.Slack} days`,
-      })
+      }) => {
+        const startDate = new Date(proj.CharterStartDate);
+        const finishDate = new Date(proj.CharterFinishDate);
+        const totalProjectPeriod = finishDate.getTime() - startDate.getTime();
+        const days = Math.floor(totalProjectPeriod / (1000 * 60 * 60 * 24));
+        return {
+          WBS: proj.WBS,
+          ProjectName: proj.ProjectName,
+          StartDate: proj.CharterStartDate,
+          EndDate: proj.CharterFinishDate,
+          Duration: days,
+          CriticalPath: proj.CriticalPath.join(" → "),
+          Slack: `${proj.Slack} days`,
+        };
+      }
     );
     const effortViewData = MockProjects.map(
       (proj: {
@@ -762,12 +780,80 @@ const CPAPage = () => {
       ];
     });
 
+    const calenderData = {};
+    const daysOfYear = [];
+    const resourceArrays = {};
+
+    const projectCalenderData = {};
+
+    MockProjects.forEach((project) => {
+      const startDate = new Date(project.CharterStartDate);
+      const dayOfYear = getDayOfYear(startDate);
+      let day = dayOfYear;
+
+      project.activity.forEach((activity) => {
+        const duration = activity.duration;
+        const resources = activity.resources;
+
+        for (let i = 0; i < duration; i++) {
+          const resourceRequirements = resources.reduce((acc, resource) => {
+            acc[resource] = (acc[resource] || 0) + 1;
+            return acc;
+          }, {});
+
+          if (!calenderData[day]) {
+            calenderData[day] = {};
+          }
+
+          Object.keys(resourceRequirements).forEach((resource) => {
+            calenderData[day][resource] =
+              (calenderData[day][resource] || 0) +
+              resourceRequirements[resource];
+          });
+
+          if (!daysOfYear.includes(day)) {
+            daysOfYear.push(day);
+          }
+
+          resources.forEach((resource) => {
+            if (!resourceArrays[resource]) {
+              resourceArrays[resource] = [];
+            }
+            resourceArrays[resource].push(calenderData[day][resource] || 0);
+          });
+
+          // Add project-specific data to projectCalenderData
+          if (!projectCalenderData[project.ProjectName]) {
+            projectCalenderData[project.ProjectName] = {};
+          }
+          if (!projectCalenderData[project.ProjectName][day]) {
+            projectCalenderData[project.ProjectName][day] = {};
+          }
+          Object.keys(resourceRequirements).forEach((resource) => {
+            projectCalenderData[project.ProjectName][day][resource] =
+              (projectCalenderData[project.ProjectName][day][resource] || 0) +
+              resourceRequirements[resource];
+          });
+
+          day++;
+        }
+      });
+    });
+
+    const exportedData = {
+      calender: calenderData,
+      daysOfYear,
+      resourceArrays,
+      projectCalenderData,
+    };
+
     setProjectViewData(projectViewData);
     setTimelineViewData(timelineViewData);
     setEffortViewData(effortViewData);
     setStatusViewData(statusViewData);
     setDocumentationViewData(documentationViewData);
     setBubbleChartData(bubbleChartData);
+    setResourceCalender(exportedData);
 
     const HighRiskProjects = detectHighRiskProjects(MockProjects);
     const BudgetHealth = analyzeBudgetHealth(MockProjects);
@@ -1188,6 +1274,23 @@ const CPAPage = () => {
     ),
     [mode]
   );
+  const getResourceMap = useMemo(() => {
+    const ObjHeatMapData = {
+      calender:
+        selectedProject === null
+          ? ResourceCalender?.calender
+          : ResourceCalender?.projectCalenderData[selectedProject],
+      daysOfYear: ResourceCalender?.daysOfYear,
+      resourceArrays: ResourceCalender?.resourceArrays,
+    };
+    return (
+      <HeatmapChart
+        className="border-2"
+        calenderData={ObjHeatMapData}
+        title="RESOURCE CALENDERS"
+      />
+    );
+  }, [selectedProject, ResourceCalender]);
 
   const dataToRender = () => {
     switch (view) {
@@ -1288,6 +1391,8 @@ const CPAPage = () => {
           />
         </div>
       )}
+
+      {mode === Mode.Dashboard && ResourceCalender && getResourceMap}
 
       {selectedProject && (
         <div className="border-2 p-4">

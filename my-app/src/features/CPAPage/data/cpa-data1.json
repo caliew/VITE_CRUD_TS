@@ -33,7 +33,7 @@
           "name": "Patient Admission",
           "duration": 2,
           "dependencies": [],
-          "resources": ["R1"]
+          "resources": ["R1", "R2"]
         },
         {
           "id": "B",

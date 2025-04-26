@@ -23,7 +23,7 @@ const ButtonClasses = "font-Roboto font-extralight text-2xl m-2 lg:flex ";
 
 const MapClasses =
   "w-[650px] h-[500px] p-1 bg-n-8 rounded-[2.4375rem] overflow-hidden";
-const ChartClasses = "w-[450px] h-[600px] p-1 bg-n-8 overflow-hidden";
+const ChartClasses = "w-full h-full p-2 bg-n-8 overflow-hidden";
 const IOTSensorsClasses =
   "flex flex-wrap justify-center items-center gap-3 overflow-hidden";
 
