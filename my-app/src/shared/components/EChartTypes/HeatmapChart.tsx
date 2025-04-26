@@ -109,7 +109,7 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
         top: "middle", // add this property to center the visualMap vertically
         height: "80%",
         inRange: {
-          color: ["#32CD32", "#FF0000"], // green to red
+          color: ["#00FF00", "#FF0000"], // green to red
         },
       },
       series: [
