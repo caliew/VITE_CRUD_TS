@@ -33,7 +33,7 @@
           "name": "Patient Admission",
           "duration": 2,
           "dependencies": [],
-          "resources": ["R1", "R2"]
+          "resources": ["R1", "R1", "R2"]
         },
         {
           "id": "B",
@@ -54,7 +54,7 @@
           "name": "X-Ray",
           "duration": 2,
           "dependencies": ["B"],
-          "resources": ["R4"]
+          "resources": ["R4", "R3"]
         },
         {
           "id": "C3",

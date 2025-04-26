@@ -256,6 +256,67 @@ const generateRecommendations = (project: any) => {
 
   return recommendations;
 };
+const generateResourcesMap = (MockProjects: any[]) => {
+  const calenderData = {};
+  const daysOfYear: number[] = [];
+  const resourceArrays = {};
+  const projectCalenderData = {};
+
+  MockProjects.forEach((project) => {
+    const startDate = new Date(project.CharterStartDate);
+    const dayOfYear = getDayOfYear(startDate);
+    let day = dayOfYear;
+
+    project.activity.forEach((activity) => {
+      const duration = activity.duration;
+      const resources = activity.resources;
+
+      for (let i = 0; i < duration; i++) {
+        const resourceRequirements = resources.reduce((acc, resource) => {
+          acc[resource] = (acc[resource] || 0) + 1;
+          return acc;
+        }, {});
+
+        if (!calenderData[day]) {
+          calenderData[day] = {};
+        }
+
+        Object.keys(resourceRequirements).forEach((resource) => {
+          calenderData[day][resource] =
+            (calenderData[day][resource] || 0) + resourceRequirements[resource];
+        });
+
+        if (!daysOfYear.includes(day)) {
+          daysOfYear.push(day);
+        }
+
+        resources.forEach((resource) => {
+          if (!resourceArrays[resource]) {
+            resourceArrays[resource] = [];
+          }
+          resourceArrays[resource].push(calenderData[day][resource] || 0);
+        });
+
+        // Add project-specific data to projectCalenderData
+        if (!projectCalenderData[project.ProjectName]) {
+          projectCalenderData[project.ProjectName] = {};
+        }
+        if (!projectCalenderData[project.ProjectName][day]) {
+          projectCalenderData[project.ProjectName][day] = {};
+        }
+        Object.keys(resourceRequirements).forEach((resource) => {
+          projectCalenderData[project.ProjectName][day][resource] =
+            (projectCalenderData[project.ProjectName][day][resource] || 0) +
+            resourceRequirements[resource];
+        });
+
+        day++;
+      }
+    });
+  });
+
+  return { calenderData, daysOfYear, resourceArrays, projectCalenderData };
+};
 
 export class GraphCPA {
   private graph: Graph;
@@ -634,8 +695,8 @@ const CPAPage = () => {
   const [data, setData] = useState(null);
   const [BubbleChartData, setBubbleChartData] = useState(null);
   const [MockProjects, setMockProjects] = useState<any>([]);
-  const [ResourceCalender, setResourceCalender] = useState<any>(null);
   const [cpaResult, setCPAResult] = useState<any>({});
+  const [ResourceCalender, setResourceCalender] = useState<any>(null);
   const [titles, setTitles] = useState<any>([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTitle, setSelTitle] = useState(null);
@@ -780,80 +841,12 @@ const CPAPage = () => {
       ];
     });
 
-    const calenderData = {};
-    const daysOfYear = [];
-    const resourceArrays = {};
-
-    const projectCalenderData = {};
-
-    MockProjects.forEach((project) => {
-      const startDate = new Date(project.CharterStartDate);
-      const dayOfYear = getDayOfYear(startDate);
-      let day = dayOfYear;
-
-      project.activity.forEach((activity) => {
-        const duration = activity.duration;
-        const resources = activity.resources;
-
-        for (let i = 0; i < duration; i++) {
-          const resourceRequirements = resources.reduce((acc, resource) => {
-            acc[resource] = (acc[resource] || 0) + 1;
-            return acc;
-          }, {});
-
-          if (!calenderData[day]) {
-            calenderData[day] = {};
-          }
-
-          Object.keys(resourceRequirements).forEach((resource) => {
-            calenderData[day][resource] =
-              (calenderData[day][resource] || 0) +
-              resourceRequirements[resource];
-          });
-
-          if (!daysOfYear.includes(day)) {
-            daysOfYear.push(day);
-          }
-
-          resources.forEach((resource) => {
-            if (!resourceArrays[resource]) {
-              resourceArrays[resource] = [];
-            }
-            resourceArrays[resource].push(calenderData[day][resource] || 0);
-          });
-
-          // Add project-specific data to projectCalenderData
-          if (!projectCalenderData[project.ProjectName]) {
-            projectCalenderData[project.ProjectName] = {};
-          }
-          if (!projectCalenderData[project.ProjectName][day]) {
-            projectCalenderData[project.ProjectName][day] = {};
-          }
-          Object.keys(resourceRequirements).forEach((resource) => {
-            projectCalenderData[project.ProjectName][day][resource] =
-              (projectCalenderData[project.ProjectName][day][resource] || 0) +
-              resourceRequirements[resource];
-          });
-
-          day++;
-        }
-      });
-    });
-
-    const exportedData = {
-      calender: calenderData,
-      daysOfYear,
-      resourceArrays,
-      projectCalenderData,
-    };
-
     setProjectViewData(projectViewData);
     setTimelineViewData(timelineViewData);
     setEffortViewData(effortViewData);
     setStatusViewData(statusViewData);
     setDocumentationViewData(documentationViewData);
     setBubbleChartData(bubbleChartData);
-    setResourceCalender(exportedData);
 
     const HighRiskProjects = detectHighRiskProjects(MockProjects);
     const BudgetHealth = analyzeBudgetHealth(MockProjects);
@@ -905,6 +898,7 @@ const CPAPage = () => {
   }, []);
 
   useEffect(() => {
+    setCPAResult(null); // Initialize with null
     const processData = ({ data, projectstatus }) => {
       const {
         graphCPA,
@@ -944,6 +938,15 @@ const CPAPage = () => {
         processData({ data: ObjData, projectstatus: projStatus });
       }
     );
+    const { calenderData, daysOfYear, resourceArrays, projectCalenderData } =
+      generateResourcesMap(MockProjects);
+    const exportedData = {
+      calender: calenderData,
+      daysOfYear,
+      resourceArrays,
+      projectCalenderData,
+    };
+    setResourceCalender(exportedData);
     // -------------------
   }, [MockProjects]);
 
@@ -953,59 +956,6 @@ const CPAPage = () => {
 
   stopTimer();
 
-  const handleUpdate = (
-    newDuration: number,
-    newResources: string[],
-    newDependencies: string[]
-  ) => {
-    setCPAResult((prevResults: any) => {
-      const updatedResults = { ...prevResults };
-      const workflow = updatedResults[selectedTitle];
-      const updatedActivities = workflow.scheduleJSON.map(
-        (task: { id: any }) => {
-          if (task.id === selectedActivity.id) {
-            return {
-              ...task,
-              duration: newDuration,
-              resources: newResources,
-              dependencies: newDependencies,
-            };
-          }
-          return task;
-        }
-      );
-      const updatedData = {
-        activity: updatedActivities.map(
-          ({ id, name, duration, dependencies, resources }) => ({
-            id,
-            name,
-            duration,
-            dependencies,
-            resources,
-          })
-        ),
-        title: selectedTitle,
-      };
-      const {
-        graphCPA,
-        scheduleJSON,
-        criticalPath,
-        executionOrder,
-        totalDuration,
-        projectProgress,
-      } = processCPAData({ data: updatedData.activity });
-      updatedResults[selectedTitle] = {
-        graphCPA,
-        scheduleJSON,
-        criticalPath,
-        executionOrder,
-        totalDuration,
-        projectProgress,
-      };
-      return updatedResults;
-    });
-    setShowModal(false);
-  };
   const handleCPARowClick = (
     title: string | number | SetStateAction<null>,
     activity: SetStateAction<null>
@@ -1066,132 +1016,25 @@ const CPAPage = () => {
       };
       return updatedResults;
     });
-  };
-  const handleProjectRowClick = (title: SetStateAction<string>) => {
-    setSelectedProject(title);
-  };
-  const EditForm = () => {
-    return (
-      <div className="modal">
-        <div className="modal-content">
-          <h2>Edit Data</h2>
-          <form>
-            <label>Duration:</label>
-            <input
-              type="number"
-              value={selectedActivity.duration}
-              onChange={(e) =>
-                handleUpdate(
-                  parseInt(e.target.value),
-                  selectedActivity.resources,
-                  selectedActivity.dependencies
-                )
-              }
-            />
-            <br />
-            <label>Resources:</label>
-            <input
-              type="text"
-              value={selectedActivity.resources.join(",")}
-              onChange={(e) =>
-                handleUpdate(
-                  selectedActivity.duration,
-                  e.target.value.split(","),
-                  selectedActivity.dependencies
-                )
-              }
-            />
-            <br />
-            <label>Dependencies:</label>
-            <input
-              type="text"
-              value={selectedActivity.dependencies.join(",")}
-              onChange={(e) =>
-                handleUpdate(
-                  selectedActivity.duration,
-                  selectedActivity.resources,
-                  e.target.value.split(",")
-                )
-              }
-            />
-            <br />
-            <button
-              onClick={() =>
-                handleUpdate(
-                  selectedActivity.duration,
-                  selectedActivity.resources,
-                  selectedActivity.dependencies
-                )
-              }
-            >
-              Update
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  };
-  const simulateDisruption = (title: string) => {
-    setCPAResult((prevResults: { [x: string]: { projectProgress: any } }) => {
-      const updatedResults = { ...prevResults };
-      const workflow = updatedResults[title];
-      const currentTime =
-        (workflow.projectProgress / 100) * workflow.totalDuration;
-      // Identify the current task
-      const currentTask = workflow.scheduleJSON.find(
-        (task: { start: number; end: number }) =>
-          task.start <= currentTime && task.end > currentTime
-      );
-      if (!currentTask) return prevResults;
-      // Increase the duration by 50%
-      const updatedActivities = workflow.scheduleJSON.map(
-        (task: { id: any; duration: number }) => {
-          if (task.id === currentTask.id) {
+    const updatedMockProjects = MockProjects.map((project) => {
+      if (project.ProjectName === title) {
+        project.activity = project.activity.map((task) => {
+          if (task.id === activity.id) {
+            console.log(task.id);
             return {
               ...task,
               duration: Math.ceil(task.duration * 1.5),
             };
           }
           return task;
-        }
-      );
-      // Reconstruct the data for processing
-      const updatedData = {
-        activity: updatedActivities.map(
-          ({ id, name, duration, dependencies, resources }) => ({
-            id,
-            name,
-            duration,
-            dependencies,
-            resources,
-          })
-        ),
-        title,
-      };
-      const currentTaskTitle = updatedData?.title ?? "";
-      const ProjectProgress = prevResults[currentTaskTitle]?.projectProgress;
-      // Reprocess the CPA data
-      const {
-        graphCPA,
-        scheduleJSON,
-        criticalPath,
-        executionOrder,
-        totalDuration,
-        projectProgress,
-      } = processCPAData({
-        data: updatedData.activity,
-        projectstatus: ProjectProgress,
-      });
-      updatedResults[title] = {
-        graphCPA,
-        scheduleJSON,
-        criticalPath,
-        executionOrder,
-        totalDuration,
-        projectProgress,
-      };
-      return updatedResults;
+        });
+      }
+      return project;
     });
+    setMockProjects(updatedMockProjects);
+  };
+  const handleProjectRowClick = (title: SetStateAction<string>) => {
+    setSelectedProject(title);
   };
   const initiateRandomTask = () => {
     if (cpaResult.length === 0) return;
@@ -1374,10 +1217,6 @@ const CPAPage = () => {
                 projectProgress={cpaResult[title].projectProgress}
                 handleCPARowClick={handleCPARowClick}
               />
-              <button onClick={() => simulateDisruption(title)}>
-                Disrupt Schedule
-              </button>
-              {false && showModal && selectedTitle === title && EditForm()}
             </div>
           ))}
         </>
