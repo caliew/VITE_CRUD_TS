@@ -21,7 +21,6 @@ import {
 } from "@shared/utils/classname";
 import mockProjectsData from "./data/projectMockData.json";
 import "./index.css";
-import { get } from "http";
 
 interface Project {
   WBS: string;

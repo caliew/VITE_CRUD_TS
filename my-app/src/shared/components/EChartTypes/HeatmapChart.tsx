@@ -2,8 +2,9 @@
 import React, { useRef, useEffect, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts/core";
-
-import { ChartClasses } from "@shared/utils/classname";
+import { Button } from "@shared/components";
+import { ButtonLINKClasses, ChartClasses } from "@shared/utils/classname";
+import { GetIcon } from "@shared/utils/icon";
 
 interface HeatmapChartProp {
   className?: string;
@@ -18,6 +19,7 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
 }) => {
   const chartRef = useRef(null);
   const [option, setOption] = useState({});
+  const [showHideResourceMap, setShowHideResourceMap] = useState(true);
 
   useEffect(() => {
     if (calenderData === null) return;
@@ -27,8 +29,6 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
     const ResourcesKEY = Object.keys(ObjResources);
     const _data = calenderData?.calender ?? null;
     if (_data === null || Object.keys(_data).length === 0) return;
-
-    console.log(calenderData);
 
     let ObjDataArr: any[][] = [];
     Object.entries(_data).forEach(([day, resources]) => {
@@ -117,7 +117,7 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
       },
       visualMap: {
         min: 0,
-        max: maxResource * 1.25,
+        max: maxResource * 1.15,
         calculable: true,
         orient: "vertical", // change from "horizontal" to "vertical"
         right: "0%", // add this property to set the visualMap to the right
@@ -154,22 +154,34 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
       console.log(params);
     },
   };
+  const onClickSHOWHIDERESOURCECALENDER = () => {
+    setShowHideResourceMap((prevValue) => !prevValue);
+  };
 
   return (
     <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
-      <ReactECharts
-        ref={chartRef}
-        echarts={echarts}
-        className={`${ChartClasses} ${className}`}
-        option={option}
-        notMerge={true}
-        lazyUpdate={true}
-        theme={""}
-        onChartReady={onChartReadyCallback}
-        onEvents={onEvents}
-        opts={{ renderer: "svg" }}
-        style={{ width: "1150px", height: "550px" }}
-      />
+      <Button
+        Icon={GetIcon("home")}
+        className={ButtonLINKClasses}
+        onClick={onClickSHOWHIDERESOURCECALENDER}
+      >
+        {showHideResourceMap ? "HIDE" : "SHOW"} RESOURCE CALENDER
+      </Button>
+      {showHideResourceMap && (
+        <ReactECharts
+          ref={chartRef}
+          echarts={echarts}
+          className={`${ChartClasses} ${className}`}
+          option={option}
+          notMerge={true}
+          lazyUpdate={true}
+          theme={""}
+          onChartReady={onChartReadyCallback}
+          onEvents={onEvents}
+          opts={{ renderer: "svg" }}
+          style={{ width: "1150px", height: "550px" }}
+        />
+      )}
     </div>
   );
 };
