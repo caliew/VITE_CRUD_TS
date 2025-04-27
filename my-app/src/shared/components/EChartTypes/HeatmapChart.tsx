@@ -4,7 +4,6 @@ import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts/core";
 
 import { ChartClasses } from "@shared/utils/classname";
-import { fontSize, height } from "@mui/system";
 
 interface HeatmapChartProp {
   className?: string;
@@ -29,6 +28,8 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
     const _data = calenderData?.calender ?? null;
     if (_data === null || Object.keys(_data).length === 0) return;
 
+    console.log(calenderData);
+
     let ObjDataArr: any[][] = [];
     Object.entries(_data).forEach(([day, resources]) => {
       const dayIndex = daysOfYear.indexOf(parseInt(day));
@@ -38,6 +39,20 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
         ObjDataArr.push([dayIndex, resourceIndex, totalResource]);
       });
     });
+
+    const maxResourceCounts = {};
+    Object.values(calenderData.calender).forEach((dayResources) => {
+      Object.keys(dayResources).forEach((resourceKey) => {
+        const count = dayResources[resourceKey];
+        if (
+          !maxResourceCounts[resourceKey] ||
+          count > maxResourceCounts[resourceKey]
+        ) {
+          maxResourceCounts[resourceKey] = count;
+        }
+      });
+    });
+    const maxResource = Math.max(...Object.values(maxResourceCounts));
 
     const _option = {
       title: {
@@ -102,14 +117,14 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
       },
       visualMap: {
         min: 0,
-        max: 3,
+        max: maxResource * 1.25,
         calculable: true,
         orient: "vertical", // change from "horizontal" to "vertical"
         right: "0%", // add this property to set the visualMap to the right
         top: "middle", // add this property to center the visualMap vertically
         height: "80%",
         inRange: {
-          color: ["#00FF00", "#FF0000"], // green to red
+          color: ["#0000FF", "#00FF00", "#FF0000"], // green to red
         },
       },
       series: [
