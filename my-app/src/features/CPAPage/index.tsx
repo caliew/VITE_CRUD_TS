@@ -285,6 +285,15 @@ const generateResourcesMap = (MockProjects: any[]) => {
             (calenderData[day][resource] || 0) + resourceRequirements[resource];
         });
 
+        // Add additional resources from project.additionalResources
+        if (project.additionalResources && project.additionalResources[day]) {
+          Object.keys(project.additionalResources[day]).forEach((resource) => {
+            calenderData[day][resource] =
+              (calenderData[day][resource] || 0) +
+              project.additionalResources[day][resource];
+          });
+        }
+
         if (!daysOfYear.includes(day)) {
           daysOfYear.push(day);
         }
@@ -309,6 +318,18 @@ const generateResourcesMap = (MockProjects: any[]) => {
             resourceRequirements[resource];
         });
 
+        // Add additional resources to projectCalenderData
+        if (project.additionalResources && project.additionalResources[day]) {
+          Object.keys(project.additionalResources[day]).forEach((resource) => {
+            if (!projectCalenderData[project.ProjectName][day][resource]) {
+              projectCalenderData[project.ProjectName][day][resource] =
+                project.additionalResources[day][resource];
+            } else {
+              projectCalenderData[project.ProjectName][day][resource] +=
+                project.additionalResources[day][resource];
+            }
+          });
+        }
         day++;
       }
     });
@@ -1130,9 +1151,34 @@ const CPAPage = () => {
         className="border-2"
         calenderData={ObjHeatMapData}
         title="RESOURCE CALENDERS"
+        increaseProjectResource={(resourceKey, day) => {
+          increaseProjectResource(resourceKey, day);
+        }}
       />
     );
   }, [selectedProject, ResourceCalender]);
+
+  const increaseProjectResource = (resourceKey, day) => {
+    if (!selectedProject) return null;
+
+    const updatedMockProjects = MockProjects.map((project) => {
+      if (project.ProjectName === selectedProject) {
+        if (!project.additionalResources) {
+          project.additionalResources = {};
+        }
+        if (!project.additionalResources[day]) {
+          project.additionalResources[day] = {};
+        }
+        if (!project.additionalResources[day][resourceKey]) {
+          project.additionalResources[day][resourceKey] = 1;
+        } else {
+          project.additionalResources[day][resourceKey]++;
+        }
+      }
+      return project;
+    });
+    setMockProjects(updatedMockProjects);
+  };
 
   const dataToRender = () => {
     switch (view) {

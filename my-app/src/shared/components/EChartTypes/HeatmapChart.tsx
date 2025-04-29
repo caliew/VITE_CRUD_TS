@@ -10,15 +10,19 @@ interface HeatmapChartProp {
   className?: string;
   title?: string;
   calenderData: any;
+  increaseProjectResource: (resourceKey: string, day: number) => void;
 }
 
 const HeatmapChart: React.FC<HeatmapChartProp> = ({
   className,
   title,
   calenderData,
+  increaseProjectResource = () => {},
 }) => {
   const chartRef = useRef(null);
   const [option, setOption] = useState({});
+  const [resources, setResources] = useState(null);
+  const [daysOfYear, setDaysOfYear] = useState(null);
   const [showHideResourceMap, setShowHideResourceMap] = useState(true);
 
   useEffect(() => {
@@ -26,6 +30,8 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
     const daysOfYear = calenderData.daysOfYear;
     const ObjResources = calenderData?.resourceArrays ?? null;
     if (ObjResources === null) return;
+    setResources(ObjResources);
+    setDaysOfYear(daysOfYear);
     const ResourcesKEY = Object.keys(ObjResources);
     const _data = calenderData?.calender ?? null;
     if (_data === null || Object.keys(_data).length === 0) return;
@@ -151,7 +157,11 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
   const onChartReadyCallback = () => {};
   const onEvents = {
     click: (params: any) => {
-      console.log(params);
+      const day = daysOfYear[params.value[0]];
+      const resourceKEY = Object.entries(resources)[params.value[1]][0];
+      if (typeof increaseProjectResource === "function") {
+        increaseProjectResource(resourceKEY, day);
+      }
     },
   };
   const onClickSHOWHIDERESOURCECALENDER = () => {
