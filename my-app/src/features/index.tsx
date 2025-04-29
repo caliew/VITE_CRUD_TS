@@ -13,6 +13,7 @@ import CalendarPage from "./CalenderPage";
 import SunburstPage from "./SunburstPage";
 import PhotoAlbumPage from "./PhotoAlbumPage";
 import LoginPage from "./LoginPage";
+import PresentationPage from "./PresentationPage";
 
 export {
   PageNotFound,
@@ -29,5 +30,6 @@ export {
   CalendarPage,
   SunburstPage,
   PhotoAlbumPage,
+  PresentationPage,
   ErrorFallback,
 };

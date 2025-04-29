@@ -55,6 +55,13 @@ const HomePage = () => {
           <Button
             Icon={GetIcon("IOTPortal")}
             className={ButtonLINKClasses}
+            to="/Presentation"
+          >
+            PRESENTATION
+          </Button>
+          <Button
+            Icon={GetIcon("IOTPortal")}
+            className={ButtonLINKClasses}
             to="/IOTPortals"
           >
             IOT PORTAL
