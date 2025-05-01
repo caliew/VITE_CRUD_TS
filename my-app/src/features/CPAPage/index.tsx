@@ -803,15 +803,36 @@ const CPAPage = () => {
         ActualWork: any;
         TotalITBudget: any;
         BudgetVariance: any;
-      }) => ({
-        WBS: proj.WBS,
-        ProjectName: proj.ProjectName,
-        PlannedMD: proj.TotalPlannedMDs,
-        ActualWork: proj.ActualWork,
-        "%Clocked": proj["%Clocked"],
-        Budget: proj.TotalITBudget,
-        Variance: proj.BudgetVariance,
-      })
+      }) => {
+        const totalResources =
+          proj.activity.reduce(
+            (acc, activity) =>
+              acc + activity.duration * activity.resources.length,
+            0
+          ) +
+          (proj.additionalResources
+            ? Object.values(proj.additionalResources).reduce(
+                (acc, resource) =>
+                  acc +
+                  Object.values(resource).reduce(
+                    (acc, value) => acc + value,
+                    0
+                  ),
+                0
+              )
+            : 0);
+
+        console.log(totalResources);
+        return {
+          WBS: proj.WBS,
+          ProjectName: proj.ProjectName,
+          PlannedMD: proj.TotalPlannedMDs,
+          ActualWork: totalResources,
+          "%Clocked": proj["%Clocked"],
+          Budget: proj.TotalITBudget,
+          Variance: proj.BudgetVariance,
+        };
+      }
     );
     const statusViewData = MockProjects.map(
       (proj: {
@@ -852,14 +873,30 @@ const CPAPage = () => {
       const finishDate = new Date(proj.CharterFinishDate);
       const totalProjectPeriod = finishDate.getTime() - startDate.getTime();
       const days = Math.floor(totalProjectPeriod / (1000 * 60 * 60 * 24));
+      const totalResources =
+        proj.activity.reduce(
+          (acc, activity) =>
+            acc + activity.duration * activity.resources.length,
+          0
+        ) +
+        (proj.additionalResources
+          ? Object.values(proj.additionalResources).reduce(
+              (acc, resource) =>
+                acc +
+                Object.values(resource).reduce((acc, value) => acc + value, 0),
+              0
+            )
+          : 0);
       return [
         proj["%Clocked"],
         Number(Number(proj.TotalPlannedMDs / days).toFixed(2)),
         proj.TotalPlannedMDs,
         proj.ProjectName,
         proj.Status.toUpperCase(),
+        totalResources,
       ];
     });
+    console.log(MockProjects);
 
     setProjectViewData(projectViewData);
     setTimelineViewData(timelineViewData);
@@ -1150,7 +1187,7 @@ const CPAPage = () => {
       <HeatmapChart
         className="border-2"
         calenderData={ObjHeatMapData}
-        title="RESOURCE CALENDERS"
+        title={selectedProject ?? "ALL PROJECT"}
         increaseProjectResource={(resourceKey, day) => {
           increaseProjectResource(resourceKey, day);
         }}
@@ -1220,7 +1257,7 @@ const CPAPage = () => {
           {BubbleChartData && (
             <BubbleChart
               className=""
-              title="PROJECT EFFORT VS PROGRESS"
+              title="Project Effort VS Progress"
               data={BubbleChartData}
             />
           )}

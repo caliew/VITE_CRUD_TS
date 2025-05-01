@@ -14,7 +14,7 @@
       "CriticalPath": ["1.1.1", "1.1.2", "1.1.3"],
       "Slack": 2,
 
-      "TotalPlannedMDs": 850,
+      "TotalPlannedMDs": 60,
       "ActualWork": 382,
       "TotalITBudget": 1250000,
       "BudgetVariance": -15000,
@@ -207,7 +207,7 @@
 
       "CriticalPath": ["1.2.3", "1.2.4"],
       "Slack": 0,
-      "TotalPlannedMDs": 420,
+      "TotalPlannedMDs": 60,
       "ActualWork": 285,
       "TotalITBudget": 750000,
       "BudgetVariance": 12000,
@@ -400,7 +400,7 @@
 
       "CriticalPath": ["2.1.5", "2.1.6"],
       "Slack": 5,
-      "TotalPlannedMDs": 1200,
+      "TotalPlannedMDs": 60,
       "ActualWork": 264,
       "TotalITBudget": 2000000,
       "BudgetVariance": -45000,
@@ -593,7 +593,7 @@
 
       "CriticalPath": ["3.3.2"],
       "Slack": 0,
-      "TotalPlannedMDs": 300,
+      "TotalPlannedMDs": 60,
       "ActualWork": 276,
       "TotalITBudget": 500000,
       "BudgetVariance": 25000,
@@ -786,7 +786,7 @@
 
       "CriticalPath": ["4.5.1", "4.5.2"],
       "Slack": 3,
-      "TotalPlannedMDs": 600,
+      "TotalPlannedMDs": 100,
       "ActualWork": 198,
       "TotalITBudget": 950000,
       "BudgetVariance": -30000,

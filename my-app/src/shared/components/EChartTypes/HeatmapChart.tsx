@@ -5,6 +5,7 @@ import * as echarts from "echarts/core";
 import { Button } from "@shared/components";
 import { ButtonLINKClasses, ChartClasses } from "@shared/utils/classname";
 import { GetIcon } from "@shared/utils/icon";
+import { data } from "react-router-dom";
 
 interface HeatmapChartProp {
   className?: string;
@@ -33,9 +34,27 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
     setResources(ObjResources);
     setDaysOfYear(daysOfYear);
     const ResourcesKEY = Object.keys(ObjResources);
+
+    const resourceTotals = {};
+    Object.keys(calenderData.calender).forEach((day) => {
+      Object.keys(calenderData.calender[day]).forEach((resource) => {
+        if (!resourceTotals[resource]) {
+          resourceTotals[resource] = 0;
+        }
+        resourceTotals[resource] += calenderData.calender[day][resource];
+      });
+    });
+    const yAxisData = Object.keys(resourceTotals).map(
+      (resource) => `${resource}: (${resourceTotals[resource]})`
+    );
+
     const _data = calenderData?.calender ?? null;
     if (_data === null || Object.keys(_data).length === 0) return;
 
+    const sums = {};
+    Object.keys(ObjResources).forEach((key) => {
+      sums[key] = ObjResources[key].reduce((acc, current) => acc + current, 0);
+    });
     let ObjDataArr: any[][] = [];
     Object.entries(_data).forEach(([day, resources]) => {
       const dayIndex = daysOfYear.indexOf(parseInt(day));
@@ -102,7 +121,7 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
       },
       yAxis: {
         type: "category",
-        data: ResourcesKEY,
+        data: yAxisData,
         name: "Resources",
         nameLocation: "middle",
         splitArea: {
@@ -119,7 +138,7 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
           fontWeight: "normal",
           color: "#FFF",
         },
-        nameGap: 50,
+        nameGap: 80,
       },
       visualMap: {
         min: 0,

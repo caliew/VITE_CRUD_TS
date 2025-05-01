@@ -4,6 +4,8 @@ import ReactECharts from "echarts-for-react";
 import * as echarts from "echarts/core";
 
 import { ChartClasses } from "@shared/utils/classname";
+import { wrap } from "module";
+import { color } from "echarts";
 
 interface BubbleChartProp {
   className?: string;
@@ -29,9 +31,21 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
       ]),
       title: {
         text: title,
-        left: "50%",
+        left: "60%",
         right: "5%",
-        top: "10%",
+        top: "5%",
+        padding: [380, 0, 0, -10], // add padding to control width
+        textStyle: {
+          fontSize: 22, // change font size to 18
+          fontWeight: "normal", // change font weight to bold
+          fontFamily: "Tahoma", // change font family to Arial
+          color: "blue",
+          wrap: true,
+          rich: {
+            align: "left",
+            verticalAlign: "top",
+          },
+        },
       },
       legend: {
         right: "10%",
@@ -63,14 +77,14 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
           data: data,
           type: "scatter",
           symbolSize: function (data) {
-            return Math.sqrt(data[2]) / 0.4;
+            return Math.sqrt(data[5]) / 0.2;
           },
           label: {
             show: true,
             formatter: function (params: any) {
               return params.data[3];
             },
-            position: "left",
+            position: "bottom",
             fontSize: 13,
             wrap: true,
             fontWeight: "normal",
@@ -81,10 +95,19 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
             label: {
               show: true,
               formatter: function (param: any) {
-                return param.data[3];
+                return (
+                  param.data[3] +
+                  "\n" +
+                  param.data[4] +
+                  "\n" +
+                  "RESOURCE =" +
+                  param.data[5] +
+                  "/" +
+                  param.data[2]
+                );
               },
               position: "top",
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: "normal",
               color: "black",
             },
