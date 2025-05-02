@@ -6,6 +6,7 @@ import * as echarts from "echarts/core";
 import { ChartClasses } from "@shared/utils/classname";
 import { wrap } from "module";
 import { color } from "echarts";
+import { Padding } from "@mui/icons-material";
 
 interface BubbleChartProp {
   className?: string;
@@ -109,7 +110,9 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
               position: "top",
               fontSize: 14,
               fontWeight: "normal",
-              color: "black",
+              color: "white",
+              backgroundColor: "blue", // add this line
+              padding: [10, 10, 10, 10],
             },
           },
           itemStyle: {

@@ -1,0 +1,27 @@
+.section {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    max-width: 100vw;
+    margin: 0 auto;
+}
+
+.slide-image {
+    flex: 0 1 calc(30em - 10px);
+    max-width: calc(30em - 10px);
+    max-height: 100vh;
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: auto;
+    /* or whatever aspect ratio you want to maintain */
+}
+
+/* If only 1 image in section, make it take full width and height */
+.section:has(img:only-child) .slide-image {
+    flex: 0 1 100%;
+    max-width: 100%;
+    height: 50vh;
+}

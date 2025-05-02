@@ -18,4 +18,5 @@ export * from "./WholePageLoading";
 
 export * from "./PageAction";
 export * from "./CPAGanttChart";
+export * from "./SlideShow";
 // export * from "./CPATable";
