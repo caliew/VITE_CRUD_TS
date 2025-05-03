@@ -1283,8 +1283,8 @@ const CPAPage = () => {
         <input type="file" accept=".json" onChange={handleFileImport} />
       </div>
 
-      {false && mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
       {mode === Mode.Dashboard && getDashboardFeatures}
+      {false && mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
 
       {mode === Mode.CPAAnalysis && (
         <>
@@ -1303,6 +1303,7 @@ const CPAPage = () => {
           ))}
         </>
       )}
+
       {mode === Mode.Dashboard && (
         <div className="border-2 p-4">
           <TableDashboard
@@ -1315,7 +1316,7 @@ const CPAPage = () => {
 
       {mode === Mode.Dashboard && ResourceCalender && getResourceMap}
 
-      {selectedProject && (
+      {mode === Mode.Dashboard && selectedProject && (
         <div className="border-2 p-4">
           <Button
             Icon={GetIcon("home")}

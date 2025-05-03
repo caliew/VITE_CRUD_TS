@@ -1,3 +1,8 @@
+body {
+    background-color: black !important;
+    color: white !important;
+}
+
 .section {
     display: flex !important;
     flex-wrap: wrap;
@@ -7,6 +12,7 @@
     width: 100%;
     max-width: 100vw;
     margin: 0 auto;
+    background-color: black !important;
 }
 
 .slide-image {
@@ -24,4 +30,54 @@
     flex: 0 1 100%;
     max-width: 100%;
     height: 50vh;
+}
+
+.text-overlay {
+    position: absolute;
+    bottom: -120px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-size: 0.8em;
+    font-weight: 200;
+    text-align: center;
+    background-color: black;
+    padding: 5px;
+    margin: 5px;
+}
+
+.text-overlay.fragment {
+    opacity: 0;
+}
+
+.text-overlay.fragment.visible {
+    opacity: 1;
+}
+
+.text-overlay h2 {
+    font-size: 18px;
+    margin-bottom: 0px;
+    background-color: black;
+}
+
+.text-overlay h3 {
+    font-size: 16px;
+    margin-bottom: 0px;
+    width: 300px;
+    background-color: black;
+}
+
+.text-overlay p {
+    font-size: 16px;
+    margin-bottom: -5px;
+    line-height: 1.3;
+    background-color: black;
+}
+
+.reveal body {
+    background-color: black !important;
 }
