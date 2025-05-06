@@ -16,35 +16,37 @@ const Slide = ({
   content,
   description,
   currentSlide,
-}) => (
-  <section>
-    <div className="section">
-      {images.map((image, index) => (
-        <img
-          className="slide-image"
-          src={`http://localhost:8080/images/${image}`}
-          key={index}
-        />
-      ))}
-      <div
-        className={`text-overlay fragment ${
-          currentSlide === slideId ? "visible" : ""
-        }`}
-        data-fragment-index="2"
-      >
-        {" "}
-        <div>{slideId}</div>
-        <h2>{title}</h2>
-        <h3>
-          {storyId}
-          <br />
-          {description}
-        </h3>
-        <p>{content}</p>
+}) => {
+  return (
+    <section>
+      <div className="section">
+        {images.map((image, index) => (
+          <img
+            className={`slide-image-${images.length}`}
+            src={`http://localhost:8080/images/${image}`}
+            key={index}
+          />
+        ))}
+        <div
+          className={`text-overlay fragment ${
+            currentSlide === slideId ? "visible" : ""
+          }`}
+          data-fragment-index="2"
+        >
+          {" "}
+          <div>{slideId}</div>
+          <h2>{title}</h2>
+          <h3>
+            {storyId}
+            <br />
+            {description}
+          </h3>
+          <p>{content}</p>
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 const transitions = ["fade", "slide", "convex", "concave", "zoom"];
 
 const SlideShow = () => {
@@ -61,14 +63,19 @@ const SlideShow = () => {
       revealInstance.current = new Reveal(revealRef.current);
       revealInstance.current.initialize();
       revealInstance.current.configure({
-        fragments: true,
+        fragments: false,
+      });
+      revealInstance.current.on("ready", () => {
+        const state = revealInstance.current.getState();
+        const currentSlide = state.indexh ?? 0;
+        setCurrentSlide(currentSlide);
       });
       revealInstance.current.on("slidechanged", (event) => {
         const currentSlide = event.indexh;
         const slides = revealInstance.current.getSlides();
         slides.forEach((slide, index) => {
           const fragment = slide.querySelector(".text-overlay.fragment");
-          if (fragment) {
+          if (fragment && fragment.classList) {
             if (index === currentSlide) {
               fragment.classList.add("visible");
             } else {
@@ -87,42 +94,42 @@ const SlideShow = () => {
   }, []);
 
   useEffect(() => {
-    const fetchStoryAndData = async () => {
-      try {
-        const storyResponse = await fetch("http://localhost:8080/story.json");
-        const story = await storyResponse.json();
-        setStories(story);
-
-        const dataResponse = await fetch("http://localhost:8080/data.json");
-        const data = await dataResponse.json();
-        const slides = [];
-        let storyIndex = 0;
-        let images = [];
-        let slideLength = Math.floor(Math.random() * 4) + 1;
-        for (let i = 0; i < data.length; i++) {
-          images.push(data[i].filename);
-          if (images.length === slideLength || i === data.length - 1) {
-            const storyData = story[storyIndex];
-            slides.push({
-              id: storyData.id,
-              title: storyData.title,
-              content: storyData.content,
-              description: storyData.description,
-              images,
-            });
-            images = [];
-            storyIndex = (storyIndex + 1) % story.length;
-            slideLength = Math.floor(Math.random() * 4) + 1;
-          }
-        }
-        setSlides(slides);
-        setTotalSlides(slides.length);
-      } catch (error) {}
-    };
-
     fetchStoryAndData();
   }, []);
+  const fetchStoryAndData = async () => {
+    try {
+      const storyResponse = await fetch("http://localhost:8080/story.json");
+      const story = await storyResponse.json();
+      const activeStory = story.filter((s) => s?.active === true); // changed to boolean true
+      setStories(activeStory);
 
+      const dataResponse = await fetch("http://localhost:8080/data.json");
+      const data = await dataResponse.json();
+      const slides = [];
+      let storyIndex = 0;
+      let images = [];
+      let slideLength = Math.floor(Math.random() * 4) + 1;
+      for (let i = 0; i < data.length; i++) {
+        images.push(data[i].filename);
+        if (images.length === slideLength || i === data.length - 1) {
+          const storyData = activeStory[storyIndex];
+          slides.push({
+            id: storyData.id,
+            title: storyData.title,
+            content: storyData.content,
+            description: storyData.description,
+            images,
+          });
+          images = [];
+          storyIndex = (storyIndex + 1) % activeStory.length;
+          slideLength = Math.floor(Math.random() * 4) + 1;
+        }
+      }
+      setSlides(slides);
+      setTotalSlides(slides.length);
+      goFirstSlide();
+    } catch (error) {}
+  };
   const goFirstSlide = () => {
     if (revealRef.current && revealInstance.current) {
       revealInstance.current.configure({ rtl: false });
@@ -148,7 +155,7 @@ const SlideShow = () => {
   const handlePreviousSlide = () => {
     if (revealRef.current && revealInstance.current) {
       const state = revealInstance.current.getState();
-      const currentSlide = state.indexh;
+      const currentSlide = state.indexh ?? 0;
       setCurrentSlide(currentSlide);
       revealInstance.current.configure({ rtl: false });
       const randomTransition =
@@ -157,14 +164,14 @@ const SlideShow = () => {
       if (currentSlide === 0) {
         revealInstance.current.slide(totalSlides);
       } else {
-        revealInstance.current.slide((currentSlide - 1) % totalSlides);
+        revealInstance.current.slide(currentSlide - 1);
       }
     }
   };
   const handleNextSlide = () => {
     if (revealRef.current && revealInstance.current) {
       const state = revealInstance.current.getState();
-      const currentSlide = state.indexh;
+      const currentSlide = state.indexh ?? 0;
       setCurrentSlide(currentSlide);
       revealInstance.current.configure({ rtl: false });
       const randomTransition =
@@ -173,7 +180,7 @@ const SlideShow = () => {
       if (currentSlide === totalSlides - 1) {
         revealInstance.current.slide(0);
       } else {
-        revealInstance.current.slide((currentSlide + 1) % totalSlides);
+        revealInstance.current.slide(currentSlide + 1);
       }
     }
   };
@@ -194,7 +201,13 @@ const SlideShow = () => {
     <>
       <div className="font-Roboto text-lg text-white font-extralight flex justify-center items-center mt-4 gap-4">
         <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          BACK TO HOME
+          HOME
+        </Button>
+        <Button
+          className={ButtonLINKClasses}
+          onClick={() => fetchStoryAndData()}
+        >
+          RELOAD
         </Button>
         <Button className={ButtonLINKClasses} onClick={() => goFirstSlide()}>
           FIRST

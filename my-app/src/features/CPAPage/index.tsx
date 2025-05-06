@@ -57,6 +57,7 @@ interface TaskSchedule {
 const Mode = {
   Dashboard: "Dashboard",
   CPAAnalysis: "CPAAnalysis",
+  Simulator: "Simulator",
 };
 const View = {
   ProjectView: "Project",
@@ -821,8 +822,6 @@ const CPAPage = () => {
                 0
               )
             : 0);
-
-        console.log(totalResources);
         return {
           WBS: proj.WBS,
           ProjectName: proj.ProjectName,
@@ -896,7 +895,6 @@ const CPAPage = () => {
         totalResources,
       ];
     });
-    console.log(MockProjects);
 
     setProjectViewData(projectViewData);
     setTimelineViewData(timelineViewData);
@@ -1112,6 +1110,7 @@ const CPAPage = () => {
     setTitles((prevTitles: any) => [...prevTitles, selTitle]);
   };
 
+  const getSimulatorFeatures = useMemo(() => <div></div>, [mode]);
   const getDashboardFeatures = useMemo(
     () => (
       <div>
@@ -1252,18 +1251,21 @@ const CPAPage = () => {
         className={PageHeaderClasses}
         title="CRITICAL PATH ANALYSIS & CONSTRAINT MODELING"
       />
-      <div className="flex">
-        <div>
-          {BubbleChartData && (
-            <BubbleChart
-              className=""
-              title="Project Effort VS Progress"
-              data={BubbleChartData}
-            />
-          )}
+
+      {mode !== Mode.Simulator && (
+        <div className="flex">
+          <div>
+            {BubbleChartData && (
+              <BubbleChart
+                className=""
+                title="Project Effort VS Progress"
+                data={BubbleChartData}
+              />
+            )}
+          </div>
+          <Recommendations recommendations={recommendations} />
         </div>
-        <Recommendations recommendations={recommendations} />
-      </div>
+      )}
 
       <div>
         <Button
@@ -1280,9 +1282,17 @@ const CPAPage = () => {
         >
           CPANALYSIS
         </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={() => setMode(Mode.Simulator)}
+        >
+          SIMULATOR
+        </Button>
         <input type="file" accept=".json" onChange={handleFileImport} />
       </div>
 
+      {mode === Mode.Simulator && getSimulatorFeatures}
       {mode === Mode.Dashboard && getDashboardFeatures}
       {false && mode === Mode.CPAAnalysis && getCPAnalysisFeatures}
 
@@ -1317,7 +1327,7 @@ const CPAPage = () => {
       {mode === Mode.Dashboard && ResourceCalender && getResourceMap}
 
       {mode === Mode.Dashboard && selectedProject && (
-        <div className="border-2 p-4">
+        <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
           <Button
             Icon={GetIcon("home")}
             className={ButtonLINKClasses}
