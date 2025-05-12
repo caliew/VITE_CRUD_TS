@@ -1,0 +1,110 @@
+{
+  "MockProjects": [
+    {
+      "WBS": "WARD-2024-OPT2",
+      "ProjectName": "Ward Nurse Daily Rounds-OPT2",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "CriticalPath": ["MED-101", "VIT-102", "DOC-104"],
+      "Slack": 1.5,
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 8,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A", "MED-CART"],
+          "travelTimeAfter": 3
+        },
+        {
+          "id": "VIT-102",
+          "name": "Check Vitals - Room 2",
+          "duration": 12,
+          "location": "Room2",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-B"],
+          "travelTimeAfter": 5
+        },
+        {
+          "id": "PAT-106",
+          "name": "Post-Medication Assessment - Room 1",
+          "duration": 10,
+          "location": "Room1",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 2
+        },
+        {
+          "id": "FLW-107",
+          "name": "Follow-up Vitals - Room 2",
+          "duration": 8,
+          "location": "Room2",
+          "dependencies": ["VIT-102"],
+          "resources": ["NURSE-B"],
+          "travelTimeAfter": 3
+        },
+        {
+          "id": "COD-109",
+          "name": "Doctor Coordination - Station",
+          "duration": 15,
+          "location": "NursesStation",
+          "dependencies": ["PAT-106", "FLW-107"],
+          "resources": ["NURSE-A", "NURSE-B"],
+          "travelTimeAfter": 0
+        },
+        {
+          "id": "EDU-110",
+          "name": "Discharge Education - Room 4",
+          "duration": 20,
+          "location": "Room4",
+          "dependencies": ["COD-109"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 4
+        }
+      ],
+      "resources": [
+        {
+          "id": "NURSE-A",
+          "name": "Primary Care Nurse",
+          "type": "Staff",
+          "currentLocation": "NursesStation"
+        },
+        {
+          "id": "ROOM-MAP",
+          "locations": {
+            "Room1": { "x": 10, "y": 20 },
+            "Room2": { "x": 30, "y": 20 },
+            "Room3": { "x": 10, "y": 40 },
+            "Room4": { "x": 50, "y": 30 },
+            "NursesStation": { "x": 0, "y": 0 }
+          },
+          "travelSpeed": 0.5
+        }
+      ],
+      "optimizationRules": {
+        "maxConcurrentTasks": 1,
+        "shiftDuration": 480,
+        "priorityWeights": {
+          "criticalMedication": 3,
+          "routineCheck": 1,
+          "documentation": 2
+        }
+      }
+    }
+  ]
+}

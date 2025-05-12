@@ -1,0 +1,154 @@
+{
+  "MockProjects": [
+    {
+      "WBS": "HOSP-2024",
+      "ProjectName": "Regional Hospital Daily Operations",
+      "PrimaryPM": "Chief Nursing Officer",
+      "CharterStartDate": "2024-06-01",
+      "CharterFinishDate": "2024-06-02",
+      "%Clocked": 28,
+      "Status": "At Risk",
+      "NextAction": "Optimize Multi-Wing Patient Care Path",
+      "CriticalPath": ["MED-ROUNDS", "SURG-PREP", "ICU-MONITOR"],
+      "Slack": 0.75,
+
+      "activity": [
+        {
+          "id": "MED-ROUNDS",
+          "name": "Morning Medication Rounds",
+          "type": "Critical Care",
+          "duration": 120,
+          "location": "NorthWing",
+          "dependencies": [],
+          "resources": ["RN-1", "RN-2"],
+          "travelTimeAfter": 15,
+          "priority": 9,
+          "constraints": ["TempSensitiveMeds"]
+        },
+        {
+          "id": "SURG-PREP",
+          "name": "Surgical Preparation",
+          "type": "Surgical",
+          "duration": 90,
+          "location": "SurgicalWing",
+          "dependencies": ["MED-ROUNDS"],
+          "resources": ["RN-SPEC"],
+          "travelTimeAfter": 10,
+          "priority": 8,
+          "constraints": ["SterileEnvironment"]
+        },
+        {
+          "id": "ICU-MONITOR",
+          "name": "ICU Patient Monitoring",
+          "type": "Critical Care",
+          "duration": 240,
+          "location": "ICU-Wing",
+          "dependencies": ["MED-ROUNDS"],
+          "resources": ["RN-ICU"],
+          "travelTimeAfter": 20,
+          "priority": 10,
+          "constraints": ["ContinuousMonitoring"]
+        },
+        {
+          "id": "PHYS-THERAPY",
+          "name": "Physical Therapy Sessions",
+          "type": "Rehab",
+          "duration": 180,
+          "location": "RehabCenter",
+          "dependencies": ["MED-ROUNDS"],
+          "resources": ["PT-1", "PT-2"],
+          "travelTimeAfter": 25,
+          "priority": 7
+        },
+        {
+          "id": "EMERG-RESP",
+          "name": "Emergency Response Protocol",
+          "type": "Emergency",
+          "duration": 60,
+          "location": "ER-Wing",
+          "dependencies": [],
+          "resources": ["RN-ER"],
+          "travelTimeAfter": 5,
+          "priority": 10,
+          "constraints": ["STATPriority"]
+        }
+      ],
+      "resources": [
+        {
+          "id": "RN-1",
+          "name": "Registered Nurse - Day Shift",
+          "type": "General",
+          "skills": ["MedAdmin", "Vitals"],
+          "currentLocation": "NursesStation",
+          "availability": "06:00-18:00"
+        },
+        {
+          "id": "RN-SPEC",
+          "name": "Surgical Nurse",
+          "type": "Specialist",
+          "skills": ["SurgicalPrep", "SterileProc"],
+          "currentLocation": "SurgicalLounge",
+          "availability": "07:00-15:00"
+        },
+        {
+          "id": "RN-ICU",
+          "name": "ICU Specialist Nurse",
+          "type": "CriticalCare",
+          "skills": ["VentManagement", "HemodynamicMonitoring"],
+          "currentLocation": "ICU-Station",
+          "availability": "24/7"
+        }
+      ],
+      "optimizationRules": {
+        "multiObjectiveWeights": {
+          "timeEfficiency": 0.4,
+          "resourceUtilization": 0.3,
+          "criticalPathAdherence": 0.2,
+          "energyConservation": 0.1
+        },
+        "constraints": {
+          "maxConcurrentCriticalTasks": 2,
+          "minStaffPerWing": 1,
+          "maxTravelTime": 30,
+          "biohazardZones": ["ICU-Wing", "SurgicalWing"]
+        },
+        "locationMap": {
+          "NursesStation": { "x": 0, "y": 0 },
+          "NorthWing": { "x": 100, "y": 0 },
+          "SurgicalWing": { "x": 0, "y": 150 },
+          "ICU-Wing": { "x": 200, "y": 200 },
+          "RehabCenter": { "x": 300, "y": 50 },
+          "ER-Wing": { "x": 400, "y": 0 }
+        },
+        "travelParameters": {
+          "averageSpeed": 1.4, // m/s
+          "elevationGains": {
+            "ICU-Wing": 10,
+            "SurgicalWing": 5
+          },
+          "congestionFactors": {
+            "07:00-09:00": 1.5,
+            "12:00-14:00": 2.0,
+            "17:00-19:00": 1.8
+          }
+        }
+      },
+      "heuristicConfig": {
+        "algorithm": "AdaptiveLargeNeighborhoodSearch",
+        "parameters": {
+          "maxRuntime": 300,
+          "populationSize": 50,
+          "mutationRate": 0.15,
+          "elitismCount": 5,
+          "localSearchIntensity": 0.3
+        },
+        "objectiveFunctions": [
+          "MinimizeTotalTravelTime",
+          "BalanceWorkload",
+          "MaximizeCriticalPathAdherence",
+          "MinimizeCrossContaminationRisk"
+        ]
+      }
+    }
+  ]
+}

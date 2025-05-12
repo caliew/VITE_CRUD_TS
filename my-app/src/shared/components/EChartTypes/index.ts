@@ -8,3 +8,4 @@ export { default as MapChart } from "./MapChart";
 export { default as SunburstChart } from "./SunburstChart";
 export { default as BubbleChart } from "./BubbleChart";
 export { default as HeatmapChart } from "./HeatmapChart";
+export { default as VisitRouteChart } from "./VisitRouteChart";

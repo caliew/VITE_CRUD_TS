@@ -1,0 +1,274 @@
+{
+  "MockProjects": [
+    {
+      "WBS": "WARD-2024-BASE",
+      "ProjectName": "Baseline Nurse Rounds",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "Slack": 1.5,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+
+      "CriticalPath": ["MED-101", "VIT-102", "DOC-104"],
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 8,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 4
+        },
+        {
+          "id": "VIT-102",
+          "name": "Check Vitals - Room 2",
+          "duration": 12,
+          "location": "Room2",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 6
+        },
+        {
+          "id": "DOC-104",
+          "name": "Update Charts",
+          "duration": 10,
+          "location": "NursesStation",
+          "dependencies": ["VIT-102"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 0
+        }
+      ]
+    },
+    {
+      "WBS": "WARD-2024-OPT1",
+      "ProjectName": "Scenario 1: Parallel Processing (Medication + Vitals Concurrent)",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "Slack": 1.5,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+      "CriticalPath": ["MED-101", "DOC-104"],
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 8,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 2
+        },
+        {
+          "id": "VIT-102",
+          "name": "Check Vitals - Room 2",
+          "duration": 12,
+          "location": "Room2",
+          "dependencies": [],
+          "resources": ["NURSE-B"],
+          "travelTimeAfter": 3
+        },
+        {
+          "id": "DOC-104",
+          "name": "Update Charts",
+          "duration": 6,
+          "location": "NursesStation",
+          "dependencies": ["MED-101", "VIT-102"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 0
+        }
+      ],
+      "resources": [
+        { "id": "NURSE-B", "name": "Secondary Nurse", "type": "Staff" }
+      ]
+    },
+    {
+      "WBS": "WARD-2024-OPT2",
+      "ProjectName": "Scenario 2: Dynamic Routing (TSP-Optimized Path)",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "Slack": 1.5,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+      "CriticalPath": ["MED-101", "PAT-106", "DOC-104"],
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 8,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 1
+        },
+        {
+          "id": "PAT-106",
+          "name": "Patient Assessment - Room 3",
+          "duration": 10,
+          "location": "Room3",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 1
+        },
+        {
+          "id": "DOC-104",
+          "name": "Update Charts",
+          "duration": 8,
+          "location": "NursesStation",
+          "dependencies": ["PAT-106"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 0
+        }
+      ]
+    },
+    {
+      "WBS": "WARD-2024-OPT3",
+      "ProjectName": "Scenario 3: Resource Pooling (Shared Nursing Team)",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "Slack": 1.5,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+      "CriticalPath": ["MED-101", "VIT-102"],
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 6,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A", "NURSE-B"],
+          "travelTimeAfter": 2
+        },
+        {
+          "id": "VIT-102",
+          "name": "Check Vitals - Room 2",
+          "duration": 8,
+          "location": "Room2",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-B"],
+          "travelTimeAfter": 3
+        }
+      ],
+      "resources": [{ "id": "NURSE-B", "name": "Float Nurse", "type": "Staff" }]
+    },
+    {
+      "WBS": "WARD-2024-OPT4",
+      "ProjectName": "Scenario 4: Automated Documentation (AI-Assisted)",
+      "PrimaryPM": "Head Nurse Smith",
+      "CharterStartDate": "2025-03-01",
+      "CharterFinishDate": "2025-03-01",
+      "%Clocked": 35,
+      "Status": "Delayed",
+      "NextAction": "Optimize Morning Medication Route",
+      "Slack": 1.5,
+
+      "TotalPlannedMDs": 850,
+      "ActualWork": 382,
+      "TotalITBudget": 1250000,
+      "BudgetVariance": -15000,
+
+      "PMRemark": "Vendor delay impacting procurement phase",
+      "RiskLevel": "Medium",
+
+      "ReqSignoffDoc": true,
+      "BuildCompleteDoc": false,
+      "GoLiveDoc": false,
+      "PostLiveDoc": false,
+
+      "CriticalPath": ["MED-101", "VIT-102"],
+      "activity": [
+        {
+          "id": "MED-101",
+          "name": "Administer Meds - Room 1",
+          "duration": 8,
+          "location": "Room1",
+          "dependencies": [],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 2
+        },
+        {
+          "id": "VIT-102",
+          "name": "Check Vitals - Room 2",
+          "duration": 12,
+          "location": "Room2",
+          "dependencies": ["MED-101"],
+          "resources": ["NURSE-A"],
+          "travelTimeAfter": 3
+        },
+        {
+          "id": "AUTO-105",
+          "name": "Auto-Charting",
+          "duration": 2,
+          "location": "NursesStation",
+          "dependencies": ["VIT-102"],
+          "resources": ["AI-SYSTEM"],
+          "travelTimeAfter": 0
+        }
+      ],
+      "resources": [
+        { "id": "AI-SYSTEM", "name": "Smart Documentation", "type": "Software" }
+      ]
+    }
+  ]
+}

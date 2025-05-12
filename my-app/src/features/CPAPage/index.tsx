@@ -8,7 +8,10 @@ import {
   PageAction,
   Button,
   CPAGanttChart,
+  VisitRouteChart,
 } from "@shared/components";
+import { TSPOptimizer } from "@shared/utils";
+import type { Location, TSPNode } from "@shared/utils";
 
 import { grid } from "@assets/index";
 import { GetIcon } from "@utils/icon";
@@ -19,8 +22,12 @@ import {
   GridClasses,
   ButtonLINKClasses,
 } from "@shared/utils/classname";
+
 import mockProjectsData from "./data/projectMockData.json";
+import simulatorData from "./data/cpa-nurse5.json";
+import mockCPAData from "./data/cpa-data1.json";
 import "./index.css";
+import { data } from "react-router-dom";
 
 interface Project {
   WBS: string;
@@ -51,9 +58,17 @@ interface TaskSchedule {
   slack: number;
   resources: string[];
   dependencies: string[];
+  travelTimeAfter: number;
+  location: string;
   status: "pending" | "inProgress" | "completed";
 }
-
+const StatusEnum = {
+  AT_RISK: "AT RISK",
+  ON_TRACK: "ON TRACK",
+  COMPLETED: "COMPLETED",
+  DELAYED: "DELAYED",
+  ON_HOLD: "ON HOLD",
+};
 const Mode = {
   Dashboard: "Dashboard",
   CPAAnalysis: "CPAAnalysis",
@@ -346,11 +361,14 @@ export class GraphCPA {
     this.graph = new Graph({ directed: true });
   } // Add a node with metadata (duration, resources, etc.)
   addNode(node: Node) {
-    this.graph.setNode(node.id, { ...node });
+    this.graph.setNode(node.id, {
+      ...node,
+      location: (node as any).location || "Unknown",
+    });
   }
   // Add a directed dependency: from → to
-  addDependency(from: string, to: string) {
-    this.graph.setEdge(from, to);
+  addDependency(from: string, to: string, travelTimeAfter: number = 0) {
+    this.graph.setEdge(from, to, { travelTimeAfter });
   }
   isAcyclic() {
     return alg.isAcyclic(this.graph);
@@ -378,8 +396,16 @@ export class GraphCPA {
       durations[id] = node.duration || 0;
       const preds = this.graph.predecessors(id) || [];
 
+      // Calculate max(previous end + travel time)
       earliestStart[id] =
-        preds.length === 0 ? 0 : Math.max(...preds.map((p) => earliestEnd[p]));
+        preds.length === 0
+          ? 0
+          : Math.max(
+              ...preds.map((p) => {
+                const edge = this.graph.edge(p, id);
+                return earliestEnd[p] + (edge?.travelTimeAfter || 0);
+              })
+            );
 
       earliestEnd[id] = earliestStart[id] + durations[id];
     }
@@ -406,6 +432,12 @@ export class GraphCPA {
     const tasks: TaskSchedule[] = order.map((id) => {
       const node = this.graph.node(id);
       const slack = latestStart[id] - earliestStart[id];
+      // Get travel time from predecessors
+      const travelTimeAfter =
+        this.graph.predecessors(id)?.reduce((max, p) => {
+          const edge = this.graph.edge(p, id);
+          return Math.max(max, edge?.travelTimeAfter || 0);
+        }, 0) || 0;
       return {
         id,
         name: node.name,
@@ -416,15 +448,19 @@ export class GraphCPA {
         slack,
         resources: node.resources,
         dependencies: node.dependencies,
+        // Add travel time to task schedule
+        travelTimeAfter,
+        // Add location data
+        location: node.location,
       };
     });
 
     const criticalPath = tasks.filter((t) => t.isCritical).map((t) => t.id);
-    const executionOrder = alg.topsort(this.graph);
+    // const executionOrder = alg.topsort(this.graph);
     return {
       tasks,
       criticalPath,
-      executionOrder,
+      executionOrder: order,
       totalDuration,
     };
   }
@@ -450,53 +486,107 @@ const getViewParams = (view: string) => {
 };
 
 const processCPAData = ({ data, projectstatus = null }) => {
-  const graphCPA = new GraphCPA();
+  // 1. Initial CPA Analysis
+  const initialGraphCPA = new GraphCPA();
   data.forEach((node: any) => {
-    graphCPA.addNode(node);
+    initialGraphCPA.addNode(node);
     node.dependencies.forEach((dependency: string) => {
       if (data.find((n: { id: any }) => n.id === dependency)) {
-        graphCPA.addDependency(dependency, node.id);
+        initialGraphCPA.addDependency(
+          dependency,
+          node.id,
+          node?.travelTimeAfter
+        );
       }
     });
   });
-  const result = graphCPA.analyze();
-  const executionOrder = result.executionOrder;
-  const totalDuration = result.totalDuration;
-  const criticalPath = result.criticalPath;
+
+  let result = initialGraphCPA.analyze();
+  let tasks = result.tasks;
+
+  // 2. TSP Optimization Layer
+  try {
+    // Location conversion helper
+    const parseLocation = (locationString: string): Location => {
+      const [x, y] = locationString.split(",").map(Number);
+      return { x, y };
+    };
+
+    // Create TSP nodes from CPA results
+    const tspNodes: TSPNode[] = tasks.map((task) => ({
+      id: task.id,
+      location: parseLocation(task.location),
+      duration: task.duration,
+    }));
+
+    if (tspNodes.length > 1) {
+      // Only optimize if multiple locations exist
+      const optimizer = new TSPOptimizer(tspNodes, 50); // 50 km/h speed
+
+      // Get optimized route
+      const optimizedRoute = optimizer.optimizeWith2Opt(
+        optimizer.nearestNeighbor()
+      );
+
+      // Reorder tasks based on TSP optimization
+      const optimizedTasks = optimizedRoute
+        .map((id) => tasks.find((t) => t.id === id))
+        .filter(Boolean) as TaskSchedule[];
+      console.log(optimizedTasks);
+
+      // 3. Update travel times between consecutive tasks
+      optimizedTasks.forEach((task, index) => {
+        if (index < optimizedRoute.length - 1) {
+          const nextId = optimizedRoute[index + 1];
+          const distance = optimizer.getDistance(task.id, nextId);
+          task.travelTimeAfter = distance / 50; // Convert km to hours at 50km/h
+        } else {
+          task.travelTimeAfter = 0; // No travel after last task
+        }
+      });
+
+      // 4. Rebuild CPA model with optimized values
+      const optimizedGraphCPA = new GraphCPA();
+      optimizedTasks.forEach((task) => {
+        optimizedGraphCPA.addNode(task);
+        task.dependencies.forEach((dep: string) => {
+          if (optimizedTasks.some((t) => t.id === dep)) {
+            optimizedGraphCPA.addDependency(dep, task.id, task.travelTimeAfter);
+          }
+        });
+      });
+
+      // Get final optimized schedule
+      result = optimizedGraphCPA.analyze();
+      tasks = result.tasks;
+    }
+  } catch (error) {
+    console.error("TSP optimization failed:", error);
+    // Fallback to original CPA results
+  }
+
+  // 5. Calculate project statuses
   const projectProgress = projectstatus ?? Math.floor(Math.random() * 101);
   const progressRatio = projectProgress / 100;
-  const currentTime = progressRatio * totalDuration;
+  const currentTime = progressRatio * result.totalDuration;
 
-  const scheduleJSON = result.tasks.map((task) => {
-    let status;
-    if (currentTime >= task.end) {
-      status = "completed";
-    } else if (currentTime >= task.start) {
-      status = "inProgress";
-    } else {
-      status = "pending";
-    }
-    return {
-      id: task.id,
-      name: task.name,
-      start: task.start,
-      end: task.end,
-      duration: task.duration,
-      critical: task.isCritical,
-      slack: task.slack,
-      resources: task.resources,
-      dependencies: task.dependencies,
-      isCritical: criticalPath.includes(task.id),
-      status,
-    };
-  });
+  const scheduleJSON = tasks.map((task) => ({
+    ...task,
+    status:
+      currentTime >= task.end
+        ? "completed"
+        : currentTime >= task.start
+        ? "inProgress"
+        : "pending",
+    isCritical: result.criticalPath.includes(task.id),
+  }));
+  const optimizedRoute = tasks.map((t) => t.id);
+
   return {
-    graphCPA,
+    ...result,
     scheduleJSON,
-    criticalPath,
-    executionOrder,
-    totalDuration,
     projectProgress,
+    optimizedRoute,
   };
 };
 
@@ -510,6 +600,7 @@ const TableCPAHeaders = ({ className }: any) => {
         <th className={className}>RESOURCES</th>
         <th className={className}>START</th>
         <th className={className}>END</th>
+        <th className={className}>TRAVEL</th>
         <th className={className}>SLACK</th>
         <th className={className}>DEP</th>
         <th className={className}>STATUS</th>
@@ -540,6 +631,7 @@ const TableRowCPAComponent = ({ activity, handleCPARowClick }) => {
       <td className="text-center">{activity.resources.join(",")}</td>
       <td className="text-center">{activity.start}</td>
       <td className="text-center">{activity.end}</td>
+      <td className="text-center">{activity.travelTimeAfter}</td>
       <td className="text-center">{activity.slack}</td>
       <td className="text-center">{activity.dependencies.join(",")}</td>
       <td className="text-center font-Roboto text-lg">
@@ -712,8 +804,6 @@ const Recommendations = ({ recommendations }) => {
 };
 
 const CPAPage = () => {
-  const [file, setFile] = useState(null);
-  const [data, setData] = useState(null);
   const [BubbleChartData, setBubbleChartData] = useState(null);
   const [MockProjects, setMockProjects] = useState<any>([]);
   const [cpaResult, setCPAResult] = useState<any>({});
@@ -732,7 +822,7 @@ const CPAPage = () => {
   const [documentationViewData, setDocumentationViewData] = useState(null);
   const [recommendations, setRecommendations] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState(null);
-  const [intervalId, setIntervalId] = useState(null);
+  const [timerRunning, setTimerRunning] = useState(false);
 
   useEffect(() => {
     const MockProjects = mockProjectsData["MockProjects"];
@@ -913,44 +1003,94 @@ const CPAPage = () => {
   }, [MockProjects]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCPAResult((prevResults: { [x: string]: any }) => {
-        const updatedResults = {};
-        const updatedTitles = [];
-        for (const title in prevResults) {
-          let newProgress = prevResults[title].projectProgress + 1;
-          newProgress = Math.min(newProgress, 100);
-          const progressRatio = newProgress / 100;
-          const currentTime = progressRatio * prevResults[title].totalDuration;
-          const updatedSchedule = prevResults[title].scheduleJSON.map(
-            (task: { end: number; start: number }) => {
-              let status;
-              if (currentTime >= task.end) {
-                status = "completed";
-              } else if (currentTime >= task.start) {
-                status = "inProgress";
-              } else {
-                status = "pending";
-              }
-              return { ...task, status };
+    if (timerRunning) {
+      const interval = setInterval(() => {
+        setCPAResult((prevResults: { [x: string]: any }) => {
+          const updatedResults = {};
+          const updatedTitles = [];
+          for (const title in prevResults) {
+            let newProgress = prevResults[title].projectProgress;
+            if (Math.random() < 0.5) {
+              newProgress = prevResults[title].projectProgress + 1;
             }
-          );
-          if (newProgress < 100) {
-            updatedResults[title] = {
-              ...prevResults[title],
-              projectProgress: newProgress,
-              scheduleJSON: updatedSchedule,
-            };
-            updatedTitles.push(title);
+            newProgress = prevResults[title].projectProgress + 1;
+            newProgress = Math.min(newProgress, 100);
+            const progressRatio = newProgress / 100;
+            const currentTime =
+              progressRatio * prevResults[title].totalDuration;
+            const updatedSchedule = prevResults[title].scheduleJSON.map(
+              (task: { end: number; start: number }) => {
+                let status;
+                if (currentTime >= task.end) {
+                  status = "completed";
+                } else if (currentTime >= task.start) {
+                  status = "inProgress";
+                } else {
+                  status = "pending";
+                }
+                return { ...task, status };
+              }
+            );
+            if (newProgress < 100) {
+              updatedResults[title] = {
+                ...prevResults[title],
+                projectProgress: newProgress,
+                scheduleJSON: updatedSchedule,
+              };
+              updatedTitles.push(title);
+            }
           }
+          setTitles(updatedTitles);
+          return updatedResults;
+        });
+      }, 1000); // Update every second
+      return () => clearInterval(interval);
+    }
+  }, [timerRunning]);
+
+  useEffect(() => {
+    if (cpaResult === null) return;
+    const tempStatuses = {};
+    setProjectViewData((prevData) => {
+      return prevData.map((project) => {
+        const cpaResultForProject = cpaResult[project.ProjectName];
+        if (cpaResultForProject) {
+          const statusValues = Object.values(StatusEnum).filter(
+            (status) => status !== StatusEnum.COMPLETED
+          );
+          const status =
+            cpaResultForProject.projectProgress >= 99
+              ? StatusEnum.COMPLETED
+              : statusValues[Math.floor(Math.random() * statusValues.length)];
+          tempStatuses[project.ProjectName] = status;
+          return {
+            ...project,
+            "%Clocked": cpaResultForProject.projectProgress,
+            Status: status,
+          };
         }
-        setTitles(updatedTitles);
-        return updatedResults;
+        return project;
       });
-    }, 1000); // Update every second
-    setIntervalId(interval);
-    return () => clearInterval(interval);
-  }, []);
+    });
+    setBubbleChartData((prevData) => {
+      return prevData.map((project) => {
+        const cpaResultForProject = cpaResult[project[3]]; // assuming project name is at index 3
+        if (cpaResultForProject) {
+          const newProgress = cpaResultForProject.projectProgress;
+          return [
+            newProgress,
+            project[1], // PROGRESS
+            project[2], // PROJECT EFFORT
+            project[3], // TOTAL MANPOWER
+            tempStatuses[project[3]], // STATUS
+            project[5], // PROGRESS
+            newProgress,
+          ];
+        }
+        return project;
+      });
+    });
+  }, [cpaResult]);
 
   useEffect(() => {
     setCPAResult(null); // Initialize with null
@@ -1005,11 +1145,13 @@ const CPAPage = () => {
     // -------------------
   }, [MockProjects]);
 
-  const stopTimer = () => {
-    clearInterval(intervalId);
+  const startTimer = () => {
+    setTimerRunning(true);
   };
 
-  stopTimer();
+  const stopTimer = () => {
+    setTimerRunning(false);
+  };
 
   const handleCPARowClick = (
     title: string | number | SetStateAction<null>,
@@ -1092,7 +1234,7 @@ const CPAPage = () => {
     setSelectedProject(title);
   };
   const initiateRandomTask = () => {
-    if (cpaResult.length === 0) return;
+    if (cpaResult === null) return;
     const titles = Object.keys(cpaResult);
     const randomIndex = Math.floor(Math.random() * titles.length);
     const selTitle = titles[randomIndex];
@@ -1110,7 +1252,15 @@ const CPAPage = () => {
     setTitles((prevTitles: any) => [...prevTitles, selTitle]);
   };
 
-  const getSimulatorFeatures = useMemo(() => <div></div>, [mode]);
+  const getSimulatorFeatures = useMemo(
+    () => (
+      <VisitRouteChart
+        className="w-1/4 h-1/4 !important"
+        title="ROUTE SIMULATION"
+      />
+    ),
+    [mode]
+  );
   const getDashboardFeatures = useMemo(
     () => (
       <div>
@@ -1233,6 +1383,7 @@ const CPAPage = () => {
     }
   };
   const handleFileImport = (event: any) => {
+    setSelectedProject(null);
     const file = event.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -1243,16 +1394,36 @@ const CPAPage = () => {
     };
     reader.readAsText(file);
   };
+  const handleTimer = (event: any) => {
+    // setMode(Mode.Simulator)
+    if (timerRunning) {
+      stopTimer();
+    } else {
+      startTimer();
+    }
+  };
+  const setDashboard = (event: any) => {
+    const MockProjects = mockProjectsData["MockProjects"];
+    setMockProjects(MockProjects);
+    setTitles([]);
+    setMode(Mode.Dashboard);
+  };
+  const setCPAAnalysis = (event: any) => {
+    const MockProjects = simulatorData["MockProjects"];
+    setMockProjects(MockProjects);
+    setTitles([]);
+    setMode(Mode.CPAAnalysis);
+  };
 
   return (
     <div className={PageClasses}>
       <HeaderTitle
         Icon={GetIcon("Scheduler")}
         className={PageHeaderClasses}
-        title="CRITICAL PATH ANALYSIS & CONSTRAINT MODELING"
+        title="LTAI RESOURCE OPTIMIZATION & CONSTRAINT MODELLING"
       />
 
-      {mode !== Mode.Simulator && (
+      {mode == Mode.Dashboard && (
         <div className="flex">
           <div>
             {BubbleChartData && (
@@ -1271,17 +1442,25 @@ const CPAPage = () => {
         <Button
           Icon={GetIcon("home")}
           className={ButtonLINKClasses}
-          onClick={() => setMode(Mode.Dashboard)}
+          onClick={setDashboard}
         >
           DASHBOARD
         </Button>
         <Button
           Icon={GetIcon("home")}
           className={ButtonLINKClasses}
-          onClick={() => setMode(Mode.CPAAnalysis)}
+          onClick={setCPAAnalysis}
         >
           CPANALYSIS
         </Button>
+        <Button
+          Icon={GetIcon("home")}
+          className={ButtonLINKClasses}
+          onClick={handleTimer}
+        >
+          START/PAUSE
+        </Button>
+
         <Button
           Icon={GetIcon("home")}
           className={ButtonLINKClasses}
@@ -1305,8 +1484,8 @@ const CPAPage = () => {
                 className="position-relative z-index-0"
                 key={index}
                 title={title}
-                scheduleJSON={cpaResult[title].scheduleJSON}
-                projectProgress={cpaResult[title].projectProgress}
+                scheduleJSON={cpaResult[title]?.scheduleJSON}
+                projectProgress={cpaResult[title]?.projectProgress}
                 handleCPARowClick={handleCPARowClick}
               />
             </div>
@@ -1338,8 +1517,8 @@ const CPAPage = () => {
           <TableCPA
             className="position-relative z-index-0"
             title={selectedProject}
-            scheduleJSON={cpaResult[selectedProject].scheduleJSON}
-            projectProgress={cpaResult[selectedProject].projectProgress}
+            scheduleJSON={cpaResult[selectedProject]?.scheduleJSON ?? []}
+            projectProgress={cpaResult[selectedProject]?.projectProgress ?? 100}
             handleCPARowClick={handleCPARowClick}
           />
         </div>

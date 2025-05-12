@@ -31,12 +31,13 @@ const HeatmapChart: React.FC<HeatmapChartProp> = ({
     const daysOfYear = calenderData.daysOfYear;
     const ObjResources = calenderData?.resourceArrays ?? null;
     if (ObjResources === null) return;
+    if (calenderData.calender === null) return;
     setResources(ObjResources);
     setDaysOfYear(daysOfYear);
     const ResourcesKEY = Object.keys(ObjResources);
 
     const resourceTotals = {};
-    Object.keys(calenderData.calender).forEach((day) => {
+    Object.keys(calenderData?.calender ?? {}).forEach((day) => {
       Object.keys(calenderData.calender[day]).forEach((resource) => {
         if (!resourceTotals[resource]) {
           resourceTotals[resource] = 0;

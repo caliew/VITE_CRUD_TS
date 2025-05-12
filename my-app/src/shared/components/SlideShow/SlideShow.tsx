@@ -34,13 +34,10 @@ const Slide = ({
           data-fragment-index="2"
         >
           {" "}
-          <div>{slideId}</div>
-          <h2>{title}</h2>
-          <h3>
-            {storyId}
-            <br />
-            {description}
-          </h3>
+          <div>{slideId}/{storyId}</div>
+          <div className="title">
+            {title}<br/>{description}
+          </div>
           <p>{content}</p>
         </div>
       </div>

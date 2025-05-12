@@ -13,6 +13,13 @@ interface BubbleChartProp {
   title?: string;
   data: any;
 }
+const StatusEnum = {
+  AT_RISK: "AT RISK",
+  ON_TRACK: "ON TRACK",
+  COMPLETED: "COMPLETED",
+  DELAYED: "DELAYED",
+  ON_HOLD: "ON HOLD",
+};
 
 const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
   const chartRef = useRef(null);
@@ -122,15 +129,15 @@ const BubbleChart: React.FC<BubbleChartProp> = ({ className, title, data }) => {
             color: function (params: any) {
               // return a color based on the data item
               switch (params.data[4].toUpperCase()) {
-                case "AT RISK":
+                case StatusEnum.AT_RISK:
                   return "rgb(255, 0, 0)"; // red
-                case "ON TRACK":
+                case StatusEnum.ON_TRACK:
                   return "rgb(0, 255, 0)"; // green
-                case "COMPLETED":
+                case StatusEnum.COMPLETED:
                   return "rgb(0, 0, 255)"; // blue
-                case "DELAYED":
+                case StatusEnum.DELAYED:
                   return "rgb(255, 255, 0)"; // yellow
-                case "ON HOLD":
+                case StatusEnum.ON_HOLD:
                   return "rgb(255, 0, 255)"; // magenta
               }
             },
