@@ -11,9 +11,10 @@ import { VisitorRouteClasses } from "@shared/utils/classname";
 interface MapProp {
   className?: string;
   title?: string;
+  WBS?: string;
 }
 
-const VisitorRouteChart: React.FC<MapProp> = ({ className, title }) => {
+const VisitorRouteChart: React.FC<MapProp> = ({ className, title, WBS }) => {
   const chartRef = useRef(null);
   const [option, setOption] = useState({});
 
@@ -123,7 +124,8 @@ const VisitorRouteChart: React.FC<MapProp> = ({ className, title }) => {
         style={{ width: "850px", height: "800px" }}
       />
       <div className="flex flex-col flex-wrap justify-center items-center pt-5">
-        {title}
+        <p>{title}</p>
+        <p>{WBS}</p>
       </div>
     </div>
   );

@@ -823,6 +823,7 @@ const CPAPage = () => {
   const [recommendations, setRecommendations] = useState(null);
   const [highRiskProjects, setHighRiskProjects] = useState(null);
   const [timerRunning, setTimerRunning] = useState(false);
+  const [selectedWBS, setSelectedWBS] = useState("");
 
   useEffect(() => {
     const MockProjects = mockProjectsData["MockProjects"];
@@ -1252,15 +1253,35 @@ const CPAPage = () => {
     setTitles((prevTitles: any) => [...prevTitles, selTitle]);
   };
 
-  const getSimulatorFeatures = useMemo(
-    () => (
-      <VisitRouteChart
-        className="w-1/4 h-1/4 !important"
-        title="ROUTE SIMULATION"
-      />
-    ),
-    [mode]
-  );
+  const getSimulatorFeatures = useMemo(() => {
+    const simulatorDataArr = simulatorData.MockProjects;
+    const handleWBSClick = (wbs) => {
+      setSelectedWBS(wbs);
+    };
+    return (
+      <div className="flex justify-center items-center gap-5 text-xl">
+        <div className="flex-1">
+          <ul>
+            {simulatorDataArr.map((project) => (
+              <li key={project.WBS}>
+                <button
+                  className="text-left"
+                  onClick={() => handleWBSClick(project.WBS)}
+                >
+                  {project.WBS}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <VisitRouteChart
+          className="w-1/4 h-1/4 !important"
+          title="ROUTE SIMULATION"
+          WBS={selectedWBS}
+        />
+      </div>
+    );
+  }, [mode, selectedWBS]);
   const getDashboardFeatures = useMemo(
     () => (
       <div>
