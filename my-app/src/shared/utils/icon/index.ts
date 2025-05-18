@@ -33,6 +33,8 @@ import {
   LayoutPanelLeft,
   LayoutPanelTop,
   Ban,
+  CirclePlay,
+  CirclePause,
 } from "lucide-react";
 
 const getIcon = (name: any) => {
@@ -73,6 +75,8 @@ const getIcon = (name: any) => {
   if (name === "Layout2") return LayoutPanelTop;
   if (name === "Map") return Map;
   if (name === "MapPinHouse") return MapPinHouse;
+  if (name === "VideoPlay") return CirclePlay;
+  if (name === "VideoPause") return CirclePause;
 
   return Ban;
 };
