@@ -7,10 +7,11 @@ import "./styles.css";
 import { ButtonLINKClasses } from "@shared/utils/classname";
 import { GetIcon } from "@shared/utils/icon";
 
+const _PORT1 = 8080;
+
 const Slide = ({
   slideId,
   storyId,
-  id,
   images,
   title,
   content,
@@ -36,7 +37,7 @@ const Slide = ({
         {images.map((image, index) => (
           <img
             className={`slide-image-${images.length}`}
-            src={`http://localhost:8080/images/${image}`}
+            src={`http://localhost:${_PORT1}/images/${image}`}
             key={index}
             onClick={() => handleImageClick(image)}
           />
@@ -55,7 +56,6 @@ const Slide = ({
           }`}
           data-fragment-index="2"
         >
-          {" "}
           <div>
             {slideId}/{storyId}
           </div>
@@ -122,15 +122,24 @@ const SlideShow = () => {
   }, []);
 
   useEffect(() => {
-    fetchStoryAndData();
+    fetchStories();
+    fetchImages();
   }, []);
-  const fetchStoryAndData = async () => {
+
+  const fetchStories = async () => {
     try {
-      const storyResponse = await fetch("http://localhost:8080/story.json");
+      const storyResponse = await fetch("http://localhost:8080/storyData.json");
       const story = await storyResponse.json();
       const activeStory = story.filter((s) => s?.active === true); // changed to boolean true
       setStories(activeStory);
-
+      return activeStory;
+    } catch (error) {
+      console.error("Error fetching stories:", error);
+    }
+  };
+  const fetchImages = async () => {
+    try {
+      const activeStory = await fetchStories();
       const dataResponse = await fetch("http://localhost:8080/photoData.json");
       const data = await dataResponse.json();
       const slides = [];
@@ -246,10 +255,7 @@ const SlideShow = () => {
         <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
           HOME
         </Button>
-        <Button
-          className={ButtonLINKClasses}
-          onClick={() => fetchStoryAndData()}
-        >
+        <Button className={ButtonLINKClasses} onClick={() => fetchImages()}>
           RELOAD
         </Button>
         <Button className={ButtonLINKClasses} onClick={() => goFirstSlide()}>
