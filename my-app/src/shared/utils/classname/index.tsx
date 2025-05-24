@@ -18,8 +18,8 @@ const PageHeaderClasses =
 
 const SidebarClasses =
   "fixed top-20 left-5 w-64 bg-red p-4 z-20 font-Roboto font-extralight text-2xl rounded-[1.5rem] shadow-2xl shadow-indigo-500/50";
-const ButtonLINKClasses = "font-Roboto font-extralight text-2xl m-1 ";
-const ButtonClasses = "font-Roboto font-extralight text-2xl m-2 lg:flex ";
+const ButtonLINKClasses = "font-Roboto font-extralight text-2xl";
+const ButtonClasses = "font-Roboto font-extralight text-2xl m-2 lg:flex";
 
 const MapClasses =
   "w-[650px] h-[500px] p-1 bg-n-8 rounded-[2.4375rem] overflow-hidden";

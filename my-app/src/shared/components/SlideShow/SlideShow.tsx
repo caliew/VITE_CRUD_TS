@@ -1,305 +1,235 @@
-import { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Reveal from "reveal.js";
-import { Button } from "@shared/components";
-
+import Slide from "./Slide";
 import "reveal.js/dist/reveal.css";
 import "./styles.css";
+import { Button } from "@shared/components";
 import { ButtonLINKClasses } from "@shared/utils/classname";
 import { GetIcon } from "@shared/utils/icon";
 
-const _PORT1 = 8080;
-
-const Slide = ({
-  slideId,
-  storyId,
-  images,
-  title,
-  content,
-  description,
-  currentSlide,
-  SourceName,
-}) => {
-  const [showEnlargedImage, setShowEnlargedImage] = useState(false);
-  const [enlargedImage, setEnlargedImage] = useState(null);
-  const handleImageClick = (image) => {
-    setEnlargedImage(image);
-    setShowEnlargedImage(true);
-  };
-
-  const handleCloseEnlargedImage = () => {
-    setShowEnlargedImage(false);
-  };
-
-  return (
-    <section>
-      <div className="SourceName">{SourceName}</div>
-      <div className="section">
-        {images.map((image, index) => (
-          <img
-            className={`slide-image-${images.length}`}
-            src={`http://localhost:${_PORT1}/images/${image}`}
-            key={index}
-            onClick={() => handleImageClick(image)}
-          />
-        ))}
-        {showEnlargedImage && (
-          <div
-            className="enlarged-image-popup"
-            onClick={handleCloseEnlargedImage}
-          >
-            <img src={`http://localhost:8080/images/${enlargedImage}`} />
-          </div>
-        )}
-        <div
-          className={`text-overlay fragment ${
-            currentSlide === slideId ? "visible" : ""
-          }`}
-          data-fragment-index="2"
-        >
-          <div>
-            {slideId}/{storyId}
-          </div>
-          <div className="title">
-            {title}
-            <br />
-            {description}
-          </div>
-          <p>{content}</p>
-        </div>
-      </div>
-    </section>
-  );
-};
+const PORT = 8080;
+const FETCH_BASE = `http://localhost:${PORT}`;
 
 const transitions = ["fade", "slide", "convex", "concave", "zoom"];
-enum VideoMode {
-  PLAY,
-  PAUSE,
-}
+
+const VideoMode = {
+  PLAY: "PLAY",
+  PAUSE: "PAUSE",
+};
+
 const SlideShow = () => {
   const [slides, setSlides] = useState([]);
   const [stories, setStories] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [totalSlides, setTotalSlides] = useState(0);
   const [modeVideo, setModeVideo] = useState(VideoMode.PAUSE);
-  const revealRef = useRef<HTMLDivElement>(null);
-  const revealInstance = useRef<Reveal | null>(null);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const revealRef = useRef(null);
+  const revealInstance = useRef(null);
+  const timerRef = useRef(null);
+
+  // Fetch stories once on mount
   useEffect(() => {
-    if (revealRef.current) {
+    fetchStories();
+  }, []);
+
+  // Fetch slides whenever stories updated
+  useEffect(() => {
+    if (stories.length > 0) {
+      fetchSlides();
+    }
+  }, [stories]);
+
+  // Initialize Reveal once slides are ready
+  useEffect(() => {
+    if (revealRef.current && slides.length > 0) {
       revealInstance.current = new Reveal(revealRef.current);
       revealInstance.current.initialize();
-      revealInstance.current.configure({
-        fragments: false,
-      });
+      revealInstance.current.configure({ fragments: false });
+
       revealInstance.current.on("ready", () => {
         const state = revealInstance.current.getState();
-        const currentSlide = state.indexh ?? 0;
-        setCurrentSlide(currentSlide);
+        setCurrentSlide(state.indexh || 0);
       });
+
       revealInstance.current.on("slidechanged", (event) => {
-        const currentSlide = event.indexh;
-        const slides = revealInstance.current.getSlides();
-        slides.forEach((slide, index) => {
+        const current = event.indexh || 0;
+        setCurrentSlide(current);
+
+        const allSlides = revealInstance.current.getSlides();
+        allSlides.forEach((slide, idx) => {
           const fragment = slide.querySelector(".text-overlay.fragment");
-          if (fragment && fragment.classList) {
-            if (index === currentSlide) {
-              fragment.classList.add("visible");
-            } else {
-              fragment.classList.remove("visible");
-            }
+          if (fragment) {
+            if (idx === current) fragment.classList.add("visible");
+            else fragment.classList.remove("visible");
           }
         });
       });
-      StopTimer();
-    }
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, []);
 
-  useEffect(() => {
-    fetchStories();
-    fetchImages();
-  }, []);
+      stopTimer(); // stop auto play on init
+    }
+
+    return () => {
+      stopTimer();
+    };
+  }, [slides]);
 
   const fetchStories = async () => {
     try {
-      const storyResponse = await fetch("http://localhost:8080/storyData.json");
-      const story = await storyResponse.json();
-      const activeStory = story.filter((s) => s?.active === true); // changed to boolean true
-      setStories(activeStory);
-      return activeStory;
-    } catch (error) {
-      console.error("Error fetching stories:", error);
-    }
-  };
-  const fetchImages = async () => {
-    try {
-      const activeStory = await fetchStories();
-      const dataResponse = await fetch("http://localhost:8080/photoData.json");
-      const data = await dataResponse.json();
-      const slides = [];
-      let storyIndex = 0;
-      let images = [];
-      let slideLength = Math.floor(Math.random() * 4) + 1;
-      if (slideLength === 3) slideLength = 2;
-      for (let i = 0; i < data.length; i++) {
-        const fileName = data[i].filename;
-        const SourceName = fileName.split("_snapshot")[0];
-        images.push(fileName);
-        if (images.length === slideLength || i === data.length - 1) {
-          const storyData = activeStory[storyIndex];
-          slides.push({
-            id: storyData.id,
-            title: storyData.title,
-            content: storyData.content,
-            description: storyData.description,
-            filename: data[i].filename,
-            images,
-            SourceName,
-          });
-          images = [];
-          storyIndex = (storyIndex + 1) % activeStory.length;
-          slideLength = Math.floor(Math.random() * 4) + 1;
-          if (slideLength === 3) slideLength = 2;
-        }
-      }
-      setSlides(slides);
-      setTotalSlides(slides.length);
-      goFirstSlide();
-    } catch (error) {}
-  };
-  const goFirstSlide = () => {
-    if (revealRef.current && revealInstance.current) {
-      revealInstance.current.configure({ rtl: false });
-      const randomTransition =
-        transitions[Math.floor(Math.random() * transitions.length)];
-      revealInstance.current.configure({ transition: randomTransition });
-      revealInstance.current.slide(0);
-      setCurrentSlide(0);
-    }
-  };
-  const goLastSlide = () => {
-    if (revealRef.current && revealInstance.current) {
-      const slides = revealInstance.current.getSlides();
-      const totalSlides = slides.length;
-      revealInstance.current.configure({ rtl: false });
-      const randomTransition =
-        transitions[Math.floor(Math.random() * transitions.length)];
-      revealInstance.current.configure({ transition: randomTransition });
-      revealInstance.current.slide(totalSlides - 1);
-      setCurrentSlide(totalSlides - 1);
-    }
-  };
-  const handlePreviousSlide = () => {
-    if (revealRef.current && revealInstance.current) {
-      const state = revealInstance.current.getState();
-      const currentSlide = state.indexh ?? 0;
-      setCurrentSlide(currentSlide);
-      revealInstance.current.configure({ rtl: false });
-      const randomTransition =
-        transitions[Math.floor(Math.random() * transitions.length)];
-      revealInstance.current.configure({ transition: randomTransition });
-      if (currentSlide === 0) {
-        revealInstance.current.slide(totalSlides);
-      } else {
-        revealInstance.current.slide(currentSlide - 1);
-      }
-    }
-  };
-  const handleNextSlide = () => {
-    if (revealRef.current && revealInstance.current) {
-      const state = revealInstance.current.getState();
-      const currentSlide = state.indexh ?? 0;
-      setCurrentSlide(currentSlide);
-      revealInstance.current.configure({ rtl: false });
-      const randomTransition =
-        transitions[Math.floor(Math.random() * transitions.length)];
-      revealInstance.current.configure({ transition: randomTransition });
-      if (currentSlide === totalSlides - 1) {
-        revealInstance.current.slide(0);
-      } else {
-        revealInstance.current.slide(currentSlide + 1);
-      }
+      const res = await fetch(`${FETCH_BASE}/storyData.json`);
+      const data = await res.json();
+      const activeStories = data.filter((s) => s.active === true);
+      setStories(activeStories);
+    } catch (e) {
+      console.error("Failed to fetch stories:", e);
     }
   };
 
-  const startOrRestartTimer = () => {
-    if (timerRef.current) {
-      clearInterval(timerRef.current);
+  const fetchSlides = async () => {
+    try {
+      const res = await fetch(`${FETCH_BASE}/photoData.json`);
+      const photoData = await res.json();
+
+      let slidesBuilt = [];
+      let images = [];
+      let storyIndex = 0;
+
+      // Random slide length logic: 1,2 or 4 images per slide (never 3)
+      const getRandomSlideLength = () => {
+        let len = Math.floor(Math.random() * 4) + 1;
+        if (len === 3) len = 2;
+        return len;
+      };
+
+      let slideLength = getRandomSlideLength();
+
+      for (let i = 0; i < photoData.length; i++) {
+        const filename = photoData[i].filename;
+        images.push(filename);
+
+        if (images.length === slideLength || i === photoData.length - 1) {
+          const story = stories[storyIndex];
+          slidesBuilt.push({
+            id: story.id,
+            title: story.title,
+            content: story.content,
+            description: story.description,
+            images: [...images],
+            sourceName: filename.split("_snapshot")[0],
+          });
+          images = [];
+          storyIndex = (storyIndex + 1) % stories.length;
+          slideLength = getRandomSlideLength();
+        }
+      }
+
+      setSlides(slidesBuilt);
+      goToSlide(0);
+    } catch (e) {
+      console.error("Failed to fetch slides:", e);
     }
-    setModeVideo(VideoMode.PLAY);
-    timerRef.current = setInterval(handleNextSlide, 3000); // 10 seconds
   };
-  const StopTimer = () => {
+
+  const goToSlide = (index) => {
+    if (revealInstance.current) {
+      const randomTransition =
+        transitions[Math.floor(Math.random() * transitions.length)];
+      revealInstance.current.configure({ transition: randomTransition });
+      revealInstance.current.slide(index);
+      setCurrentSlide(index);
+    }
+  };
+
+  const nextSlide = () => {
+    if (!revealInstance.current) return;
+    const state = revealInstance.current.getState();
+    const current = state.indexh || 0;
+    const next = current >= slides.length - 1 ? 0 : current + 1;
+    goToSlide(next);
+  };
+
+  const previousSlide = () => {
+    if (!revealInstance.current) return;
+    const state = revealInstance.current.getState();
+    const current = state.indexh || 0;
+    const prev = current === 0 ? slides.length - 1 : current - 1;
+    goToSlide(prev);
+  };
+
+  const startTimer = () => {
+    stopTimer();
+    setModeVideo(VideoMode.PLAY);
+    timerRef.current = setInterval(() => {
+      nextSlide();
+    }, 2000); // 10 seconds
+  };
+
+  const stopTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
+      timerRef.current = null;
     }
     setModeVideo(VideoMode.PAUSE);
   };
-  const handleVideoToggle = () => {
-    if (modeVideo === VideoMode.PLAY) {
-      StopTimer();
-    } else {
-      startOrRestartTimer();
-    }
+
+  const toggleVideoMode = () => {
+    if (modeVideo === VideoMode.PLAY) stopTimer();
+    else startTimer();
   };
 
   return (
     <>
-      <div className="font-Roboto text-lg text-white font-extralight flex justify-center items-center mt-4 gap-4">
+      <div className="controls font-Roboto text-lg text-white font-extralight flex justify-center items-center mt-4 gap-4">
         <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
           HOME
         </Button>
-        <Button className={ButtonLINKClasses} onClick={() => fetchImages()}>
+        <Button className={ButtonLINKClasses} onClick={() => fetchSlides()}>
           RELOAD
         </Button>
-        <Button className={ButtonLINKClasses} onClick={() => goFirstSlide()}>
+        <Button className={ButtonLINKClasses} onClick={() => goToSlide(0)}>
           FIRST
-        </Button>
-        <Button className={ButtonLINKClasses} onClick={() => goLastSlide()}>
-          LAST
         </Button>
         <Button
           className={ButtonLINKClasses}
-          onClick={() => handlePreviousSlide()}
+          onClick={() => goToSlide(slides.length - 1)}
         >
-          PREVIOUS {currentSlide - 1 < 0 ? totalSlides - 1 : currentSlide - 1}
+          LAST
+        </Button>
+        <Button className={ButtonLINKClasses} onClick={previousSlide}>
+          PREVIOUS {currentSlide - 1 < 0 ? slides.length - 1 : currentSlide - 1}
         </Button>
         <Button
           Icon={GetIcon(
             modeVideo === VideoMode.PLAY ? "VideoPause" : "VideoPlay"
           )}
-          className={`${ButtonLINKClasses} size-24 w-36`}
-          onClick={() => handleVideoToggle()}
+          className={ButtonLINKClasses}
+          iconClassName="size-10 text-red-500"
+          onClick={toggleVideoMode}
         >
-          {currentSlide}/{totalSlides - 1}
+          {currentSlide} / {slides.length - 1}
         </Button>
-        <Button className={ButtonLINKClasses} onClick={() => handleNextSlide()}>
-          NEXT {currentSlide >= totalSlides - 1 ? 0 : currentSlide + 1}
+        <Button className={ButtonLINKClasses} onClick={nextSlide}>
+          NEXT {currentSlide >= slides.length - 1 ? 0 : currentSlide + 1}
         </Button>
       </div>
+
       <div
         ref={revealRef}
         className="reveal bg-black"
         style={{ width: "100%", height: "90vh" }}
       >
         <div className="slides bg-black flex">
-          {slides.map((slide, index) => (
+          {slides.map((slide, idx) => (
             <Slide
-              key={index}
-              slideId={index}
+              key={idx}
+              slideId={idx}
               storyId={slide.id}
               title={slide.title}
               images={slide.images}
               content={slide.content}
               description={slide.description}
               currentSlide={currentSlide}
-              SourceName={slide.SourceName}
+              sourceName={slide.sourceName}
+              port={PORT}
             />
           ))}
         </div>

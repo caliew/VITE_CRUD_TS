@@ -1,4 +1,5 @@
-body {
+body,
+.reveal body {
     background-color: black !important;
     color: white !important;
 }
@@ -25,45 +26,40 @@ body {
     background-color: black !important;
 }
 
+.slide-image-1,
+.slide-image-2,
+.slide-image-3,
+.slide-image-4 {
+    height: auto;
+    object-fit: contain;
+    aspect-ratio: auto;
+}
 
 .slide-image-1 {
     flex: 0 1 calc(100% - 5px);
     max-width: calc(100% - 5px);
-    max-height: calc(40em);
-    height: auto;
-    object-fit: contain;
-    aspect-ratio: auto;
+    max-height: 40em;
 }
 
 .slide-image-2 {
-    flex: 0 1 calc(100% / 2 - 5px);
-    max-width: calc(100% / 2 - 5px);
-    max-height: calc(35em);
-    height: auto;
-    object-fit: contain;
-    aspect-ratio: auto;
+    flex: 0 1 calc(50% - 5px);
+    max-width: calc(50% - 5px);
+    max-height: 35em;
 }
 
 .slide-image-3 {
-    flex: 0 1 calc(100% / 3 - 5px);
-    max-width: calc(100% / 3 - 5px);
-    max-height: calc(55em);
-    height: auto;
-    object-fit: contain;
-    aspect-ratio: auto;
+    flex: 0 1 calc(33.333% - 5px);
+    max-width: calc(33.333% - 5px);
+    max-height: 55em;
 }
 
 .slide-image-4 {
     flex: 0 1 calc(30em - 10px);
     max-width: calc(30em - 10px);
-    max-height: calc(22em);
-    height: auto;
-    object-fit: contain;
-    aspect-ratio: auto;
-    /* or whatever aspect ratio you want to maintain */
+    max-height: 22em;
 }
 
-/* If only 1 image in section, make it take full width and height */
+/* Full size for single image */
 .section:has(img:only-child) .slide-image {
     flex: 0 1 100%;
     max-width: 100%;
@@ -87,7 +83,6 @@ body {
     background-color: black;
     padding: 5px;
     margin-right: -290px;
-    /* add margin to right side only */
 }
 
 .text-overlay.fragment {
@@ -98,28 +93,26 @@ body {
     opacity: 1;
 }
 
+.text-overlay h2,
+.text-overlay h3,
+.text-overlay p {
+    background-color: black;
+    margin-bottom: 0;
+}
+
 .text-overlay h2 {
     font-size: 18px;
-    margin-bottom: 0px;
-    background-color: black;
 }
 
 .text-overlay h3 {
     font-size: 16px;
-    margin-bottom: 0px;
     width: 300px;
-    background-color: black;
 }
 
 .text-overlay p {
     font-size: 16px;
     margin-bottom: -5px;
     line-height: 1.3;
-    background-color: black;
-}
-
-.reveal body {
-    background-color: black !important;
 }
 
 .enlarged-image-popup {

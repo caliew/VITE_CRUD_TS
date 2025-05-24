@@ -1,11 +1,10 @@
+import ButtonSvg from "@shared/assets/svg/ButtonSvg";
 import { Link } from "react-router-dom";
-
-import ButtonSvg from "@assets/svg/ButtonSvg";
-import { VideoPlay, VideoPause } from "@shared/assets";
 
 interface ButtonProp {
   className?: string;
   Icon?: React.ComponentType<any>;
+  iconClassName?: string; // 新增：专门给 Icon 的类名
   to?: string;
   onClick?: any;
   children?: any;
@@ -16,6 +15,7 @@ interface ButtonProp {
 const Button = ({
   className,
   Icon,
+  iconClassName, // 新增
   to,
   onClick,
   children,
@@ -29,20 +29,19 @@ const Button = ({
     ${px || "px-7"} 
     ${white ? "text-n-8" : "text-n-1"} 
     ${className || ""}`;
+
   const spanClasses: any = "px-5";
 
   const renderButton = () => (
-    <>
-      <button className={classes} onClick={onClick}>
-        {Icon && <Icon className={className} />}
-        {children}
-        {ButtonSvg(white)}
-      </button>
-    </>
+    <button className={classes} onClick={onClick}>
+      {Icon && <Icon className={iconClassName} />}
+      {children}
+      {ButtonSvg(white)}
+    </button>
   );
   const renderLink = () => (
     <Link to={to} className={classes}>
-      <Icon className={className} />
+      {Icon && <Icon className={iconClassName} />}
       <span className={spanClasses}>{children}</span>
       {ButtonSvg(white)}
     </Link>

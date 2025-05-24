@@ -3,15 +3,12 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 import plugin from "tailwindcss/plugin";
 
 export default {
-  content: [
-    "./index.html", 
-    "./src/**/*.{js,ts,jsx,tsx}"
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       colors: {
         screen: {
-          '3xl': '0 35px 60px -15px rgba(0, 0, 0, 0.3)',
+          "3xl": "0 35px 60px -15px rgba(0, 0, 0, 0.3)",
         },
         color: {
           0: "#FFFFFF", // WHITE
@@ -50,8 +47,8 @@ export default {
         },
       },
       fontFamily: {
-        Tahoma: ['Tahoma','sans-serif'],
-        Roboto: ['Roboto','Helvetica','Arial','Sans-serif'],
+        Tahoma: ["Tahoma", "sans-serif"],
+        Roboto: ["Roboto", "Helvetica", "Arial", "Sans-serif"],
         sans: ["var(--font-sora)", ...fontFamily.sans],
         code: "var(--font-code)",
         grotesk: "var(--font-grotesk)",
@@ -91,7 +88,7 @@ export default {
     },
   },
   plugins: [
-    require('@tailwindcss/typography'),
+    require("@tailwindcss/typography"),
     plugin(function ({ addBase, addComponents, addUtilities }) {
       addBase({});
       addComponents({
