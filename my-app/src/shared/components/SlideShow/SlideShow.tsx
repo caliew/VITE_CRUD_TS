@@ -6,6 +6,7 @@ import "./styles.css";
 import { Button } from "@shared/components";
 import { ButtonLINKClasses } from "@shared/utils/classname";
 import { GetIcon } from "@shared/utils/icon";
+import NavigationBar from "./NavigationBar"; // import the new component
 
 const PORT = 8080;
 const FETCH_BASE = `http://localhost:${PORT}`;
@@ -22,10 +23,12 @@ const SlideShow = () => {
   const [stories, setStories] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [modeVideo, setModeVideo] = useState(VideoMode.PAUSE);
+  const [remainingTime, setRemainingTime] = useState(null);
 
   const revealRef = useRef(null);
   const revealInstance = useRef(null);
   const timerRef = useRef(null);
+  const intervalRef = useRef(null); // ✅ Add this to fix the error
 
   // Fetch stories once on mount
   useEffect(() => {
@@ -90,36 +93,36 @@ const SlideShow = () => {
       const photoData = await res.json();
 
       let slidesBuilt = [];
-      let images = [];
-      let storyIndex = 0;
+      let photoIndex = 0; // index to track position in photoData
 
-      // Random slide length logic: 1,2 or 4 images per slide (never 3)
-      const getRandomSlideLength = () => {
-        let len = Math.floor(Math.random() * 4) + 1;
-        if (len === 3) len = 2;
-        return len;
-      };
+      for (let storyIndex = 0; storyIndex < stories.length; storyIndex++) {
+        const story = stories[storyIndex];
+        const imagesCount = story.images || 1; // fallback to 1 image if undefined
+        const paragraphs = story.paragraph || [];
 
-      let slideLength = getRandomSlideLength();
-
-      for (let i = 0; i < photoData.length; i++) {
-        const filename = photoData[i].filename;
-        images.push(filename);
-
-        if (images.length === slideLength || i === photoData.length - 1) {
-          const story = stories[storyIndex];
-          slidesBuilt.push({
-            id: story.id,
-            title: story.title,
-            content: story.content,
-            description: story.description,
-            images: [...images],
-            sourceName: filename.split("_snapshot")[0],
-          });
-          images = [];
-          storyIndex = (storyIndex + 1) % stories.length;
-          slideLength = getRandomSlideLength();
+        // Extract imagesCount images from photoData starting at photoIndex
+        const images = [];
+        for (
+          let i = 0;
+          i < imagesCount && photoIndex < photoData.length;
+          i++, photoIndex++
+        ) {
+          images.push(photoData[photoIndex].filename);
         }
+
+        // Build content string from paragraphs array, join with line breaks or spaces
+        const contentText =
+          paragraphs.length > 0 ? paragraphs.join("\n\n") : story.content || "";
+
+        slidesBuilt.push({
+          id: story.id,
+          title: story.title,
+          content: contentText,
+          description: story.description,
+          duration: story.duration,
+          images,
+          sourceName: images.length > 0 ? images[0].split("_snapshot")[0] : "",
+        });
       }
 
       setSlides(slidesBuilt);
@@ -155,82 +158,114 @@ const SlideShow = () => {
     goToSlide(prev);
   };
 
-  const startTimer = () => {
-    stopTimer();
-    setModeVideo(VideoMode.PLAY);
-    timerRef.current = setInterval(() => {
-      nextSlide();
-    }, 2000); // 10 seconds
-  };
+  // --- UPDATED TIMER LOGIC BELOW ---
 
+  // Clear existing timer
   const stopTimer = () => {
     if (timerRef.current) {
-      clearInterval(timerRef.current);
+      clearTimeout(timerRef.current);
       timerRef.current = null;
     }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+    setRemainingTime(null);
     setModeVideo(VideoMode.PAUSE);
   };
 
+  // Start or restart timer for current slide's duration
+  const startTimer = () => {
+    stopTimer();
+    setModeVideo(VideoMode.PLAY);
+    scheduleNextSlide();
+  };
+
+  // Schedule advancing to next slide after current slide's duration
+
+  const scheduleNextSlide = () => {
+    if (!slides.length) return;
+
+    const duration = slides[currentSlide]?.duration || 5; // seconds
+    console.log(
+      `Starting timer for slide ${currentSlide}, duration: ${duration}s`
+    );
+
+    setRemainingTime(duration);
+
+    // Clear any previous interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      setRemainingTime((prev) => {
+        if (prev === 1) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    timerRef.current = setTimeout(() => {
+      nextSlide();
+    }, duration * 1000);
+  };
+
+  // When currentSlide changes AND mode is PLAY, restart timer with new slide's duration
+  useEffect(() => {
+    if (modeVideo === VideoMode.PLAY) {
+      scheduleNextSlide();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSlide]);
+
+  // When toggling playback mode
   const toggleVideoMode = () => {
     if (modeVideo === VideoMode.PLAY) stopTimer();
     else startTimer();
   };
 
+  // --- END UPDATED TIMER LOGIC ---
   return (
     <>
-      <div className="controls font-Roboto text-lg text-white font-extralight flex justify-center items-center mt-4 gap-4">
-        <Button Icon={GetIcon("home")} className={ButtonLINKClasses} to="/">
-          HOME
-        </Button>
-        <Button className={ButtonLINKClasses} onClick={() => fetchSlides()}>
-          RELOAD
-        </Button>
-        <Button className={ButtonLINKClasses} onClick={() => goToSlide(0)}>
-          FIRST
-        </Button>
-        <Button
-          className={ButtonLINKClasses}
-          onClick={() => goToSlide(slides.length - 1)}
-        >
-          LAST
-        </Button>
-        <Button className={ButtonLINKClasses} onClick={previousSlide}>
-          PREVIOUS {currentSlide - 1 < 0 ? slides.length - 1 : currentSlide - 1}
-        </Button>
-        <Button
-          Icon={GetIcon(
-            modeVideo === VideoMode.PLAY ? "VideoPause" : "VideoPlay"
-          )}
-          className={ButtonLINKClasses}
-          iconClassName="size-10 text-red-500"
-          onClick={toggleVideoMode}
-        >
-          {currentSlide} / {slides.length - 1}
-        </Button>
-        <Button className={ButtonLINKClasses} onClick={nextSlide}>
-          NEXT {currentSlide >= slides.length - 1 ? 0 : currentSlide + 1}
-        </Button>
-      </div>
-
+      <NavigationBar
+        currentSlide={currentSlide}
+        slidesLength={slides.length}
+        modeVideo={modeVideo}
+        VideoMode={VideoMode}
+        remainingTime={remainingTime}
+        onHome={() => {}}
+        onReload={() => fetchSlides()}
+        onFirst={() => goToSlide(0)}
+        onLast={() => goToSlide(slides.length - 1)}
+        onPrevious={previousSlide}
+        onTogglePlay={toggleVideoMode}
+        onNext={nextSlide}
+      />
       <div
         ref={revealRef}
         className="reveal bg-black"
         style={{ width: "100%", height: "90vh" }}
       >
-        <div className="slides bg-black flex">
+        <div className="slides bg-black">
           {slides.map((slide, idx) => (
-            <Slide
-              key={idx}
-              slideId={idx}
-              storyId={slide.id}
-              title={slide.title}
-              images={slide.images}
-              content={slide.content}
-              description={slide.description}
-              currentSlide={currentSlide}
-              sourceName={slide.sourceName}
-              port={PORT}
-            />
+            <section key={idx}>
+              <Slide
+                slideId={idx}
+                storyId={slide.id}
+                title={slide.title}
+                images={slide.images}
+                content={slide.content}
+                duration={slide.duration}
+                description={slide.description}
+                currentSlide={currentSlide}
+                sourceName={slide.sourceName}
+                port={PORT}
+              />
+            </section>
           ))}
         </div>
       </div>
