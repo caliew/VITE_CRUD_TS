@@ -1,14 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Reveal from "reveal.js";
 import Slide from "./Slide";
 import "reveal.js/dist/reveal.css";
 import "./styles.css";
-import { Button } from "@shared/components";
-import { ButtonLINKClasses } from "@shared/utils/classname";
-import { GetIcon } from "@shared/utils/icon";
 import NavigationBar from "./NavigationBar"; // import the new component
 
-const PORT = 8080;
+const PORT = 5000;
 const FETCH_BASE = `http://localhost:${PORT}`;
 
 const transitions = ["fade", "slide", "convex", "concave", "zoom"];
@@ -29,6 +26,7 @@ const SlideShow = () => {
   const revealInstance = useRef(null);
   const timerRef = useRef(null);
   const intervalRef = useRef(null); // ✅ Add this to fix the error
+  const modeVideoRef = useRef(VideoMode.PAUSE);
 
   // Fetch stories once on mount
   useEffect(() => {
@@ -68,17 +66,17 @@ const SlideShow = () => {
         });
       });
 
-      stopTimer(); // stop auto play on init
+      clearSlideTimer(); // stop auto play on init
     }
 
     return () => {
-      stopTimer();
+      clearSlideTimer();
     };
   }, [slides]);
 
   const fetchStories = async () => {
     try {
-      const res = await fetch(`${FETCH_BASE}/storyData.json`);
+      const res = await fetch(`${FETCH_BASE}/data/storyData.json`);
       const data = await res.json();
       const activeStories = data.filter((s) => s.active === true);
       setStories(activeStories);
@@ -89,7 +87,7 @@ const SlideShow = () => {
 
   const fetchSlides = async () => {
     try {
-      const res = await fetch(`${FETCH_BASE}/photoData.json`);
+      const res = await fetch(`${FETCH_BASE}/data/photoData.json`);
       const photoData = await res.json();
 
       let slidesBuilt = [];
@@ -98,7 +96,6 @@ const SlideShow = () => {
       for (let storyIndex = 0; storyIndex < stories.length; storyIndex++) {
         const story = stories[storyIndex];
         const imagesCount = story.images || 1; // fallback to 1 image if undefined
-        const paragraphs = story.paragraph || [];
 
         // Extract imagesCount images from photoData starting at photoIndex
         const images = [];
@@ -110,14 +107,11 @@ const SlideShow = () => {
           images.push(photoData[photoIndex].filename);
         }
 
-        // Build content string from paragraphs array, join with line breaks or spaces
-        const contentText =
-          paragraphs.length > 0 ? paragraphs.join("\n\n") : story.content || "";
-
         slidesBuilt.push({
           id: story.id,
           title: story.title,
-          content: contentText,
+          paragraphs: story.paragraph,
+          content: story.content,
           description: story.description,
           duration: story.duration,
           images,
@@ -144,41 +138,51 @@ const SlideShow = () => {
 
   const nextSlide = () => {
     if (!revealInstance.current) return;
+    clearSlideTimer(); // 🔴 stop current timers
     const state = revealInstance.current.getState();
     const current = state.indexh || 0;
     const next = current >= slides.length - 1 ? 0 : current + 1;
     goToSlide(next);
+    // Restart timer if in PLAY mode
+    console.log(modeVideoRef.current);
+    if (modeVideoRef.current === VideoMode.PLAY) {
+      startTimer();
+    }
   };
 
   const previousSlide = () => {
     if (!revealInstance.current) return;
+    clearSlideTimer(); // 🔴 stop current timers
     const state = revealInstance.current.getState();
     const current = state.indexh || 0;
     const prev = current === 0 ? slides.length - 1 : current - 1;
     goToSlide(prev);
+    // Restart timer if in PLAY mode
+    if (modeVideoRef.current === VideoMode.PLAY) {
+      startTimer();
+    }
   };
 
   // --- UPDATED TIMER LOGIC BELOW ---
 
-  // Clear existing timer
-  const stopTimer = () => {
+  const clearSlideTimer = () => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
       timerRef.current = null;
     }
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-      intervalRef.current = null;
-    }
-    setRemainingTime(null);
+  };
+  // Use this ONLY when user clicks "Pause"
+  const stopSlideshow = () => {
+    clearSlideTimer();
     setModeVideo(VideoMode.PAUSE);
   };
 
   // Start or restart timer for current slide's duration
   const startTimer = () => {
-    stopTimer();
+    clearSlideTimer();
     setModeVideo(VideoMode.PLAY);
-    scheduleNextSlide();
+    modeVideoRef.current = VideoMode.PLAY;
+    scheduleNextSlide(); // ← Move here for clarity
   };
 
   // Schedule advancing to next slide after current slide's duration
@@ -216,15 +220,17 @@ const SlideShow = () => {
 
   // When currentSlide changes AND mode is PLAY, restart timer with new slide's duration
   useEffect(() => {
-    if (modeVideo === VideoMode.PLAY) {
+    if (modeVideoRef.current === VideoMode.PLAY) {
       scheduleNextSlide();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSlide]);
 
+  useEffect(() => {
+    modeVideoRef.current = modeVideo;
+  }, [modeVideo]);
   // When toggling playback mode
   const toggleVideoMode = () => {
-    if (modeVideo === VideoMode.PLAY) stopTimer();
+    if (modeVideo === VideoMode.PLAY) stopSlideshow();
     else startTimer();
   };
 
@@ -258,12 +264,14 @@ const SlideShow = () => {
                 storyId={slide.id}
                 title={slide.title}
                 images={slide.images}
+                paragraphs={slide.paragraphs}
                 content={slide.content}
                 duration={slide.duration}
                 description={slide.description}
                 currentSlide={currentSlide}
                 sourceName={slide.sourceName}
                 port={PORT}
+                modeVideo={modeVideo} // ⬅️ Pass this
               />
             </section>
           ))}

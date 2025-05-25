@@ -19,9 +19,17 @@
     "noImplicitAny": true,
     "allowJs": true,
     "useDefineForClassFields": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "ignore": ["**/*.json"]
   },
-  "include": ["src", "@types", "internals", "tailwind.config.js", "vite.config.ts","vite-env.d.ts"],
+  "include": [
+    "src",
+    "@types",
+    "internals",
+    "tailwind.config.js",
+    "vite.config.ts",
+    "vite-env.d.ts"
+  ],
   "extends": "./tsconfig.paths.json",
-  "exclude": ["node_modules","dist"]
+  "exclude": ["node_modules", "dist"]
 }
