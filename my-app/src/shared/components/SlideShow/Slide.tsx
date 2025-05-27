@@ -12,9 +12,18 @@ interface SlideProps {
   description: string;
   currentSlide: number;
   sourceName: string;
-  duration?: number; // in seconds
+  duration?: number;
   port?: number;
-  modeVideo?: "PLAY" | "PAUSE"; // ⬅️ Add this line
+  editable?: boolean;
+  modeVideo?: "PLAY" | "PAUSE";
+  updateStoryData?: (data: {
+    id: number;
+    title: string;
+    content: string;
+    duration?: number;
+    description: string;
+    paragraph: string[];
+  }) => Promise<boolean>;
 }
 
 const Slide: React.FC<SlideProps> = ({
@@ -27,19 +36,32 @@ const Slide: React.FC<SlideProps> = ({
   description,
   currentSlide,
   sourceName,
-  duration = 10, // default duration in seconds
+  duration = 10,
   port = 8080,
-  modeVideo = { modeVideo }, // ⬅️ Pass this
+  editable = true,
+  modeVideo,
+  updateStoryData,
 }) => {
   const [showEnlargedImage, setShowEnlargedImage] = useState(false);
   const [enlargedImageIndex, setEnlargedImageIndex] = useState(0);
-
   const [slideshowActive, setSlideshowActive] = useState(true);
   const [slideshowImageIndex, setSlideshowImageIndex] = useState(0);
   const [slideshowParagraphIndex, setSlideshowParagraphIndex] = useState(0);
 
+  const [editMode, setEditMode] = useState(false);
+  const [editedText, setEditedText] = useState(paragraphs.join("\n"));
+
+  const [localParagraphs, setLocalParagraphs] = useState<string[]>([
+    ...paragraphs,
+  ]);
+
   const imageTimerRef = useRef<NodeJS.Timeout | null>(null);
   const paragraphTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    setLocalParagraphs([...paragraphs]);
+    setEditedText(paragraphs.join("\n"));
+  }, [paragraphs]);
 
   useEffect(() => {
     if (modeVideo === "PLAY") {
@@ -86,9 +108,9 @@ const Slide: React.FC<SlideProps> = ({
 
     const totalDurationMs = duration * 1000;
     const imageCount = images.length;
-    const paragraphCount = paragraphs.length;
-    const MIN_IMAGE_INTERVAL = 300; // ms
-    const MIN_PARAGRAPH_INTERVAL = 500; // ms
+    const paragraphCount = localParagraphs.length;
+    const MIN_IMAGE_INTERVAL = 300;
+    const MIN_PARAGRAPH_INTERVAL = 500;
 
     const imageInterval =
       imageCount > 0
@@ -127,34 +149,94 @@ const Slide: React.FC<SlideProps> = ({
       </p>
     );
   };
+
   const truncateDescription = (text: string, maxLength: number) => {
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "..." + text.slice(-maxLength);
   };
 
-  const slideShowControl = () => {
+  const slideShowControl = () => (
+    <div
+      className="slideshow-control"
+      style={{ textAlign: "center", marginTop: 10 }}
+    >
+      {!slideshowActive ? (
+        <button onClick={startSlideshow} className="slideshow-btn">
+          Start Slideshow
+        </button>
+      ) : (
+        <button onClick={stopSlideshow} className="slideshow-btn">
+          Stop Slideshow
+        </button>
+      )}
+    </div>
+  );
+
+  const SourceName = () => (
+    <div className="source-name">{sourceName.split("_")[0]}</div>
+  );
+
+  const handleSave = () => {
+    const lines = editedText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line !== "");
+    if (lines.length > 0) {
+      setLocalParagraphs(lines);
+      setEditMode(false);
+    }
+  };
+
+  const handleCancel = () => {
+    setEditedText(localParagraphs.join("\n"));
+    setEditMode(false);
+  };
+
+  const handleUpload = async () => {
+    if (updateStoryData) {
+      const success = await updateStoryData({
+        id: storyId,
+        title,
+        content,
+        duration,
+        description,
+        paragraph: localParagraphs,
+      });
+
+      if (success) {
+        alert("Paragraphs uploaded successfully.");
+      } else {
+        alert("Upload failed.");
+      }
+    }
+  };
+
+  const EditParagraphFunction = () => {
     return (
-      <div
-        className="slideshow-control"
-        style={{ textAlign: "center", marginTop: 10 }}
-      >
-        {!slideshowActive ? (
-          <button onClick={startSlideshow} className="slideshow-btn">
-            Start Slideshow
-          </button>
-        ) : (
-          <button onClick={stopSlideshow} className="slideshow-btn">
-            Stop Slideshow
-          </button>
-        )}
+      <div style={{ marginTop: "10px" }}>
+        <button onClick={handleSave} className="slideshow-btn">
+          Save
+        </button>
+        <button
+          onClick={handleCancel}
+          className="slideshow-btn"
+          style={{ marginLeft: 10 }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleUpload}
+          className="slideshow-btn"
+          style={{ marginLeft: 10 }}
+        >
+          Upload
+        </button>
       </div>
     );
   };
 
   return (
     <section data-transition="fade">
-      <div className="source-name">{sourceName.split("_")[0]}</div>
-
       <div className="section">
         {slideshowActive && images.length > 0 ? (
           <div className="image-text-overlay-wrapper">
@@ -163,10 +245,39 @@ const Slide: React.FC<SlideProps> = ({
               src={`http://localhost:${port}/images/${images[slideshowImageIndex]}`}
               alt={`slideshow-${slideshowImageIndex}`}
             />
-            {paragraphs.length > 0 && (
-              <p className="paragraph-item overlay-text">
-                {paragraphs[slideshowParagraphIndex]}
+            {localParagraphs.length > 0 && (
+              <p className="overlay-text">
+                {localParagraphs[slideshowParagraphIndex]}
               </p>
+            )}
+
+            {slideshowActive && (
+              <div style={{ marginTop: 10, textAlign: "center" }}>
+                {!editMode && editable ? (
+                  <button
+                    onClick={() => {
+                      setEditedText(localParagraphs.join("\n"));
+                      setEditMode(true);
+                    }}
+                    className="slideshow-btn"
+                  >
+                    Edit Paragraph
+                  </button>
+                ) : (
+                  editMode && (
+                    <div style={{ padding: "10px" }}>
+                      <textarea
+                        className="edit-textarea"
+                        placeholder="Enter text here..."
+                        value={editedText || ""}
+                        onChange={(e) => setEditedText(e.target.value)}
+                        rows={3}
+                      />
+                      {EditParagraphFunction()}
+                    </div>
+                  )
+                )}
+              </div>
             )}
           </div>
         ) : (
@@ -198,17 +309,18 @@ const Slide: React.FC<SlideProps> = ({
         )}
 
         <div
-          className={`text-overlay fragment ${
+          className={`text-overlay ${
             currentSlide === slideId ? "visible" : ""
           }`}
           data-fragment-index={2}
         >
+          {SourceName()}
           {slideShowControl()}
           <div>
             Slide {currentSlide} / Story {storyId}
           </div>
           <div>
-            Images={images.length} / Paragraph={paragraphs.length}
+            Images={images.length} / Paragraph={localParagraphs.length}
           </div>
           <div className="title">
             {title}
@@ -216,18 +328,25 @@ const Slide: React.FC<SlideProps> = ({
             {description}
           </div>
 
-          {!slideshowActive && (
-            <>
-              <ul className="paragraph-list">
-                {paragraphs.map((para, idx) => (
-                  <li key={idx} className="paragraph-item">
-                    {truncateDescription(para, 8)}
-                  </li>
-                ))}
-              </ul>
-              {renderContent()}
-            </>
-          )}
+          <>
+            <ul className="paragraph-list">
+              {localParagraphs.map((para, idx) => (
+                <li
+                  key={idx}
+                  className={`paragraph-item ${
+                    slideshowActive && idx === slideshowParagraphIndex
+                      ? "highlight"
+                      : ""
+                  }`}
+                >
+                  {slideshowActive && idx === slideshowParagraphIndex
+                    ? para
+                    : truncateDescription(para, 8)}
+                </li>
+              ))}
+            </ul>
+            {renderContent()}
+          </>
         </div>
       </div>
     </section>

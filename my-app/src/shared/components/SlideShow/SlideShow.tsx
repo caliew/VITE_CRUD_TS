@@ -87,25 +87,43 @@ const SlideShow = () => {
 
   const fetchSlides = async () => {
     try {
-      const res = await fetch(`${FETCH_BASE}/data/photoData.json`);
-      const photoData = await res.json();
+      const resPhotos = await fetch(`${FETCH_BASE}/data/photoData.json`);
+      const photoData = await resPhotos.json();
 
-      let slidesBuilt = [];
-      let photoIndex = 0; // index to track position in photoData
+      // Group photoData by filename prefix before "_"
+      const photoGroups: { [key: string]: string[] } = {};
+      photoData.forEach((photo: any) => {
+        const baseName = photo.filename.replace(/_[^_]+$/, "");
+        if (!photoGroups[baseName]) photoGroups[baseName] = [];
+        photoGroups[baseName].push(photo.filename);
+      });
+
+      const slidesBuilt = [];
 
       for (let storyIndex = 0; storyIndex < stories.length; storyIndex++) {
         const story = stories[storyIndex];
-        const imagesCount = story.images || 1; // fallback to 1 image if undefined
+        const group = photoGroups[story.source];
+        if (!group) continue; // skip if no matching photo group
 
-        // Extract imagesCount images from photoData starting at photoIndex
-        const images = [];
-        for (
-          let i = 0;
-          i < imagesCount && photoIndex < photoData.length;
-          i++, photoIndex++
-        ) {
-          images.push(photoData[photoIndex].filename);
+        // Parse the image range string like "0-15"
+        let startIndex = 0;
+        let endIndex = 0;
+        if (typeof story.images === "string" && story.images.includes("-")) {
+          const [startStr, endStr] = story.images.split("-");
+          const parsedStart = parseInt(startStr, 10);
+          const parsedEnd = parseInt(endStr, 10);
+
+          if (
+            !isNaN(parsedStart) &&
+            !isNaN(parsedEnd) &&
+            parsedEnd >= parsedStart
+          ) {
+            startIndex = parsedStart;
+            endIndex = Math.min(parsedEnd, group.length - 1); // cap to max available
+          }
         }
+
+        const selectedImages = group.slice(startIndex, endIndex + 1); // inclusive
 
         slidesBuilt.push({
           id: story.id,
@@ -114,8 +132,8 @@ const SlideShow = () => {
           content: story.content,
           description: story.description,
           duration: story.duration,
-          images,
-          sourceName: images.length > 0 ? images[0].split("_snapshot")[0] : "",
+          images: selectedImages,
+          sourceName: story.source,
         });
       }
 
@@ -234,6 +252,30 @@ const SlideShow = () => {
     else startTimer();
   };
 
+  const updateStoryData = async (storyData) => {
+    try {
+      const response = await fetch(
+        "http://localhost:5001/api/updateStoryData",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(storyData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+
+      const result = await response.json();
+      return result;
+    } catch (error) {
+      return null;
+    }
+  };
+
   // --- END UPDATED TIMER LOGIC ---
   return (
     <>
@@ -271,7 +313,9 @@ const SlideShow = () => {
                 currentSlide={currentSlide}
                 sourceName={slide.sourceName}
                 port={PORT}
+                editable={true}
                 modeVideo={modeVideo} // ⬅️ Pass this
+                updateStoryData={updateStoryData}
               />
             </section>
           ))}

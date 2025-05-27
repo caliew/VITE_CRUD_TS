@@ -18,7 +18,7 @@ body,
 
 .section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
     gap: 5px;
     width: 100%;
     margin: 0 auto;
@@ -61,21 +61,19 @@ body,
 
 .text-overlay {
     position: absolute;
-    top: 0;
-    right: 0;
-    width: 28%;
-    height: 60%;
+    top: 0%;
+    right: -280px;
+    width: 260px;
+    max-height: 1000px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     color: #fff;
-    font-size: 0.8em;
-    font-weight: 200;
+    font-weight: lighter;
     text-align: center;
     background-color: black;
     padding: 5px;
-    margin-right: -290px;
 }
 
 .text-overlay.fragment {
@@ -89,7 +87,10 @@ body,
 .text-overlay h2,
 .text-overlay h3,
 .text-overlay p {
-    background-color: black;
+    margin-top: 15px;
+    width: 100%;
+    text-wrap: true;
+    border-radius: 8px;
     margin-bottom: 0;
 }
 
@@ -189,19 +190,6 @@ body,
     transition: transform 0.25s ease;
 }
 
-.paragraph-list {
-    list-style-type: disc;
-    padding-left: 0;
-    margin-bottom: 1em;
-    font-size: 1.2em;
-    text-align: start;
-}
-
-.paragraph-item {
-    margin-bottom: 0em;
-    text-align: center;
-}
-
 .slideshow-btn {
     background-color: #111;
     color: white;
@@ -240,10 +228,8 @@ body,
 }
 
 .overlay-text {
-    position: absolute;
-    bottom: -85px;
-    left: 15px;
-    right: 15px;
+    position: relative;
+    top: 10px;
     color: white;
     background: rgba(0, 0, 0, 0.5);
     padding: 10px 15px;
@@ -251,6 +237,74 @@ body,
     font-size: 1rem;
     line-height: 1.5;
     max-height: 30%;
+    width: 800px;
     overflow-y: auto;
     box-sizing: border-box;
+    transition: opacity 0.6s ease-in-out;
+    opacity: 0.95;
+}
+
+.edit-textarea {
+    width: 100%;
+    font-size: 14px;
+    padding: 8px;
+    color: #000;
+    /* Ensure text is visible */
+    background-color: #fff;
+    /* Ensure background contrasts */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    /* Optional: allow resizing */
+}
+
+.story-container {
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 90%;
+    max-width: 800px;
+}
+
+#storyToggleBtn {
+    background-color: #eee;
+    border: none;
+    padding: 8px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+}
+
+#storyToggleBtn:focus {
+    outline: none;
+}
+
+#storyContent {
+    margin-top: 8px;
+}
+
+.paragraph-list {
+    list-style-type: disc;
+    padding-left: 0;
+    text-align: start;
+}
+
+.paragraph-item {
+    font-size: 0.85rem;
+    text-align: center;
+}
+
+.paragraph-item.highlight {
+    background-color: whitesmoke;
+    color: blue;
+    font-size: 0.9rem;
+    font-weight: 400;
+    border-radius: 4px;
+    padding: 5px 5px;
+}
+
+.content {
+    text-align: center;
+    margin: 0 auto;
 }
