@@ -17,3 +17,15 @@ const GetMouseEventFeedback = (renderer) => {
     canvas.removeEventListener("mouseup", () => {});
   };
 };
+
+const handleResize = () => {
+  camera.aspect =
+    containerRef.current.offsetWidth / containerRef.current.offsetHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(
+    containerRef.current.offsetWidth,
+    containerRef.current.offsetHeight
+  );
+};
+
+window.addEventListener("resize", handleResize);

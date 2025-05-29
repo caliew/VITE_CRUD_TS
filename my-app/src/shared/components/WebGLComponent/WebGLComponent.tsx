@@ -1,3 +1,4 @@
+import * as THREE from "three";
 import { useEffect, useRef } from "react";
 import { createScene } from "./Scene";
 import { createCamera } from "./Camera";
@@ -6,6 +7,7 @@ import { createOrbitControls } from "./OrbitControls";
 import { createLights } from "./Lights";
 import { createCube } from "./Cube";
 import { createFloor } from "./Floor";
+import { createSkybox } from "./Skybox";
 
 const WebGLComponent = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -14,35 +16,14 @@ const WebGLComponent = () => {
     if (containerRef.current) {
       const scene = createScene();
       const camera = createCamera();
+      camera.position.set(0, 5, 10);
       const renderer = createRenderer(containerRef.current);
+      renderer.shadowMap.enabled = true;
       const controls = createOrbitControls(camera, renderer.domElement);
-
       createLights(scene);
-
-      controls.enableDamping = true;
-
-      renderer.setSize(
-        containerRef.current.offsetWidth,
-        containerRef.current.offsetHeight
-      );
-      renderer.setPixelRatio(window.devicePixelRatio);
-      containerRef.current.appendChild(renderer.domElement);
-
       createCube(scene);
       createFloor(scene);
-
-      camera.position.z = 5;
-
-      const handleResize = () => {
-        camera.aspect =
-          containerRef.current.offsetWidth / containerRef.current.offsetHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(
-          containerRef.current.offsetWidth,
-          containerRef.current.offsetHeight
-        );
-      };
-      window.addEventListener("resize", handleResize);
+      createSkybox(scene);
 
       const animate = () => {
         controls.update();
@@ -50,6 +31,9 @@ const WebGLComponent = () => {
         requestAnimationFrame(animate);
       };
       animate();
+
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
 
       false && GetMouseEventFeedback(renderer);
     }
