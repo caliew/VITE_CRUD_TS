@@ -26,6 +26,7 @@ import {
   ChartingPage,
   PhotoAlbumPage,
   PresentationPage,
+  WebGLPage,
   ErrorFallback,
 } from "@features/index";
 
@@ -65,6 +66,7 @@ const App = () => {
               <Route path="/" element={<MainPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/CPA" element={<CPAPage />} />
+              <Route path="/WebGL" element={<WebGLPage />} />
               <Route path="/Presentation" element={<PresentationPage />} />
               <Route path="/IOTPortals" element={<IOTPortalPage />} />
               <Route path="/SPKAPortals" element={<SPKAPortalPage />} />

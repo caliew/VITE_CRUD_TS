@@ -1,9 +1,17 @@
+/* -------------------
+   Global & Body
+-------------------- */
 body,
 .reveal body {
     background-color: black !important;
     color: white !important;
+    margin: 0;
+    font-family: Arial, sans-serif;
 }
 
+/* -------------------
+   Titles & Text
+-------------------- */
 .title {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande',
         'Lucida Sans', Arial, sans-serif;
@@ -16,9 +24,12 @@ body,
     margin-bottom: 15px;
 }
 
+/* -------------------
+   Slideshow Section Grid
+-------------------- */
 .section {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 5px;
     width: 100%;
     margin: 0 auto;
@@ -26,13 +37,11 @@ body,
     background-color: black;
     max-width: 100%;
     grid-auto-rows: auto;
-    /* 5 columns max */
 }
 
-/* Single image: span entire grid and enlarge */
+/* Single image spans entire grid and is enlarged */
 .section:has(img:only-child) {
     grid-template-columns: 1fr;
-    /* Force single column */
     justify-content: center;
 }
 
@@ -43,28 +52,39 @@ body,
     height: 50vh;
 }
 
+/* -------------------
+   Slide Images
+-------------------- */
 .slide-image {
     width: 100%;
     height: auto;
     object-fit: contain;
     max-height: 12em;
     border-radius: 8px;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease;
     cursor: pointer;
 }
 
+/* Hover scale effect on slide images */
+.slide-image:hover {
+    transform: scale(1.05);
+}
+
+/* Large image spans 2x2 grid */
 .slide-image.large {
     grid-column: span 2;
     grid-row: span 2;
     max-height: 25em;
 }
 
+/* -------------------
+   Text Overlay (Story / Paragraphs)
+-------------------- */
 .text-overlay {
-    position: absolute;
-    top: 0%;
-    right: -280px;
-    width: 260px;
-    max-height: 1000px;
+    position: fixed;
+    top: 0;
+    right: -30%;
+    width: 30%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -74,6 +94,8 @@ body,
     text-align: center;
     background-color: black;
     padding: 5px;
+    z-index: 1001;
+    transition: opacity 0.3s ease;
 }
 
 .text-overlay.fragment {
@@ -89,7 +111,6 @@ body,
 .text-overlay p {
     margin-top: 15px;
     width: 100%;
-    text-wrap: true;
     border-radius: 8px;
     margin-bottom: 0;
 }
@@ -105,98 +126,90 @@ body,
 
 .text-overlay p {
     font-size: 16px;
-    margin-bottom: -5px;
     line-height: 1.3;
 }
 
-/* 弹窗整体背景及布局 */
-.enlarged-image-popup {
+/* -------------------
+   Enlarged Image Popup Overlay
+-------------------- */
+.enlarged-popup-overlay {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 100vw;
-    max-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.75);
-    padding: 15px;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.85);
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
-    z-index: 9999;
-    overflow: hidden;
-    cursor: default;
 }
 
-/* 弹窗内图片 */
-.enlarged-image-popup img {
-    border-radius: 18px;
-    width: 100%;
-    height: auto;
-    max-height: 90vh;
+/* Enlarged Popup Content Container */
+.enlarged-popup-content {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Enlarged Image */
+.enlarged-popup-content img {
+    max-width: 100%;
+    max-height: 80vh;
     object-fit: contain;
-    box-shadow: 0 0 20px yellow;
-    display: block;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
     user-select: none;
     pointer-events: none;
 }
 
-/* 控制栏容器 */
-.enlarged-image-controls {
-    position: absolute;
-    bottom: 15px;
-    left: 50%;
-    transform: translateX(-50%);
+/* -------------------
+   Popup Controls Container
+-------------------- */
+.popup-controls {
+    margin-top: 1rem;
     display: flex;
-    gap: 12px;
-    background-color: rgba(0, 0, 0, 0.65);
-    padding: 8px 20px;
-    border-radius: 10px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    user-select: none;
-    z-index: 10000;
-    pointer-events: auto;
-    width: fit-content;
-    max-width: 90%;
-    box-sizing: border-box;
-    box-shadow: 0 0 10px rgba(30, 144, 255, 0.6);
+    justify-content: center;
+    gap: 1rem;
 }
 
-/* 控制栏按钮 */
-.enlarged-image-controls button {
-    all: unset;
-    color: white !important;
-    background-color: black !important;
-    border: 1.5px solid white !important;
-    border-radius: 6px !important;
-    padding: 6px 14px !important;
-    font-family: 'Roboto', sans-serif !important;
-    font-size: 24px;
-    cursor: pointer !important;
+/* Popup Buttons */
+.popup-controls button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #fff;
+    border-radius: 4px;
+    padding: 0.5em 1em;
+    color: #fff;
+    font-size: 1.2em;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background-color 0.2s ease;
 }
 
-.enlarged-image-controls button:hover,
-.enlarged-image-controls button:focus {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: #1e90ff;
+.popup-controls button:hover,
+.popup-controls button:focus {
+    background-color: rgba(255, 255, 255, 0.25);
     outline: none;
 }
 
-/* 额外给slide图片加个hover放大效果（可选） */
-.slide-image:hover {
-    transform: scale(1.05);
-    transition: transform 0.25s ease;
+/* Close Button Special Style */
+.popup-controls button.close-btn {
+    color: red;
 }
 
+/* -------------------
+     Buttons (General)
+  -------------------- */
 .slideshow-btn {
     background-color: #111;
     color: white;
     border: 2px solid #1e90ff;
     border-radius: 8px;
     padding: 8px 16px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     margin-top: 8px;
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -207,15 +220,21 @@ body,
     border-color: white;
 }
 
+/* -------------------
+     Miscellaneous Layout Helpers
+  -------------------- */
 .slideshow-control {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 280px;
+    padding: 5px;
     margin: 15px;
 }
 
 .image-text-overlay-wrapper {
     position: relative;
     display: inline-block;
-    max-width: 90vw;
-    max-height: 80vh;
     margin: 0 auto;
 }
 
@@ -223,8 +242,15 @@ body,
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 8px;
     object-fit: contain;
+    filter: contrast(1.05) brightness(1.05);
+    image-rendering: auto;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    backface-visibility: hidden;
+    will-change: transform;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .overlay-text {
@@ -244,18 +270,18 @@ body,
     opacity: 0.95;
 }
 
+/* -------------------
+     Story Editor & Paragraphs
+  -------------------- */
 .edit-textarea {
     width: 100%;
     font-size: 14px;
     padding: 8px;
     color: #000;
-    /* Ensure text is visible */
     background-color: #fff;
-    /* Ensure background contrasts */
     border: 1px solid #ccc;
     border-radius: 4px;
     resize: vertical;
-    /* Optional: allow resizing */
 }
 
 .story-container {
@@ -286,8 +312,8 @@ body,
 
 .paragraph-list {
     list-style-type: disc;
-    padding-left: 0;
     text-align: start;
+    padding-left: 20px;
 }
 
 .paragraph-item {
@@ -307,4 +333,28 @@ body,
 .content {
     text-align: center;
     margin: 0 auto;
+}
+
+.ParagraphFunction {
+    display: flex;
+}
+
+.editor-container {
+    position: fixed;
+    bottom: 0vh;
+    left: 0px;
+    width: 100%;
+    z-index: 1002;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.Narrative {
+    padding: 5px;
+    margin: 5px;
+    width: 100%;
+    font-size: 1rem;
 }

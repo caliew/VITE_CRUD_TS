@@ -1,12 +1,9 @@
-import { OidcProvider } from "@axa-fr/react-oidc";
-
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 
-import { AUTH_CONFIG } from "@shared/configs/authentication";
 import { enableConsoleLoggingForAllowedEnvironments } from "@shared/utils/console";
 import { initializeAxiosInterceptor } from "@shared/utils/api/interceptor";
 
@@ -21,16 +18,14 @@ import "./i18n";
 // --------------
 enableConsoleLoggingForAllowedEnvironments();
 initializeAxiosInterceptor();
+const root = ReactDOM.createRoot(document.getElementById("root"));
 
-ReactDOM.render(
+root.render(
   <React.StrictMode>
-    <OidcProvider {...AUTH_CONFIG}>
-      <Provider store={store}>
-        <BrowserRouter basename={ROOT_PATH}>
-          <App />
-        </BrowserRouter>
-      </Provider>
-    </OidcProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+    <Provider store={store}>
+      <BrowserRouter basename={ROOT_PATH}>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </React.StrictMode>
 );

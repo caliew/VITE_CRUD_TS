@@ -162,12 +162,25 @@ const Slide: React.FC<SlideProps> = ({
     >
       {!slideshowActive ? (
         <button onClick={startSlideshow} className="slideshow-btn">
-          Start Slideshow
+          START
         </button>
       ) : (
         <button onClick={stopSlideshow} className="slideshow-btn">
-          Stop Slideshow
+          STOP
         </button>
+      )}
+      {!editMode ? (
+        <button
+          onClick={() => {
+            setEditedText(localParagraphs.join("\n"));
+            setEditMode(true);
+          }}
+          className="slideshow-btn"
+        >
+          EDITOR
+        </button>
+      ) : (
+        EditParagraphFunction()
       )}
     </div>
   );
@@ -213,23 +226,23 @@ const Slide: React.FC<SlideProps> = ({
 
   const EditParagraphFunction = () => {
     return (
-      <div style={{ marginTop: "10px" }}>
+      <div className="ParagraphFunction">
         <button onClick={handleSave} className="slideshow-btn">
-          Save
+          SAVE
         </button>
         <button
           onClick={handleCancel}
           className="slideshow-btn"
           style={{ marginLeft: 10 }}
         >
-          Cancel
+          CLOSED
         </button>
         <button
           onClick={handleUpload}
           className="slideshow-btn"
           style={{ marginLeft: 10 }}
         >
-          Upload
+          UPLOAD
         </button>
       </div>
     );
@@ -249,35 +262,6 @@ const Slide: React.FC<SlideProps> = ({
               <p className="overlay-text">
                 {localParagraphs[slideshowParagraphIndex]}
               </p>
-            )}
-
-            {slideshowActive && (
-              <div style={{ marginTop: 10, textAlign: "center" }}>
-                {!editMode && editable ? (
-                  <button
-                    onClick={() => {
-                      setEditedText(localParagraphs.join("\n"));
-                      setEditMode(true);
-                    }}
-                    className="slideshow-btn"
-                  >
-                    Edit Paragraph
-                  </button>
-                ) : (
-                  editMode && (
-                    <div style={{ padding: "10px" }}>
-                      <textarea
-                        className="edit-textarea"
-                        placeholder="Enter text here..."
-                        value={editedText || ""}
-                        onChange={(e) => setEditedText(e.target.value)}
-                        rows={3}
-                      />
-                      {EditParagraphFunction()}
-                    </div>
-                  )
-                )}
-              </div>
             )}
           </div>
         ) : (
@@ -307,6 +291,19 @@ const Slide: React.FC<SlideProps> = ({
             onSnapshot={handleSnapshot}
           />
         )}
+        {editMode && (
+          <div style={{ marginTop: 10, textAlign: "center" }}>
+            <div className="editor-container">
+              <textarea
+                className="edit-textarea"
+                placeholder="Enter text here..."
+                value={editedText || ""}
+                onChange={(e) => setEditedText(e.target.value)}
+                rows={3}
+              />
+            </div>
+          </div>
+        )}
 
         <div
           className={`text-overlay ${
@@ -316,6 +313,7 @@ const Slide: React.FC<SlideProps> = ({
         >
           {SourceName()}
           {slideShowControl()}
+
           <div>
             Slide {currentSlide} / Story {storyId}
           </div>
@@ -328,7 +326,7 @@ const Slide: React.FC<SlideProps> = ({
             {description}
           </div>
 
-          <>
+          <div className="Narrative">
             <ul className="paragraph-list">
               {localParagraphs.map((para, idx) => (
                 <li
@@ -346,7 +344,7 @@ const Slide: React.FC<SlideProps> = ({
               ))}
             </ul>
             {renderContent()}
-          </>
+          </div>
         </div>
       </div>
     </section>

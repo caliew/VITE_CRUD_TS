@@ -24,9 +24,8 @@ const Clock = () => {
   return (
     <div className="flex flex-col flex-wrap justify-center items-center font-Roboto font-extralight text-2xl">
       <div className="flex">
-        <div>
+        <div key="hours">
           <LEDDisplay
-            key="clock"
             displayValue={""}
             width={widthSize}
             ledSize={ledSize}
@@ -35,9 +34,8 @@ const Clock = () => {
             skew={skewSize}
           />
         </div>
-        <div>
+        <div key="minutes">
           <LEDDisplay
-            key="clock"
             displayValue={hours[0]}
             width={widthSize}
             ledSize={ledSize}
@@ -46,7 +44,6 @@ const Clock = () => {
             skew={skewSize}
           />
           <LEDDisplay
-            key="clock"
             displayValue={hours[1]}
             width={widthSize}
             ledSize={ledSize}
@@ -55,7 +52,6 @@ const Clock = () => {
             skew={skewSize}
           />
           <LEDDisplay
-            key="clock"
             displayValue={":"}
             width={widthSize}
             ledSize={ledSize}
@@ -64,9 +60,8 @@ const Clock = () => {
             skew={skewSize}
           />
         </div>
-        <div>
+        <div key="seconds">
           <LEDDisplay
-            key="clock"
             displayValue={minutes[0]}
             width={widthSize}
             ledSize={ledSize}
@@ -75,7 +70,6 @@ const Clock = () => {
             skew={skewSize}
           />
           <LEDDisplay
-            key="clock"
             displayValue={minutes[1]}
             width={widthSize}
             ledSize={ledSize}
@@ -84,7 +78,6 @@ const Clock = () => {
             skew={skewSize}
           />
           <LEDDisplay
-            key="clock"
             displayValue={":"}
             width={widthSize}
             ledSize={ledSize}
@@ -95,7 +88,6 @@ const Clock = () => {
         </div>
         <div>
           <LEDDisplay
-            key="clock"
             displayValue={seconds[0]}
             width={widthSize}
             ledSize={ledSize}
@@ -104,7 +96,6 @@ const Clock = () => {
             skew={skewSize}
           />
           <LEDDisplay
-            key="clock"
             displayValue={seconds[1]}
             width={widthSize}
             ledSize={ledSize}

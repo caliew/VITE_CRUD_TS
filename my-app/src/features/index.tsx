@@ -14,6 +14,7 @@ import SunburstPage from "./SunburstPage";
 import PhotoAlbumPage from "./PhotoAlbumPage";
 import LoginPage from "./LoginPage";
 import PresentationPage from "./PresentationPage";
+import WebGLPage from "./WebGLPage";
 
 export {
   PageNotFound,
@@ -31,5 +32,6 @@ export {
   SunburstPage,
   PhotoAlbumPage,
   PresentationPage,
+  WebGLPage,
   ErrorFallback,
 };
