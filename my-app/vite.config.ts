@@ -61,7 +61,9 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     server: {
+      host : '0.0.0.0',
       port: 3001,
+      strictPort: true,
       // Uncomment if enable CAM in localhost
       // https: {
       //   key: fs.readFileSync('./cert/local/eservices.local.hhtest.sg-key.pem'),
